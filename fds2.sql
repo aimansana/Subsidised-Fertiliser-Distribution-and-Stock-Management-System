@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 26, 2025 at 09:00 PM
+-- Generation Time: Feb 26, 2025 at 11:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,7 +34,7 @@ CREATE TABLE `farmers` (
   `phone_no` varchar(20) DEFAULT NULL,
   `age` int(11) DEFAULT NULL,
   `sex` enum('Male','Female','Other') DEFAULT NULL,
-  `address` text DEFAULT NULL,
+  `addy` text DEFAULT NULL,
   `registeredBy` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -42,10 +42,11 @@ CREATE TABLE `farmers` (
 -- Dumping data for table `farmers`
 --
 
-INSERT INTO `farmers` (`farmerID`, `FName`, `LName`, `phone_no`, `age`, `sex`, `address`, `registeredBy`) VALUES
-(1, 'Alice', 'Williams', '5551112233', 35, 'Female', '123 Green Road, City A', 3),
+INSERT INTO `farmers` (`farmerID`, `FName`, `LName`, `phone_no`, `age`, `sex`, `addy`, `registeredBy`) VALUES
+(1, 'Alice', 'Wonder', '5551112233', 35, 'Female', '123 Green Road, City A', 3),
 (2, 'Bob', 'Miller', '5552223344', 42, 'Male', '456 Blue Street, City B', 3),
-(3, 'Charlie', 'Anderson', '5553334455', 29, 'Male', '789 Red Lane, City C', 3);
+(3, 'Charlie', 'Anderson', '5553334455', 29, 'Male', '789 Red Lane, City C', 3),
+(5, 'girly', 'pop', '1245877', 25, 'Female', 'blr', 3);
 
 -- --------------------------------------------------------
 
@@ -174,7 +175,8 @@ INSERT INTO `fertilizer_requests` (`requestID`, `farmerID`, `landID`, `fertID`, 
 
 CREATE TABLE `officers` (
   `offID` int(11) NOT NULL,
-  `offName` varchar(100) NOT NULL,
+  `Fname` varchar(100) NOT NULL,
+  `Lname` varchar(100) NOT NULL,
   `role` enum('Field Officer','Junior Officer','Senior Officer','Quality Control Officer','Subsidy Payment Officer') NOT NULL,
   `phone_no` varchar(20) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
@@ -187,12 +189,33 @@ CREATE TABLE `officers` (
 -- Dumping data for table `officers`
 --
 
-INSERT INTO `officers` (`offID`, `offName`, `role`, `phone_no`, `email`, `age`, `sex`, `supervisorID`) VALUES
-(1, 'John Doe', 'Senior Officer', '1234567890', 'john@example.com', 45, 'Male', NULL),
-(2, 'Jane Smith', 'Junior Officer', '9876543210', 'jane@example.com', 38, 'Female', 1),
-(3, 'Michael Johnson', 'Field Officer', '1122334455', 'michael@example.com', 30, 'Male', 2),
-(4, 'Emily Davis', 'Quality Control Officer', '2233445566', 'emily@example.com', 34, 'Female', 1),
-(5, 'Robert Brown', 'Subsidy Payment Officer', '3344556677', 'robert@example.com', 40, 'Male', 1);
+INSERT INTO `officers` (`offID`, `Fname`, `Lname`, `role`, `phone_no`, `email`, `age`, `sex`, `supervisorID`) VALUES
+(1, 'John ', 'Doe', 'Senior Officer', '1234567890', 'john@example.com', 45, 'Male', NULL),
+(2, 'Jane ', 'Smith', 'Junior Officer', '9876543210', 'jane@example.com', 38, 'Female', 1),
+(3, 'Michael ', 'Johnson', 'Field Officer', '1122334455', 'michael@example.com', 30, 'Male', 2),
+(4, 'Emily ', 'Davis', 'Quality Control Officer', '2233445566', 'emily@example.com', 34, 'Female', 1),
+(5, 'Robert ', 'Brown', 'Subsidy Payment Officer', '3344556677', 'robert@example.com', 40, 'Male', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `officer_login`
+--
+
+CREATE TABLE `officer_login` (
+  `offID` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `officer_login`
+--
+
+INSERT INTO `officer_login` (`offID`, `username`, `password`) VALUES
+(1, 'jhonnd', '$2y$10$Fw3TrXSDpf5Vxfj8AMhPA.Zmv2hHHpL3RAV2NzfrxtzLjCcZ.NIW.'),
+(2, 'jsmith', '$2y$10$Fw3TrXSDpf5Vxfj8AMhPA.Zmv2hHHpL3RAV2NzfrxtzLjCcZ.NIW.'),
+(3, 'michjohn', '$2y$10$Fw3TrXSDpf5Vxfj8AMhPA.Zmv2hHHpL3RAV2NzfrxtzLjCcZ.NIW.');
 
 -- --------------------------------------------------------
 
@@ -243,42 +266,6 @@ INSERT INTO `subsidy_payments` (`paymentID`, `farmerID`, `requestID`, `amount`, 
 --
 -- Indexes for dumped tables
 --
-CREATE TABLE `officer_login` (
-  `offID` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `officer_login`
---
-
-INSERT INTO `officer_login` (`offID`, `username`, `password`) VALUES
-(1, 'jhonnd', '$2y$10$Fw3TrXSDpf5Vxfj8AMhPA.Zmv2hHHpL3RAV2NzfrxtzLjCcZ.NIW.'),
-(2, 'jsmith', '$2y$10$Fw3TrXSDpf5Vxfj8AMhPA.Zmv2hHHpL3RAV2NzfrxtzLjCcZ.NIW.'),
-(3, 'michjohn', '$2y$10$Fw3TrXSDpf5Vxfj8AMhPA.Zmv2hHHpL3RAV2NzfrxtzLjCcZ.NIW.');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `officer_login`
---
-ALTER TABLE `officer_login`
-  ADD PRIMARY KEY (`offID`),
-  ADD UNIQUE KEY `username` (`username`);
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `officer_login`
---
-ALTER TABLE `officer_login`
-  ADD CONSTRAINT `officer_login_ibfk_1` FOREIGN KEY (`offID`) REFERENCES `officers` (`offID`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
 
 --
 -- Indexes for table `farmers`
@@ -340,6 +327,13 @@ ALTER TABLE `officers`
   ADD KEY `supervisorID` (`supervisorID`);
 
 --
+-- Indexes for table `officer_login`
+--
+ALTER TABLE `officer_login`
+  ADD PRIMARY KEY (`offID`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
 -- Indexes for table `quality_inspections`
 --
 ALTER TABLE `quality_inspections`
@@ -364,7 +358,7 @@ ALTER TABLE `subsidy_payments`
 -- AUTO_INCREMENT for table `farmers`
 --
 ALTER TABLE `farmers`
-  MODIFY `farmerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `farmerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `farmer_land`
@@ -461,6 +455,12 @@ ALTER TABLE `fertilizer_requests`
 --
 ALTER TABLE `officers`
   ADD CONSTRAINT `officers_ibfk_1` FOREIGN KEY (`supervisorID`) REFERENCES `officers` (`offID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `officer_login`
+--
+ALTER TABLE `officer_login`
+  ADD CONSTRAINT `officer_login_ibfk_1` FOREIGN KEY (`offID`) REFERENCES `officers` (`offID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `quality_inspections`
