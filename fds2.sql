@@ -243,6 +243,42 @@ INSERT INTO `subsidy_payments` (`paymentID`, `farmerID`, `requestID`, `amount`, 
 --
 -- Indexes for dumped tables
 --
+CREATE TABLE `officer_login` (
+  `offID` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `officer_login`
+--
+
+INSERT INTO `officer_login` (`offID`, `username`, `password`) VALUES
+(1, 'jhonnd', '$2y$10$Fw3TrXSDpf5Vxfj8AMhPA.Zmv2hHHpL3RAV2NzfrxtzLjCcZ.NIW.'),
+(2, 'jsmith', '$2y$10$Fw3TrXSDpf5Vxfj8AMhPA.Zmv2hHHpL3RAV2NzfrxtzLjCcZ.NIW.'),
+(3, 'michjohn', '$2y$10$Fw3TrXSDpf5Vxfj8AMhPA.Zmv2hHHpL3RAV2NzfrxtzLjCcZ.NIW.');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `officer_login`
+--
+ALTER TABLE `officer_login`
+  ADD PRIMARY KEY (`offID`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `officer_login`
+--
+ALTER TABLE `officer_login`
+  ADD CONSTRAINT `officer_login_ibfk_1` FOREIGN KEY (`offID`) REFERENCES `officers` (`offID`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 
 --
 -- Indexes for table `farmers`

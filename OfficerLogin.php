@@ -9,7 +9,7 @@ if (isset($_POST['btnLogin'])) {
     $password = $_POST['txtPsw'];
 
     // Use prepared statement to prevent SQL Injection
-    $stmt = $conn->prepare("SELECT passw FROM Offlogin WHERE username = ? LIMIT 1");
+    $stmt = $conn->prepare("SELECT password FROM Officer_login WHERE username = ? LIMIT 1");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -17,30 +17,30 @@ if (isset($_POST['btnLogin'])) {
     if ($row = $result->fetch_assoc()) {
         
         // Verify password using password_verify()
-        if (password_verify($password, $row['passw'])) {
+        if (password_verify($password, $row['password'])) {
             $_SESSION['username'] = $username;
 
-            $stmt = $conn->prepare("SELECT offID FROM offlogin WHERE username = ?");
+            $stmt = $conn->prepare("SELECT offID FROM officer_login WHERE username = ?");
             $stmt->bind_param("s", $username);
             $stmt->execute();
             $stmt->bind_result($offID);
             $stmt->fetch();
             $stmt->close();
 
-            $stmt = $conn->prepare("SELECT depID FROM offdetails WHERE offID = ?");
+            $stmt = $conn->prepare("SELECT role FROM officers WHERE offID = ?");
             $stmt->bind_param("i", $offID);
             $stmt->execute();
-            $stmt->bind_result($depID);
+            $stmt->bind_result($role);
             $stmt->fetch();
             $stmt->close();
-            echo $depID;
-
-            switch ($depID) {
-                case '1': header("Location: Officer1.php"); exit();
-                case '2': header("Location: Officer2.php"); exit();
-                case '3': header("Location: Officer3.php"); exit();
-                case '4': header("Location: Officer4.php"); exit();
-                case '5': header("Location: Officer5.php"); exit();
+            echo $role;
+            
+            switch ($role) {
+                case 'Field Officer': header("Location: off1.php"); exit();
+                case 'Junior Officer': header("Location: Off2.php"); exit();
+                case 'Senior Officer': header("Location: Off3.php"); exit();
+                case 'Quality Control Officer': header("Location: Off4.php"); exit();
+                case 'Subsidy Payment Officer': header("Location: Off5.php"); exit();
                 default: $msg = "Invalid depat id";
             }
         }
