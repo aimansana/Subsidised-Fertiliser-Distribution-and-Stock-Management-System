@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junior Officer Dashboard</title>
+    <link rel="stylesheet" href="junior_officer_dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>Fertilizer Management</h2>
+            </div>
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Field Officers</a></li>
+                <li><a href="#">Requests</a></li>
+                <li><a href="#">Analytics</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>Junior Officer Dashboard</h2>
+                <div class="user-info">
+                    <p>Welcome, Junior Officer</p>
+                    <img src="user-avatar.png" alt="User Avatar">
+                </div>
+            </div>
+
+            <!-- View Field Officers Section -->
+            <div class="section" id="field-officers">
+                <h3>Field Officer Details</h3>
+                <table id="field-officer-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Performance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>123-456-7890</td>
+                            <td>Excellent</td>
+                        </tr>
+                        <tr>
+                            <td>Jane Smith</td>
+                            <td>234-567-8901</td>
+                            <td>Good</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- View Requests Section -->
+            <div class="section" id="requests">
+                <h3>Fertilizer Requests</h3>
+                <div class="request-filter">
+                    <input type="text" id="searchField" placeholder="Search by Farmer ID...">
+                    <button onclick="filterRequests()">Search</button>
+                </div>
+                <table id="request-table">
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Farmer Name</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>001</td>
+                            <td>Farmer A</td>
+                            <td>Pending</td>
+                            <td>
+                                <button onclick="approveRequest(1)">Approve</button>
+                                <button onclick="rejectRequest(1)">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>002</td>
+                            <td>Farmer B</td>
+                            <td>Approved</td>
+                            <td>
+                                <button onclick="approveRequest(2)">Approve</button>
+                                <button onclick="rejectRequest(2)">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="section" id="analytics">
+                <h3>Request Statistics</h3>
+                <canvas id="requestChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="junior_officer_dashboard.js"></script>
+</body>
+</html>
