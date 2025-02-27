@@ -8,7 +8,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
 </head>
 <body>
-
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
@@ -16,10 +15,11 @@
             <button id="toggle-sidebar"><i class="fas fa-bars"></i></button>
         </div>
         <ul>
-            <li><a href="#" id="dashboard-link"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="#" id="profile-link"><i class="fas fa-user"></i> Profile</a></li>
             <li><a href="#" id="manage-farmers-link"><i class="fas fa-users"></i> Farmers</a></li>
-            <li><a href="#" id="request-fertilizer-link"><i class="fas fa-leaf"></i> Request Fertilizer</a></li>
-            <li><a href="#" id="settings-link"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="#" id="manage-land-link"><i class="fas fa-map"></i> Land</a></li>
+            <li><a href="#" id="manage-requests-link"><i class="fas fa-tasks"></i> Requests</a></li>
+            <li><a href="#" id="analytics-link"><i class="fas fa-chart-bar"></i> Analytics</a></li>
             <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
@@ -27,7 +27,7 @@
     <!-- Main Content -->
     <div class="main-content">
         <header>
-            <h1>Welcome, Field Officer</h1>
+            <h1>Dashboard</h1>
             <div class="theme-toggle">
                 <i class="fas fa-sun"></i>
                 <input type="checkbox" id="theme-switch">
@@ -35,25 +35,20 @@
             </div>
         </header>
 
-        <!-- Dashboard Overview -->
-        <section class="dashboard-overview">
-            <div class="card">
-                <h3>Total Farmers</h3>
-                <p id="total-farmers">45</p>
-            </div>
-            <div class="card">
-                <h3>Pending Requests</h3>
-                <p id="pending-requests">12</p>
-            </div>
-            <div class="card">
-                <h3>Approved Requests</h3>
-                <p id="approved-requests">33</p>
-            </div>
+        <!-- Profile Section -->
+        <section id="profile-section" class="section active">
+            <h2>Profile</h2>
+            <img src="images/officer.jpg" class="profile-pic" alt="Profile Picture">
+            <p><strong>Name:</strong> John Doe</p>
+            <p><strong>Phone:</strong> +91 9876543210</p>
+            <p><strong>Sex:</strong> Male</p>
+            <p><strong>Aadhaar No:</strong> 1234-5678-9101</p>
         </section>
 
         <!-- Farmers Management -->
-        <section id="manage-farmers-section">
+        <section id="manage-farmers-section" class="section">
             <h2>Manage Farmers</h2>
+            <input type="text" id="search-farmer" placeholder="Search by ID...">
             <button id="add-farmer-btn" class="btn">+ Add Farmer</button>
             <table id="farmer-table">
                 <thead>
@@ -70,15 +65,76 @@
             </table>
         </section>
 
-        <!-- Request Fertilizer -->
-        <section id="request-fertilizer-section" class="hidden">
-            <h2>Request Fertilizer</h2>
-            <form id="fertilizer-request-form">
-                <input type="text" id="farmerName" placeholder="Farmer Name" required>
-                <input type="number" id="landSize" placeholder="Land Size (acres)" required>
-                <input type="text" id="cropType" placeholder="Crop Type" required>
-                <button type="submit" class="btn">Submit Request</button>
-            </form>
+        <!-- Land Management -->
+        <section id="manage-land-section" class="section">
+            <h2>Manage Land</h2>
+            <input type="text" id="search-land" placeholder="Search by ID...">
+            <button id="add-land-btn" class="btn">+ Add Land</button>
+            <table id="land-table">
+                <thead>
+                    <tr>
+                        <th>Land ID</th>
+                        <th>Location</th>
+                        <th>Soil Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="land-list">
+                    <!-- Data dynamically added -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Request Management -->
+        <section id="manage-requests-section" class="section">
+            <h2>Manage Requests</h2>
+            <input type="text" id="search-request" placeholder="Search by ID...">
+            <button id="add-request-btn" class="btn">+ Add Request</button>
+            <table id="request-table">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Land ID</th>
+                        <th>Fertilizer Name</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="request-list">
+                    <!-- Data dynamically added -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics-section" class="section">
+            <h2>Analytics</h2>
+            <div class="chart-container">
+                <canvas id="request-chart"></canvas>
+            </div>
+            <table id="analytics-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Total Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Farmers</td>
+                        <td id="total-farmers">45</td>
+                    </tr>
+                    <tr>
+                        <td>Lands</td>
+                        <td id="total-lands">20</td>
+                    </tr>
+                    <tr>
+                        <td>Requests</td>
+                        <td id="total-requests">55</td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
     </div>
 
