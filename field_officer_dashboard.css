@@ -4,13 +4,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #F5F5DC; /* Beige Background */
-}
-
-/* Dashboard Container */
-.dashboard-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    color: #333;
 }
 
 /* Sidebar */
@@ -20,9 +14,10 @@ body {
     position: fixed;
     left: 0;
     top: 0;
-    background-color: #556B2F; /* Olive Green */
+    background-color: #2E4600; /* Dark Olive */
     padding-top: 20px;
     color: white;
+    transition: width 0.3s ease;
 }
 
 .sidebar h2 {
@@ -44,13 +39,15 @@ body {
 }
 
 .sidebar ul li:hover {
-    background-color: #6B8E23; /* Lighter Olive */
+    background-color: #3B6B20; /* Lighter Olive */
 }
 
 .sidebar ul li a {
     text-decoration: none;
     color: white;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 16px;
 }
 
@@ -58,25 +55,24 @@ body {
 .main-content {
     margin-left: 250px;
     padding: 20px;
-    flex-grow: 1;
 }
 
 /* Dashboard Header */
 .dashboard-header {
     background: #6B8E23; /* Light Olive */
     color: white;
-    padding: 15px 20px;
+    padding: 15px;
     text-align: center;
     font-size: 24px;
     font-weight: bold;
     border-radius: 5px;
 }
 
-/* Cards for Farmer Operations */
+/* Cards */
 .dashboard-cards {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-top: 20px;
 }
 
@@ -112,7 +108,34 @@ body {
     color: #555;
 }
 
-.card button {
+/* Tables */
+.table-container {
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #6B8E23;
+    color: white;
+}
+
+/* Buttons */
+.btn {
     background: #556B2F;
     color: white;
     border: none;
@@ -123,6 +146,19 @@ body {
     transition: background 0.3s ease;
 }
 
-.card button:hover {
+.btn:hover {
     background: #6B8E23;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+    }
+    .sidebar h2, .sidebar ul li a {
+        display: none;
+    }
+    .main-content {
+        margin-left: 60px;
+    }
 }
