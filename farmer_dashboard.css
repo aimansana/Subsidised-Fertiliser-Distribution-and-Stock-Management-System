@@ -1,0 +1,110 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background: #f4f4f4;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: #2E8B57;
+    color: white;
+    height: 100vh;
+    position: fixed;
+    padding-top: 20px;
+}
+
+.sidebar .logo {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.sidebar .logo img {
+    width: 70px;
+    border-radius: 50%;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+}
+
+.sidebar .nav-links {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar .nav-links li {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.sidebar .nav-links li a {
+    text-decoration: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+}
+
+.sidebar .nav-links li a i {
+    margin-right: 10px;
+}
+
+/* Hover Effect */
+.sidebar .nav-links li:hover {
+    background: #1E5E3D;
+    cursor: pointer;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    width: 100%;
+}
+
+header {
+    background: white;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Sections */
+.section {
+    display: none;
+    text-align: center;
+    padding: 30px;
+}
+
+.section.active {
+    display: block;
+}
+
+/* Dashboard Image */
+.dashboard-img {
+    width: 80%;
+    max-width: 600px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Button */
+.btn {
+    background: #2E8B57;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn:hover {
+    background: #1E5E3D;
+}

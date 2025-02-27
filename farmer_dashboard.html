@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard</title>
+    <link rel="stylesheet" href="farmer_dashboard.css">
+    <script src="https://kit.fontawesome.com/YOUR-FONTAWESOME-KIT.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="images/indialogoimages6.jpeg" alt="Bharat Logo">
+            <h2>Farmer Panel</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" onclick="showSection('home')"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#" onclick="showSection('requests')"><i class="fas fa-seedling"></i> Request Fertilizer</a></li>
+            <li><a href="#" onclick="showSection('status')"><i class="fas fa-tasks"></i> Request Status</a></li>
+            <li><a href="#" onclick="showSection('profile')"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="#" onclick="showSection('support')"><i class="fas fa-headset"></i> Support</a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h1>Details</h1>
+        </header>
+
+        <section id="home" class="section active">
+            <img src="images/background3.jpeg" alt="Farmer Dashboard" class="dashboard-img">
+            <h2>Welcome to the Farmer Dashboard</h2>
+            <p>Manage your fertilizer requests and track the status with ease.</p>
+        </section>
+
+        <section id="requests" class="section">
+            <h2>Request Fertilizer</h2>
+            <p>Fill in the details to request a subsidy on fertilizers.</p>
+            <button class="btn">Apply Now</button>
+        </section>
+
+        <section id="status" class="section">
+            <h2>Check Request Status</h2>
+            <p>Track the progress of your requests.</p>
+        </section>
+
+        <section id="profile" class="section">
+            <h2>Your Profile</h2>
+            <p>View and update your personal details.</p>
+        </section>
+
+        <section id="support" class="section">
+            <h2>Help & Support</h2>
+            <p>Contact support for any assistance.</p>
+        </section>
+    </div>
+
+    <script src="farmer_dashboard.js"></script>
+</body>
+</html>
