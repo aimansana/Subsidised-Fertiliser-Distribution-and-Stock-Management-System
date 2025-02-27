@@ -1,0 +1,6 @@
+How to Draw This in UML Tools:
+Actors: Draw actors as stick figures or labeled ovals outside the system boundary (rectangle).
+System Boundary: Draw a large rectangle to represent the system boundary.
+Use Cases: Inside the system boundary, represent use cases as ovals.
+Associations: Use lines to connect actors with their relevant use cases. Solid lines represent associations.
+Include/Extend Relationships: If any, show them with arrows indicating the relationship between use cases.
