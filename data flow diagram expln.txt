@@ -1,0 +1,116 @@
+Level 0: Context Diagram (High-level View)
+This will provide an overview of how the system interacts with the external entities.
+
+Entities:
+Farmers: Users who register and submit fertilizer requests.
+Officers: Different levels of officers (Field, Junior, Senior, Quality Control, Subsidy Payment).
+Admin: System administrator for managing accounts and system-wide functionalities.
+Data Flows:
+Farmers:
+
+Submit fertilizer requests.
+View status of requests.
+Track subsidy payments.
+View their profile details and land details.
+Officers:
+
+Handle farmer registration (Field Officers).
+Approve/Reject fertilizer requests (Junior Officers).
+Allocate stock (Senior Officers).
+Perform quality control inspections (Quality Control Officers).
+Manage subsidy payments (Subsidy Payment Officers).
+Admin:
+
+Manage officer and farmer accounts.
+Monitor system-wide analytics.
+Level 1: Process Breakdown (Details of Processes)
+Farmers Module:
+
+Registration: Farmers provide personal details and land information through the system.
+Request Submission: Farmers submit requests for subsidized fertilizer.
+Track Status: Farmers check the status of their fertilizer request.
+View Payment Status: Farmers can check if subsidy payments are pending or completed.
+Officer Modules (Field Officer, Junior Officer, Senior Officer, Quality Control Officer, Subsidy Payment Officer):
+
+Field Officer:
+Registers farmers and land details.
+Verifies the farmer's request and submits it for approval.
+Junior Officer:
+Reviews, approves, or rejects fertilizer requests based on eligibility.
+Sends approved requests for stock allocation.
+Senior Officer:
+Allocates stock to Junior Officers based on demand.
+Monitors request statistics and trends via an analytics dashboard.
+Manages escalations.
+Quality Control Officer:
+Conducts quality checks on fertilizers and records inspection results.
+Ensures that fertilizer quality meets standards.
+Subsidy Payment Officer:
+Processes subsidy payments to eligible farmers.
+Tracks and manages pending and completed payments.
+Admin Module:
+
+Manages user accounts (farmers and officers).
+Monitors overall system statistics and analytics.
+Level 2: Data Flow Breakdown
+For this level, we will show the processes in more detail, specifying the flow of information between different entities.
+
+DFD Representation (Level 2 Breakdown):
+Entities:
+
+Farmers
+Officers
+Admin
+System
+Processes:
+
+Farmer Registration & Request Submission:
+
+Farmers submit personal details and land information via Field Officer interface.
+The Field Officer verifies this data and forwards requests for fertilizer.
+Request Approval:
+
+Junior Officer reviews the request data, checks eligibility, and either approves or rejects the request.
+The status of the request is updated and sent back to the Farmer's dashboard.
+Stock Allocation:
+
+Senior Officer allocates stock based on approved requests from Junior Officers.
+Junior Officers receive the stock allocation and ensure it’s delivered to Field Officers for final distribution to farmers.
+Quality Assurance:
+
+Quality Control Officers inspect fertilizer stock, filling out quality control surveys and uploading results to the system.
+Subsidy Payment Processing:
+
+Subsidy Payment Officers review farmer eligibility, verify delivery completion, and process payments to farmers.
+This data is updated in the system, which can be accessed by Admin and other officers.
+Data Flows:
+
+Farmers submit requests, track statuses, and view payment statuses through the system.
+Officers access and update data according to their roles (approve requests, allocate stock, process quality checks, or payments).
+Admin manages data for all users, monitors statistics, and maintains system-wide functionalities.
+DFD Structure:
+Level 0 Diagram (High-Level Context):
+
+External Entities: Farmers, Officers, Admin.
+System: Subsidized Fertilizer Distribution Management System.
+Data Flows:
+Farmers interact with the system to submit requests, view statuses, and track payments.
+Officers interact with the system to verify, approve/reject, allocate stock, perform quality checks, and process payments.
+Admin manages accounts, data, and system-wide functionality.
+Level 1 Diagram (Process Breakdown):
+
+Farmer Registration & Request:
+Farmer → System (submit personal and land details)
+System → Officer (verify data)
+Officer → System (approve/reject request)
+Request Management:
+Junior Officer → System (approve/reject request)
+System → Senior Officer (stock allocation)
+Senior Officer → System (allocate stock)
+System → Junior Officer → Field Officer → Farmer (stock distribution)
+Quality Control:
+Quality Control Officer → System (upload surveys)
+Subsidy Payment:
+Subsidy Payment Officer → System (verify eligibility and process payments)
+System → Farmer (payment notification)
+This Data Flow Diagram serves as a high-level outline of how the system processes the data, from farmer registration to subsidy payment. For a more specific and detailed flow, each of these modules and sub-modules can be represented in a deeper level of DFDs depending on the system's implementation.
