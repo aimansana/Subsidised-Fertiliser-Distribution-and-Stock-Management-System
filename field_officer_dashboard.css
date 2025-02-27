@@ -1,0 +1,128 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F5F5DC; /* Beige Background */
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #556B2F; /* Olive Green */
+    padding-top: 20px;
+    color: white;
+}
+
+.sidebar h2 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 15px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    transition: background 0.3s ease;
+}
+
+.sidebar ul li:hover {
+    background-color: #6B8E23; /* Lighter Olive */
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    font-size: 16px;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    background: #6B8E23; /* Light Olive */
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+/* Cards for Farmer Operations */
+.dashboard-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 30%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card i {
+    font-size: 40px;
+    color: #556B2F;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.card p {
+    font-size: 14px;
+    color: #555;
+}
+
+.card button {
+    background: #556B2F;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.card button:hover {
+    background: #6B8E23;
+}

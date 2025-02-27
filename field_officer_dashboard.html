@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Field Officer Dashboard</title>
+    <link rel="stylesheet" href="field_officer_dashboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <h2>🌿 Field Officer</h2>
+            <button id="toggle-sidebar"><i class="fas fa-bars"></i></button>
+        </div>
+        <ul>
+            <li><a href="#" id="dashboard-link"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="#" id="manage-farmers-link"><i class="fas fa-users"></i> Farmers</a></li>
+            <li><a href="#" id="request-fertilizer-link"><i class="fas fa-leaf"></i> Request Fertilizer</a></li>
+            <li><a href="#" id="settings-link"><i class="fas fa-cog"></i> Settings</a></li>
+            <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h1>Welcome, Field Officer</h1>
+            <div class="theme-toggle">
+                <i class="fas fa-sun"></i>
+                <input type="checkbox" id="theme-switch">
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+
+        <!-- Dashboard Overview -->
+        <section class="dashboard-overview">
+            <div class="card">
+                <h3>Total Farmers</h3>
+                <p id="total-farmers">45</p>
+            </div>
+            <div class="card">
+                <h3>Pending Requests</h3>
+                <p id="pending-requests">12</p>
+            </div>
+            <div class="card">
+                <h3>Approved Requests</h3>
+                <p id="approved-requests">33</p>
+            </div>
+        </section>
+
+        <!-- Farmers Management -->
+        <section id="manage-farmers-section">
+            <h2>Manage Farmers</h2>
+            <button id="add-farmer-btn" class="btn">+ Add Farmer</button>
+            <table id="farmer-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Land Area</th>
+                        <th>Crop Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="farmer-list">
+                    <!-- Data dynamically added -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Request Fertilizer -->
+        <section id="request-fertilizer-section" class="hidden">
+            <h2>Request Fertilizer</h2>
+            <form id="fertilizer-request-form">
+                <input type="text" id="farmerName" placeholder="Farmer Name" required>
+                <input type="number" id="landSize" placeholder="Land Size (acres)" required>
+                <input type="text" id="cropType" placeholder="Crop Type" required>
+                <button type="submit" class="btn">Submit Request</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="field_officer_dashboard.js"></script>
+</body>
+</html>

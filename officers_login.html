@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Login | Fertilizer Distribution</title>
+    <link rel="stylesheet" href="officers_login.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <img src="images/indialogoimages6.jpeg" alt="Bharat Logo" class="logo">
+            <h2>Officer Login</h2>
+            <p class="subtext">Access your panel to manage fertilizer distribution.</p>
+            
+            <form id="officerLoginForm">
+                <div class="input-group">
+                    <label for="officerType">Select Officer Type</label>
+                    <select id="officerType" required>
+                        <option value="">-- Select Role --</option>
+                        <option value="field">Field Officer</option>
+                        <option value="junior">Junior Officer</option>
+                        <option value="senior">Senior Officer</option>
+                        <option value="quality">Quality Control Officer</option>
+                        <option value="subsidy">Subsidy Payment Officer</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter username" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+
+                <button type="submit" class="login-btn">Login</button>
+                <p class="error-msg" id="errorMsg"></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="officers_login.js"></script>
+</body>
+</html>
