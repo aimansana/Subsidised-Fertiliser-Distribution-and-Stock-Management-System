@@ -58,29 +58,50 @@ if (isset($_POST['btnLogin'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>officer Login</title>
-    <link rel="stylesheet" href="farmer.css">
+    <title>Officer Login | Fertilizer Distribution</title>
+    <link rel="stylesheet" href="OfficerLogin.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
 </head>
 <body>
+    <div class="login-container">
+        <div class="login-box">
+            <img src="images/indialogoimages6.jpeg" alt="Bharat Logo" class="logo">
+            <h2>Officer Login</h2>
+            <p class="subtext">Access your panel to manage fertilizer distribution.</p>
+            
+            <form id="officerLoginForm" method="POST" action="OfficerLogin.php">
+                <div class="input-group">
+                    <label for="officerType">Select Officer Type</label>
+                    <select id="officerType" required>
+                        <option value="">-- Select Role --</option>
+                        <option value="field">Field Officer</option>
+                        <option value="junior">Junior Officer</option>
+                        <option value="senior">Senior Officer</option>
+                        <option value="quality">Quality Control Officer</option>
+                        <option value="subsidy">Subsidy Payment Officer</option>
+                    </select>
+                </div>
 
-    <!-- Login Section -->
-    <div id="login-section" class="login-section">
-        <h2>Login for officers</h2>
-    
-        <form id="login-form" action="OfficerLogin.php" method="post">
-            <br>
-            <label for="lblMsg"><b><?php echo $msg; ?></b></label>
-            <br>
-            <input type="text" name="txtUName" placeholder="Username" required>
-            <br>
-            <input type="password" name="txtPsw" placeholder="Password" required>
-            <br>
-            <br>
-            <button type="submit" name="btnLogin" class="btn btn-success btn-lg">Log In</button>
-        </form>
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="txtUName" placeholder="Enter username" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="txtPsw" placeholder="Enter password" required>
+                </div>
+
+                <button type="submit" name="btnLogin" class="login-btn">Login</button>
+                <p class="error-msg" id="errorMsg"></p>
+            </form>
+        </div>
     </div>
 
-    <!-- js files need to be checked -->
-    <script src="farmer.js"></script>
+    <!--
+    <script src="OfficerLogin.js"></script>
+    check js file 
+    -->
+
 </body>
 </html>
