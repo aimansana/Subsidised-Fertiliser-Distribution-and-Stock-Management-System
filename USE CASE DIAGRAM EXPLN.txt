@@ -143,3 +143,12 @@ A **Use Case Diagram** is a visual representation of the interactions between us
 - **Improves Communication**: Facilitates better communication among project stakeholders (e.g., developers, business analysts, and end users).
 
 Use Case Diagrams are essential tools in capturing the essence of what the system is meant to do from a user's perspective and are usually part of the requirements phase in system design.
+
+
+
+
+
+
+
+
+
