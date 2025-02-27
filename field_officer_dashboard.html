@@ -108,34 +108,41 @@
         </section>
 
         <!-- Analytics Section -->
-        <section id="analytics-section" class="section">
-            <h2>Analytics</h2>
-            <div class="chart-container">
-                <canvas id="request-chart"></canvas>
-            </div>
-            <table id="analytics-table">
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Total Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Farmers</td>
-                        <td id="total-farmers">45</td>
-                    </tr>
-                    <tr>
-                        <td>Lands</td>
-                        <td id="total-lands">20</td>
-                    </tr>
-                    <tr>
-                        <td>Requests</td>
-                        <td id="total-requests">55</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+<section id="analytics-section" class="section">
+    <h2>Analytics</h2>
+    
+    <!-- Add Chart -->
+    <div class="chart-container">
+        <canvas id="request-chart"></canvas>
+    </div>
+
+    <table id="analytics-table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Total Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Farmers</td>
+                <td id="total-farmers">45</td>
+            </tr>
+            <tr>
+                <td>Lands</td>
+                <td id="total-lands">20</td>
+            </tr>
+            <tr>
+                <td>Requests</td>
+                <td id="total-requests">55</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- Include Chart.js for Analytics -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     </div>
 
     <script src="field_officer_dashboard.js"></script>
