@@ -5,39 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Junior Officer Dashboard</title>
     <link rel="stylesheet" href="junior_officer_dashboard.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" crossorigin="anonymous"></script> <!-- FontAwesome -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
 </head>
 <body>
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="logo">
-                <h2>Fertilizer Management</h2>
+                <h2>Junior Officer</h2>
             </div>
             <ul>
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Field Officers</a></li>
-                <li><a href="#">Requests</a></li>
-                <li><a href="#">Analytics</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Logout</a></li>
+                <li><a href="#" onclick="showSection('profile')"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#" onclick="showSection('field-officers')"><i class="fas fa-users"></i> Field Officers</a></li>
+                <li><a href="#" onclick="showSection('requests')"><i class="fas fa-file-alt"></i> Requests</a></li>
+                <li><a href="#" onclick="showSection('analytics')"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </div>
 
         <!-- Main Content -->
         <div class="main-content">
             <div class="header">
-                <h2>Junior Officer Dashboard</h2>
+                <h2>Dashboard</h2>
                 <div class="user-info">
+                    
                     <p>Welcome, Junior Officer</p>
-                    <img src="user-avatar.png" alt="User Avatar">
                 </div>
             </div>
 
-            <!-- View Field Officers Section -->
-            <div class="section" id="field-officers">
-                <h3>Field Officer Details</h3>
-                <table id="field-officer-table">
+            <!-- Profile Section (Default View) -->
+            <div class="section" id="profile">
+                <h3><i class="fas fa-user"></i> Your Profile</h3>
+                <div class="profile-container">
+                    <img src="images/farmer1.jpg" alt="Profile Picture" class="profile-pic">
+                    <table>
+                        <tr><th>Name:</th><td>John Doe</td></tr>
+                        <tr><th>Address:</th><td>123 Street, City</td></tr>
+                        <tr><th>Sex:</th><td>Male</td></tr>
+                        <tr><th>Category:</th><td>General</td></tr>
+                        <tr><th>Designation:</th><td>Junior Officer</td></tr>
+                        <tr><th>Email:</th><td>johndoe@email.com</td></tr>
+                        <tr><th>Phone:</th><td>9876543210</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Field Officers Section -->
+            <div class="section" id="field-officers" style="display: none;">
+                <h3><i class="fas fa-users"></i> Field Officer Details</h3>
+                <table>
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -60,14 +77,10 @@
                 </table>
             </div>
 
-            <!-- View Requests Section -->
-            <div class="section" id="requests">
-                <h3>Fertilizer Requests</h3>
-                <div class="request-filter">
-                    <input type="text" id="searchField" placeholder="Search by Farmer ID...">
-                    <button onclick="filterRequests()">Search</button>
-                </div>
-                <table id="request-table">
+            <!-- Requests Section -->
+            <div class="section" id="requests" style="display: none;">
+                <h3><i class="fas fa-file-alt"></i> Fertilizer Requests</h3>
+                <table>
                     <thead>
                         <tr>
                             <th>Request ID</th>
@@ -82,17 +95,8 @@
                             <td>Farmer A</td>
                             <td>Pending</td>
                             <td>
-                                <button onclick="approveRequest(1)">Approve</button>
-                                <button onclick="rejectRequest(1)">Reject</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>002</td>
-                            <td>Farmer B</td>
-                            <td>Approved</td>
-                            <td>
-                                <button onclick="approveRequest(2)">Approve</button>
-                                <button onclick="rejectRequest(2)">Reject</button>
+                                <button>Approve</button>
+                                <button>Reject</button>
                             </td>
                         </tr>
                     </tbody>
@@ -100,8 +104,8 @@
             </div>
 
             <!-- Analytics Section -->
-            <div class="section" id="analytics">
-                <h3>Request Statistics</h3>
+            <div class="section" id="analytics" style="display: none;">
+                <h3><i class="fas fa-chart-bar"></i> Request Statistics</h3>
                 <canvas id="requestChart"></canvas>
             </div>
         </div>
