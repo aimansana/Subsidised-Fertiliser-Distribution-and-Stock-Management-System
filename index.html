@@ -3,127 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subsidized Fertilizer Distribution Management System</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        header .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-        nav ul li {
-            margin: 0 15px;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-        }
-        .search-bar {
-            margin-left: auto;
-        }
-        .search-bar input {
-            padding: 5px;
-            font-size: 16px;
-        }
-        main {
-            padding: 20px;
-        }
-        .welcome-section {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .welcome-section h1 {
-            color: #333;
-        }
-        .quick-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .quick-links a {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .quick-links a:hover {
-            background-color: #45a049;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-        footer a {
-            color: #4CAF50;
-            text-decoration: none;
-        }
-    </style>
+    <title>Subsidized Fertilizer Distribution</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    
+    <!-- ✅ Top Banner with Government Information -->
+    <div class="top-banner">
+        <div class="logo-container">
+            <img src="images/logo_left.jpeg" alt="Left Logo" class="logo left-logo">
+            <div class="top-text">
+                <p>🏡 Kisaan Call Centre | 🌾 Millets: Seeds of Change | 🚜 Indian Work on Agriculture <br>
+                🇮🇳 <span class="hindi-text">भारत सरकार</span> | Government of India, Ministry of Agriculture & Farmers Welfare</p>
+            </div>
+            <img src="images/logo_right.jpeg" alt="Right Logo" class="logo right-logo">
+        </div>
+    </div>
+    
+    <!-- ✅ Welcome Message -->
+    <div class="welcome-message">
+        Welcome to the Subsidized Fertilizer Distribution System
+    </div>
+
+    <!-- ✅ Navbar -->
     <header>
-        <div class="logo">Fertilizer Distribution System</div>
         <nav>
             <ul>
                 <li><a href="#">Home</a></li>
-                <li><a href="#info">Info</a></li>
                 <li><a href="#farmers">Farmers</a></li>
                 <li><a href="#officers">Officers</a></li>
+                <li><a href="#info">Info</a></li>
                 <li><a href="#contact">Contact Us</a></li>
-                <li><a href="#login">Login</a></li>
             </ul>
         </nav>
-        <div class="search-bar">
-            <input type="text" placeholder="Search...">
-        </div>
     </header>
+    
+    <!-- ✅ Message Popups -->
+    <div class="popup message1">
+        <span class="close" onclick="closePopup(1)">&times;</span>
+        <p>📢 Important Update: Fertilizer distribution starts next week!</p>
+    </div>
+    <div class="popup message2">
+        <span class="close" onclick="closePopup(2)">&times;</span>
+        <p>🚨 Reminder: Farmers must verify land details before application.</p>
+    </div>
 
-    <main>
-        <section class="welcome-section">
-            <h1>Welcome to the Subsidized Fertilizer Distribution Management System</h1>
-            <p>Empowering farmers and ensuring transparent fertilizer distribution across the nation.</p>
-        </section>
+    <!-- ✅ Slideshow -->
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide"><img src="images/farmer7.png" alt="Farmers working"></div>
+            <div class="slide"><img src="images/field_officer2.jpeg" alt="Agriculture field"></div>
+            <div class="slide"><img src="images/fertilizer5.jpg" alt="Fertilizer distribution"></div>
+        </div>
+    </div>
+    
+    <!-- ✅ View Gallery Button -->
+    <button class="view-gallery-btn" onclick="scrollToGallery()">🌌 View Gallery</button>
 
-        <section class="quick-links">
-            <a href="#">Farmer Registration</a>
-            <a href="#">Officer Login</a>
-            <a href="#">FAQs</a>
-        </section>
+    <!-- ✅ Gallery Section -->
+    <section id="gallerySection" class="gallery-section">
+        <h2>Farming Gallery</h2>
+        <div class="gallery-grid">
+            <img src="images/background4.jpeg" alt="Farm" onclick="openModal(this)">
+            <img src="images/fertilizer3.jpg" alt="Fertilizer" onclick="openModal(this)">
+            <img src="images/ministers.jpg" alt="Tractor" onclick="openModal(this)">
+            <img src="images/images1.jpeg" alt="Field" onclick="openModal(this)">
+        </div>
+    </section>
 
-        <section id="info">
-            <h2>About the Scheme</h2>
-            <p>The Subsidized Fertilizer Distribution initiative aims to support farmers by providing fertilizers at subsidized rates, ensuring financial aid, and promoting sustainable agriculture.</p>
-        </section>
-    </main>
+    <!-- ✅ Video Section Below Gallery -->
+    <section class="video-section">
+        <h2>We Thank You, Farmers</h2>
+        <video controls>
+            <source src="videos/farmer_video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </section>
 
-    <footer>
-        <p>Contact us: <a href="mailto:support@fertilizer-system.com">support@fertilizer-system.com</a> | Phone: +1-800-555-1234</p>
-        <p>Follow us on <a href="#">Facebook</a>, <a href="#">Twitter</a>, <a href="#">Instagram</a></p>
-        <p>&copy; 2025 Subsidized Fertilizer Distribution System. All rights reserved.</p>
+    <!-- ✅ Footer -->
+    <footer id="contact">
+        <p>&copy; 2025 Subsidized Fertilizer Distribution | All Rights Reserved</p>
     </footer>
+
+    <!-- ✅ JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
