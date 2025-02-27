@@ -54,7 +54,7 @@ if (isset($_POST['btnSearchID'])) {
 }
 
 // Step 2: Update Farmer Data
-if (isset($_POST['btn_update'])) {
+if (isset($_POST['btn_save'])) {
     $farmerID = $_POST['txtFarmerID'];
     $firstName = $_POST['txtFirstName'];
     $lastName = $_POST['txtLastName'];
@@ -128,6 +128,15 @@ if (isset($_POST['btn_add'])) {
         <?php if (!empty($msg1)) echo "<p>$msg1</p>"; ?>
 
         <?php if (!empty($firstName)) : ?>
+        <h2>Farmer Details</h2>
+        <p><strong>Farmer ID:</strong> <?php echo htmlspecialchars($farmerID); ?></p>
+        <p><strong>First Name:</strong> <?php echo htmlspecialchars($firstName); ?></p>
+        <p><strong>Last Name:</strong> <?php echo htmlspecialchars($lastName); ?></p>
+        <p><strong>Age:</strong> <?php echo htmlspecialchars($age); ?></p>
+        <p><strong>sex:</strong> <?php echo htmlspecialchars($sex); ?></p>
+        <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($telNo); ?></p>
+        <p><strong>Address:</strong> <?php echo htmlspecialchars($addy); ?></p>
+
         <h2>Update Farmer Details</h2>
         <form method="post">
             <input type="hidden" name="txtFarmerID" value="<?php echo htmlspecialchars($farmerID); ?>">
@@ -159,10 +168,10 @@ if (isset($_POST['btn_add'])) {
             <input type="text" id="txtaddy" name="txtaddy" value="<?php echo htmlspecialchars($addy); ?>" required>
             <br>
 
-            <button type="submit" name="btn_update">Update Farmer</button>
+            <button type="submit" name="btn_save">save</button>
         </form>
+        
         <?php endif; ?>
-
         <h2>Add New Farmer</h2>
         <form method="post">
             <label for="txtNewFirstName">First Name:</label>
