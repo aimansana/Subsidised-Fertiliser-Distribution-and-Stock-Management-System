@@ -45,6 +45,7 @@ SELECT fr.requestID, fr.landID, f.fertName, fr.quantityRequested, fr.requestDate
 FROM fertilizer_requests fr
 JOIN fertilizers f ON fr.fertID = f.fertID
 WHERE fr.farmerID = ?
+ORDER BY fr.requestDate DESC
 ");
 $stmt->bind_param("i", $farmerID);
 $stmt->execute();
