@@ -57,30 +57,6 @@ The system is designed with modularity and scalability in mind, incorporating ro
 
 This comprehensive system ensures accountability, efficient resource allocation, and convenience for all stakeholders while supporting the government’s vision of empowering farmers.
 
-## Webpage Plan
-
-### Homepage
-#### Header
-- Logo and website name
-- Navigation menu: Home, Info, Farmers, Officers, Contact Us, Login
-- Search bar
-
-#### Main Content
-- Welcome message about the scheme
-- Overview of the Subsidized Fertilizer Distribution initiative
-- Quick links (e.g., Farmer Registration, Officer Login, FAQs)
-
-#### Footer
-- Contact information
-- Social media links
-- Copyright information
-
-### Contact Us
-- Contact form for queries or feedback.
-- Support email and phone details.
-
-### FAQs
-- Categorized FAQs to assist both farmers and officers.
 
 ## Functional Tabs
 
