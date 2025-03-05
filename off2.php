@@ -8,37 +8,11 @@ if (!isset($_SESSION['username'])) {
 // Include the database connection
 include 'connection.php';
 
+// Include the functions
+include 'functions.php';
+
 // Get the logged-in officer's username
 $username = $_SESSION['username'];
-
-
-// Function to fetch a single row
-function fetchSingleRow($conn, $query, $paramTypes, ...$params) {
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param($paramTypes, ...$params);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_assoc();
-}
-
-// Function to fetch multiple rows
-function fetchAllRows($conn, $query, $paramTypes, ...$params) {
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param($paramTypes, ...$params);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_all(MYSQLI_ASSOC);
-}
-
-// Function for Insert, Update, and Delete queries
-function executeQuery($conn, $query, $paramTypes, ...$params) {
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param($paramTypes, ...$params);
-    $result = $stmt->execute();
-    $stmt->close();
-    return $result;
-}
-
 
 // Fetch officer's ID
 $officer = fetchSingleRow($conn, "SELECT offID FROM officer_login WHERE username = ?", "s", $username);
