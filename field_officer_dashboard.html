@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Field Officer Dashboard</title>
+    <link rel="stylesheet" href="field_officer_dashboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <h2>🌿 Field Officer</h2>
+            <button id="toggle-sidebar"><i class="fas fa-bars"></i></button>
+        </div>
+        <ul>
+            <li><a href="#" id="profile-link"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="#" id="manage-farmers-link"><i class="fas fa-users"></i> Farmers</a></li>
+            <li><a href="#" id="manage-land-link"><i class="fas fa-map"></i> Land</a></li>
+            <li><a href="#" id="manage-requests-link"><i class="fas fa-tasks"></i> Requests</a></li>
+            <li><a href="#" id="analytics-link"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+            <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h1>Dashboard</h1>
+            <div class="theme-toggle">
+                <i class="fas fa-sun"></i>
+                <input type="checkbox" id="theme-switch">
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+
+        <!-- Profile Section -->
+        <section id="profile-section" class="section active">
+            <h2>Profile</h2>
+            <img src="images/officer.jpg" class="profile-pic" alt="Profile Picture">
+            <p><strong>Name:</strong> John Doe</p>
+            <p><strong>Phone:</strong> +91 9876543210</p>
+            <p><strong>Sex:</strong> Male</p>
+            <p><strong>Aadhaar No:</strong> 1234-5678-9101</p>
+        </section>
+
+        <!-- Farmers Management -->
+        <section id="manage-farmers-section" class="section">
+            <h2>Manage Farmers</h2>
+            <input type="text" id="search-farmer" placeholder="Search by ID...">
+            <button id="add-farmer-btn" class="btn">+ Add Farmer</button>
+            <table id="farmer-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Land Area</th>
+                        <th>Crop Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="farmer-list">
+                    <!-- Data dynamically added -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Land Management -->
+        <section id="manage-land-section" class="section">
+            <h2>Manage Land</h2>
+            <input type="text" id="search-land" placeholder="Search by ID...">
+            <button id="add-land-btn" class="btn">+ Add Land</button>
+            <table id="land-table">
+                <thead>
+                    <tr>
+                        <th>Land ID</th>
+                        <th>Location</th>
+                        <th>Soil Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="land-list">
+                    <!-- Data dynamically added -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Request Management -->
+        <section id="manage-requests-section" class="section">
+            <h2>Manage Requests</h2>
+            <input type="text" id="search-request" placeholder="Search by ID...">
+            <button id="add-request-btn" class="btn">+ Add Request</button>
+            <table id="request-table">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Land ID</th>
+                        <th>Fertilizer Name</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="request-list">
+                    <!-- Data dynamically added -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Analytics Section -->
+<section id="analytics-section" class="section">
+    <h2>Analytics</h2>
+    
+    <!-- Add Chart -->
+    <div class="chart-container">
+        <canvas id="request-chart"></canvas>
+    </div>
+
+    <table id="analytics-table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Total Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Farmers</td>
+                <td id="total-farmers">45</td>
+            </tr>
+            <tr>
+                <td>Lands</td>
+                <td id="total-lands">20</td>
+            </tr>
+            <tr>
+                <td>Requests</td>
+                <td id="total-requests">55</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- Include Chart.js for Analytics -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    </div>
+
+    <script src="field_officer_dashboard.js"></script>
+</body>
+</html>
