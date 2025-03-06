@@ -12,7 +12,6 @@
     <div class="sidebar">
         <div class="logo">
             <h2>🌿 Field Officer</h2>
-            <button id="toggle-sidebar"><i class="fas fa-bars"></i></button>
         </div>
         <ul>
             <li><a href="#" id="profile-link"><i class="fas fa-user"></i> Profile</a></li>
@@ -20,7 +19,7 @@
             <li><a href="#" id="manage-land-link"><i class="fas fa-map"></i> Land</a></li>
             <li><a href="#" id="manage-requests-link"><i class="fas fa-tasks"></i> Requests</a></li>
             <li><a href="#" id="analytics-link"><i class="fas fa-chart-bar"></i> Analytics</a></li>
-            <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="login.html" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
@@ -28,123 +27,113 @@
     <div class="main-content">
         <header>
             <h1>Dashboard</h1>
-            <div class="theme-toggle">
-                <i class="fas fa-sun"></i>
-                <input type="checkbox" id="theme-switch">
-                <i class="fas fa-moon"></i>
-            </div>
         </header>
+
+        <!-- Add Farmer Form -->
+        <div id="farmer-form" class="form-popup">
+            <h3>Add Farmer</h3>
+            <input type="text" id="farmer-id" placeholder="Farmer ID">
+            <input type="text" id="farmer-name" placeholder="Farmer Name">
+            <input type="text" id="farmer-land" placeholder="Land Area">
+            <input type="text" id="farmer-crop" placeholder="Crop Type">
+            <button id="farmer-form-submit">Add Farmer</button>
+        </div>
+
+        <!-- Add Land Form -->
+        <div id="land-form" class="form-popup">
+            <h3>Add Land</h3>
+            <input type="text" id="land-id" placeholder="Land ID">
+            <input type="text" id="land-location" placeholder="Location">
+            <input type="text" id="land-soil" placeholder="Soil Type">
+            <button id="land-form-submit">Add Land</button>
+        </div>
 
         <!-- Profile Section -->
         <section id="profile-section" class="section active">
-            <h2>Profile</h2>
-            <img src="images/officer.jpg" class="profile-pic" alt="Profile Picture">
-            <p><strong>Name:</strong> John Doe</p>
-            <p><strong>Phone:</strong> +91 9876543210</p>
-            <p><strong>Sex:</strong> Male</p>
-            <p><strong>Aadhaar No:</strong> 1234-5678-9101</p>
+            <h3><i class="fas fa-user"></i> Your Profile</h3>
+            <div class="profile-container">
+                <img src="images/farmer1.jpg" alt="Profile Picture" class="profile-pic">
+                <table>
+                    <tr><th>Name:</th><td>John Doe</td></tr>
+                    <tr><th>Designation:</th><td>Field Officer</td></tr>
+                    <tr><th>Email:</th><td>johndoe@email.com</td></tr>
+                    <tr><th>Phone:</th><td>9876543210</td></tr>
+                </table>
+            </div>
         </section>
 
-        <!-- Farmers Management -->
+        <!-- Farmers Management Section -->
         <section id="manage-farmers-section" class="section">
             <h2>Manage Farmers</h2>
-            <input type="text" id="search-farmer" placeholder="Search by ID...">
-            <button id="add-farmer-btn" class="btn">+ Add Farmer</button>
-            <table id="farmer-table">
+            <input type="text" id="search-farmer" placeholder="Enter Farmer ID">
+            <button class="btn" id="search-farmer-btn">Search</button>
+            <div id="farmer-search-result"></div>
+            <button class="btn" id="add-farmer-btn">+ Add Farmer</button>
+            <table>
                 <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Land Area</th>
-                        <th>Crop Type</th>
-                        <th>Actions</th>
-                    </tr>
+                    <tr><th>ID</th><th>Name</th><th>Land Area</th><th>Crop Type</th></tr>
                 </thead>
-                <tbody id="farmer-list">
-                    <!-- Data dynamically added -->
-                </tbody>
+                <tbody id="farmer-list"></tbody>
             </table>
         </section>
 
-        <!-- Land Management -->
+        <!-- Manage Land Section -->
         <section id="manage-land-section" class="section">
             <h2>Manage Land</h2>
-            <input type="text" id="search-land" placeholder="Search by ID...">
-            <button id="add-land-btn" class="btn">+ Add Land</button>
-            <table id="land-table">
+            <input type="text" id="search-land" placeholder="Enter Land ID">
+            <button class="btn" id="search-land-btn">Search</button>
+            <div id="land-search-result"></div>
+            <button class="btn" id="add-land-btn">+ Add Land</button>
+            <table>
                 <thead>
-                    <tr>
-                        <th>Land ID</th>
-                        <th>Location</th>
-                        <th>Soil Type</th>
-                        <th>Actions</th>
-                    </tr>
+                    <tr><th>Land ID</th><th>Location</th><th>Soil Type</th></tr>
                 </thead>
-                <tbody id="land-list">
-                    <!-- Data dynamically added -->
-                </tbody>
+                <tbody id="land-list"></tbody>
             </table>
         </section>
 
-        <!-- Request Management -->
+        <!-- Requests Section (Fixed) -->
         <section id="manage-requests-section" class="section">
-            <h2>Manage Requests</h2>
-            <input type="text" id="search-request" placeholder="Search by ID...">
-            <button id="add-request-btn" class="btn">+ Add Request</button>
-            <table id="request-table">
+            <h2>Requests</h2>
+            <table>
                 <thead>
-                    <tr>
-                        <th>Request ID</th>
-                        <th>Land ID</th>
-                        <th>Fertilizer Name</th>
-                        <th>Quantity</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
+                    <tr><th>Request ID</th><th>Farmer</th><th>Status</th></tr>
                 </thead>
-                <tbody id="request-list">
-                    <!-- Data dynamically added -->
-                </tbody>
+                <tbody id="request-table-body"></tbody>
             </table>
         </section>
 
-        <!-- Analytics Section -->
+       <!-- Analytics Section -->
 <section id="analytics-section" class="section">
     <h2>Analytics</h2>
-    
-    <!-- Add Chart -->
-    <div class="chart-container">
-        <canvas id="request-chart"></canvas>
-    </div>
+    <canvas id="request-chart"></canvas>
 
-    <table id="analytics-table">
+    <div class="analytics-buttons">
+        <button id="show-farmers">View All Farmers</button>
+        <button id="show-requests">ALL Pending Requests</button>
+        <button id="show-approved">All Approved Requests</button>
+    </div>
+    
+    <ul id="analytics-list"></ul>
+
+    <!-- Analytics Table (Initially Hidden) -->
+    <table id="analytics-table" style="display: none;">
         <thead>
             <tr>
-                <th>Category</th>
-                <th>Total Count</th>
+                <th>Request ID</th>
+                <th>Farmer Name</th>
+                <th>Status</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>Farmers</td>
-                <td id="total-farmers">45</td>
-            </tr>
-            <tr>
-                <td>Lands</td>
-                <td id="total-lands">20</td>
-            </tr>
-            <tr>
-                <td>Requests</td>
-                <td id="total-requests">55</td>
-            </tr>
+        <tbody id="analytics-table-body">
+            <!-- Data will be added dynamically -->
         </tbody>
     </table>
 </section>
 
-<!-- Include Chart.js for Analytics -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="field_officer_dashboard.js"></script>
 </body>
 </html>
