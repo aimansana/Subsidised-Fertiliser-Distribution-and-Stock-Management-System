@@ -8,52 +8,63 @@ if (!isset($_SESSION['username'])) {
 // Include the database connection
 include 'connection.php';
 
+//include functions
+include 'functions.php';
+
 // Get the logged-in farmer's ID
 $username = $_SESSION['username'];
 
+
 // Fetch farmer's ID from login table
-$stmt = $conn->prepare("SELECT FarmerID FROM farmer_login WHERE username = ?");
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$stmt->bind_result($farmerID);
-$stmt->fetch();
-$stmt->close();
+$farmer= fetchSingleRow($conn, "SELECT FarmerID FROM farmer_login WHERE username = ?", "s", $username);
+$farmerID = $farmer['FarmerID']??null;
 
 // Fetch farmer's personal details
-$stmt = $conn->prepare("SELECT fname, lname, phone_no, age, sex FROM farmers WHERE farmerID = ?");
-$stmt->bind_param("i", $farmerID);
-$stmt->execute();
-$stmt->bind_result($fname, $lname, $phone_no, $age, $sex);
-$stmt->fetch();
-$stmt->close();
+$farmerDetails=fetchSingleRow($conn,"SELECT fname, lname, phone_no, age, sex FROM farmers WHERE farmerID = ?","i",$farmerID);
 
 // Fetch land details
-$land_details = [];
-$stmt = $conn->prepare("SELECT landID, landlocation, soiltype FROM farmer_land WHERE farmerID = ?");
-$stmt->bind_param("i", $farmerID);
-$stmt->execute();
-$result = $stmt->get_result();
-while ($row = $result->fetch_assoc()) {
-    $land_details[] = $row;
-}
-$stmt->close();
+$land_details =fetchAllRows($conn," SELECT landID, landlocation, soiltype FROM farmer_land WHERE farmerID = ?", "i", $farmerID);
 
 // Fetch fertilizer request history
-$requests = [];
-$stmt = $conn->prepare("
-SELECT fr.requestID, fr.landID, f.fertName, fr.quantityRequested, fr.requestDate, fr.status
+$requests =fetchAllRows($conn," SELECT fr.requestID, fr.landID, f.fertName, fr.quantityRequested, fr.requestDate, fr.status
 FROM fertilizer_requests fr
 JOIN fertilizers f ON fr.fertID = f.fertID
 WHERE fr.farmerID = ?
 ORDER BY fr.requestDate DESC
-");
-$stmt->bind_param("i", $farmerID);
-$stmt->execute();
-$result = $stmt->get_result();
-while ($row = $result->fetch_assoc()) {
-    $requests[] = $row;
+", "i", $farmerID);
+
+$off=fetchSingleRow($conn,"SELECT registeredBy FROM farmers WHERE farmerID=?","i",$farmerID);
+$offID=$off['registeredBy']??null;
+
+
+//apply request
+if (isset($_POST['submitrequest'])) {
+    $landID = $_POST['landID'];
+    $fertID = $_POST['fertID'];
+    $quantity = $_POST['quantity'];
+
+    // Validate Land ID (Check if land belongs to the farmer)
+    $landExists = fetchSingleRow($conn, "SELECT COUNT(*) FROM farmer_land WHERE farmerID = ? AND landID = ?", "ii", $farmerID, $landID);
+
+    // Validate Fertilizer ID (Check if fertilizer exists)
+    $fertExists = fetchSingleRow($conn, "SELECT COUNT(*) FROM fertilizers WHERE fertID = ?", "i", $fertID);
+
+  
+    if ($landExists > 0 && $fertExists > 0) {
+        // Insert the fertilizer request if both exist       
+        $result = executeQuery($conn,"INSERT INTO fertilizer_requests (farmerID, landID, fertID, quantityRequested,registeredBy, requestDate) VALUES (?, ?, ?,?, ?, NOW())", "iiiii", $farmerID, $landID, $fertID, $quantity,$offID);
+        if ($result) {
+            header("Location: FarmerDashboard.php");
+           exit();
+        }
+        else {
+            echo "<script>alert('Error in submitting request. Try again!');</script>";
+        }
+    } else {
+        echo "Invalid Land ID or Fertilizer ID";
+    }
 }
-$stmt->close();
+
 ?>
 
 
@@ -96,13 +107,13 @@ $stmt->close();
             <h2><i class="fas fa-user"></i> Profile</h2>
             <img src="images/farmer1.jpg" class="profile-pic" alt="Profile Picture">
             <p><i class="fas fa-user"></i>
-            <strong>Name:</strong>  <?php echo htmlspecialchars($fname) . " ". htmlspecialchars($lname); ?></p>
+            <strong>Name:</strong>  <?php echo $farmerDetails['fname'] . " ". $farmerDetails['lname']; ?></p>
             <p><i class="fas fa-phone"></i> 
-            <strong>Phone:</strong> <?php echo htmlspecialchars($phone_no); ?></p>
+            <strong>Phone:</strong> <?php echo $farmerDetails['phone_no']; ?></p>
             <p><i class="fas fa-venus-mars"></i> 
-            <strong>Sex:</strong> <?php echo htmlspecialchars($sex); ?></p>
+            <strong>Sex:</strong> <?php echo $farmerDetails['sex']; ?></p>
             <p><i class="fas fa-venus-mars"></i> 
-            <strong>Age:</strong> <?php echo htmlspecialchars($age); ?></p>
+            <strong>Age:</strong> <?php echo $farmerDetails['age']; ?></p>
             <p><i class="fas fa-users"></i> 
             <strong>Category:</strong> General</p>
             <p><i class="fas fa-id-card"></i> 
@@ -172,14 +183,14 @@ $stmt->close();
         <!-- Apply Request Section -->
         <section id="apply-request" class="section">
             <h2>Apply for Fertilizer</h2>
-            <form>
+            <form method="POST" action="">
                 <label>Land ID:</label>
-                <input type="text" placeholder="Enter Land ID">
-                <label>Fertilizer:</label>
-                <input type="text" placeholder="Enter Fertilizer Name">
+                <input type="text" name="landID" required placeholder="Enter Land ID">
+                <label>Fertilizer ID:</label>
+                <input type="text" name="fertID" required placeholder="Enter Fertilizer Name">
                 <label>Quantity (kg):</label>
-                <input type="number" placeholder="Enter Quantity">
-                <button type="submit" class="btn">Apply</button>
+                <input type="number" name="quantity" required placeholder="Enter Quantity">
+                <button type="submit" name="submitrequest" class="btn">Apply</button>
             </form>
         </section>
 
@@ -191,5 +202,6 @@ $stmt->close();
     </div>
 
     <script src="FarmerDashboard.js"></script>
+               
 </body>
 </html>
