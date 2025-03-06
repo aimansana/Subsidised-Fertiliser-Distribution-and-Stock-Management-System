@@ -62,6 +62,7 @@ if (isset($_POST['submitrequest'])) {
         // Insert the fertilizer request if both exist       
         $result = executeQuery($conn,"INSERT INTO fertilizer_requests (farmerID, landID, fertID, quantityRequested,registeredBy, requestDate) VALUES (?, ?, ?,?, ?, NOW())", "iiiii", $farmerID, $landID, $fertID, $quantity,$offID);
         if ($result) {
+            echo "<script>alert('Request submitted successfully!');</script>";
             header("Location: FarmerDashboard.php");
            exit();
         }
