@@ -1,0 +1,119 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #FAF3E0; /* Light beige */
+}
+
+.container {
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: olivedrab; /* Olive green */
+    color: white;
+    height: 100vh;
+    padding: 20px;
+}
+
+.sidebar .logo h2 {
+    text-align: center;
+    color: #F4E1C1; /* Soft beige */
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #8D6E53; /* Dark beige */
+}
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+button {
+    border: 2px solid black;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+.sidebar {
+    border-right: 2px solid black; /* Adds border on the right side */
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black; /* Adds border around the table */
+}
+
+.data-table th, .data-table td {
+    border: 1px solid black; /* Adds border around table cells */
+    padding: 10px;
+    text-align: left;
+}
+
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Sections */
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+/* Buttons */
+.approve-btn {
+    background-color: green;
+    color: white;
+    padding: 5px;
+}
+
+.reject-btn {
+    background-color: red;
+    color: white;
+    padding: 5px;
+}
+
+.disabled-btn {
+    background-color: gray;
+    color: white;
+    padding: 5px;
+}
+.profile-container {
+    border: 2px solid black;
+    padding: 15px;
+    border-radius: 8px; /* Optional: makes the border rounded */
+    box-shadow: 2px 2px 5px gray; /* Optional: adds a shadow effect */
+}
+.profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black; /* Border around the entire table */
+}
+
+.profile-table th, .profile-table td {
+    border: 1px solid black; /* Borders around table cells */
+    padding: 10px;
+    text-align: left;
+}
