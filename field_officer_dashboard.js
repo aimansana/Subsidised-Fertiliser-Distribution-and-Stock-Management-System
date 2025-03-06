@@ -1,101 +1,221 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Selecting navigation links
-    const profileLink = document.getElementById("profile-link");
-    const farmersLink = document.getElementById("manage-farmers-link");
-    const landLink = document.getElementById("manage-land-link");
-    const requestsLink = document.getElementById("manage-requests-link");
-    const analyticsLink = document.getElementById("analytics-link");
-    const logoutLink = document.getElementById("logout");
+    let farmers = [
+        { id: "F001", name: "Ram Singh", land: "2 Acres", crop: "Wheat" },
+        { id: "F002", name: "Sita Devi", land: "3 Acres", crop: "Rice" }
+    ];
 
-    // Selecting sections
-    const sections = document.querySelectorAll(".section");
-    const profileSection = document.getElementById("profile-section");
-    const farmersSection = document.getElementById("manage-farmers-section");
-    const landSection = document.getElementById("manage-land-section");
-    const requestsSection = document.getElementById("manage-requests-section");
-    const analyticsSection = document.getElementById("analytics-section");
+    let lands = [
+        { id: "L101", location: "Village A", soil: "Loamy" },
+        { id: "L102", location: "Village B", soil: "Sandy" }
+    ];
 
-    // Function to hide all sections and show only the selected one
-    function showSection(section) {
-        sections.forEach((sec) => sec.classList.remove("active"));
-        section.classList.add("active");
+    let requests = [
+        { id: "R001", farmer: "Ram Singh", status: "Pending" },
+        { id: "R002", farmer: "Sita Devi", status: "Approved" },
+        { id: "R003", farmer: "Raj Kumar", status: "Rejected" }
+    ];
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
     }
 
-    // Event listeners for tab navigation
-    profileLink.addEventListener("click", () => showSection(profileSection));
-    farmersLink.addEventListener("click", () => showSection(farmersSection));
-    landLink.addEventListener("click", () => showSection(landSection));
-    requestsLink.addEventListener("click", () => showSection(requestsSection));
-    analyticsLink.addEventListener("click", () => {
-        showSection(analyticsSection);
-        updateChart(); // Load the chart when Analytics is opened
+    document.getElementById("profile-link").addEventListener("click", () => switchTab("profile-section"));
+    document.getElementById("manage-farmers-link").addEventListener("click", () => switchTab("manage-farmers-section"));
+    document.getElementById("manage-land-link").addEventListener("click", () => switchTab("manage-land-section"));
+    document.getElementById("manage-requests-link").addEventListener("click", () => switchTab("manage-requests-section"));
+    document.getElementById("analytics-link").addEventListener("click", () => {
+        switchTab("analytics-section");
+        updateAnalyticsTable();
+        updateChart();
     });
 
-    // Logout Event (Temporary)
-    logoutLink.addEventListener("click", () => {
-        alert("Logging out...");
-        window.location.href = "login.html"; // Redirect to login page
-    });
-
-    // Sample data for Farmers, Land & Requests tables
-    const farmersData = [
-        { name: "Ram Singh", land: "5 acres", crop: "Wheat" },
-        { name: "Mohan Patel", land: "3 acres", crop: "Rice" }
-    ];
-    const landData = [
-        { id: "L001", location: "Village A", soil: "Clay" },
-        { id: "L002", location: "Village B", soil: "Sandy" }
-    ];
-    const requestsData = [
-        { id: "R101", landId: "L001", fertilizer: "Urea", qty: "50kg", status: "Approved" },
-        { id: "R102", landId: "L002", fertilizer: "DAP", qty: "30kg", status: "Pending" }
-    ];
-
-    // Function to populate a table
-    function populateTable(data, tableId) {
-        const tableBody = document.getElementById(tableId);
-        tableBody.innerHTML = "";
-        data.forEach((row) => {
-            const tr = document.createElement("tr");
-            Object.values(row).forEach((val) => {
-                const td = document.createElement("td");
-                td.textContent = val;
-                tr.appendChild(td);
-            });
-            tableBody.appendChild(tr);
+    function updateFarmerTable(filteredFarmers = farmers) {
+        const farmerList = document.getElementById("farmer-list");
+        farmerList.innerHTML = "";
+        filteredFarmers.forEach(farmer => {
+            farmerList.innerHTML += `<tr><td>${farmer.id}</td><td>${farmer.name}</td><td>${farmer.land}</td><td>${farmer.crop}</td></tr>`;
         });
     }
 
-    // Populate the tables on page load
-    populateTable(farmersData, "farmer-list");
-    populateTable(landData, "land-list");
-    populateTable(requestsData, "request-list");
+    function updateLandTable(filteredLands = lands) {
+        const landList = document.getElementById("land-list");
+        landList.innerHTML = "";
+        filteredLands.forEach(land => {
+            landList.innerHTML += `<tr><td>${land.id}</td><td>${land.location}</td><td>${land.soil}</td></tr>`;
+        });
+    }
 
-    // Chart.js for Analytics
-    let chartInstance;
-    function updateChart() {
-        const ctx = document.getElementById("request-chart").getContext("2d");
+    function updateRequestTable() {
+        const requestTable = document.getElementById("request-table-body");
+        requestTable.innerHTML = "";
+        requests.forEach(req => {
+            requestTable.innerHTML += `<tr><td>${req.id}</td><td>${req.farmer}</td><td>${req.status}</td></tr>`;
+        });
+    }
 
-        if (chartInstance) {
-            chartInstance.destroy(); // Destroy the existing chart before creating a new one
+    document.getElementById("add-farmer-btn").addEventListener("click", function () {
+        document.getElementById("farmer-form").style.display = "block";
+    });
+
+    document.getElementById("farmer-form-submit").addEventListener("click", function () {
+        let id = document.getElementById("farmer-id").value.trim();
+        let name = document.getElementById("farmer-name").value.trim();
+        let land = document.getElementById("farmer-land").value.trim();
+        let crop = document.getElementById("farmer-crop").value.trim();
+
+        if (id && name && land && crop) {
+            farmers.push({ id, name, land, crop });
+            updateFarmerTable();
+            document.getElementById("farmer-form").style.display = "none";
+        } else {
+            alert("Please fill all fields.");
+        }
+    });
+
+    document.getElementById("add-land-btn").addEventListener("click", function () {
+        document.getElementById("land-form").style.display = "block";
+    });
+
+    document.getElementById("land-form-submit").addEventListener("click", function () {
+        let id = document.getElementById("land-id").value.trim();
+        let location = document.getElementById("land-location").value.trim();
+        let soil = document.getElementById("land-soil").value.trim();
+
+        if (id && location && soil) {
+            lands.push({ id, location, soil });
+            updateLandTable();
+            document.getElementById("land-form").style.display = "none";
+        } else {
+            alert("Please fill all fields.");
+        }
+    });
+
+    // ✅ **SEARCH FUNCTIONALITY FOR FARMERS**
+    document.getElementById("search-farmer-btn").addEventListener("click", function () {
+        let searchId = document.getElementById("search-farmer").value.trim().toUpperCase();
+
+        if (searchId === "") {
+            alert("Please enter a Farmer ID to search.");
+            return;
         }
 
-        chartInstance = new Chart(ctx, {
+        let filteredFarmers = farmers.filter(farmer => farmer.id.toUpperCase() === searchId);
+
+        if (filteredFarmers.length > 0) {
+            updateFarmerTable(filteredFarmers);
+        } else {
+            alert("Farmer ID not found.");
+            updateFarmerTable([]);
+        }
+    });
+
+    document.getElementById("search-farmer").addEventListener("input", function () {
+        if (this.value.trim() === "") {
+            updateFarmerTable();
+        }
+    });
+
+    // ✅ **SEARCH FUNCTIONALITY FOR LANDS**
+    document.getElementById("search-land-btn").addEventListener("click", function () {
+        let searchId = document.getElementById("search-land").value.trim().toUpperCase();
+
+        if (searchId === "") {
+            alert("Please enter a Land ID to search.");
+            return;
+        }
+
+        let filteredLands = lands.filter(land => land.id.toUpperCase() === searchId);
+
+        if (filteredLands.length > 0) {
+            updateLandTable(filteredLands);
+        } else {
+            alert("Land ID not found.");
+            updateLandTable([]);
+        }
+    });
+
+    document.getElementById("search-land").addEventListener("input", function () {
+        if (this.value.trim() === "") {
+            updateLandTable();
+        }
+    });
+
+    // ✅ **ANALYTICS - CHARTJS**
+    function updateChart() {
+        let ctx = document.getElementById("analytics-chart").getContext("2d");
+
+        let statusCounts = { Pending: 0, Approved: 0, Rejected: 0 };
+        requests.forEach(req => statusCounts[req.status]++);
+
+        new Chart(ctx, {
             type: "bar",
             data: {
-                labels: ["Farmers", "Lands", "Requests"],
-                datasets: [
-                    {
-                        label: "Total Count",
-                        data: [45, 20, 55], // Dummy data
-                        backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"]
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
+                labels: ["Pending", "Approved", "Rejected"],
+                datasets: [{
+                    label: "Fertilizer Requests",
+                    data: [statusCounts.Pending, statusCounts.Approved, statusCounts.Rejected],
+                    backgroundColor: ["orange", "green", "red"]
+                }]
             }
         });
     }
+
+    // ✅ **ANALYTICS - TABLE VIEW**
+    document.getElementById("show-farmers").addEventListener("click", function() {
+        showTableWithData("farmers");
+    });
+
+    document.getElementById("show-requests").addEventListener("click", function() {
+        showTableWithData("pending");
+    });
+
+    document.getElementById("show-approved").addEventListener("click", function() {
+        showTableWithData("approved");
+    });
+
+    function showTableWithData(type) {
+        let table = document.getElementById("analytics-table");
+        let tableBody = document.getElementById("analytics-table-body");
+
+        // Show the table
+        table.style.display = "table";
+
+        // Clear previous data
+        tableBody.innerHTML = "";
+
+        // Example Data (Replace with actual fetched data)
+        let data = [];
+
+        if (type === "farmers") {
+            data = [
+                { id: "F001", name: "John Doe", status: "Farmer" },
+                { id: "F002", name: "Jane Smith", status: "Farmer" }
+            ];
+        } else if (type === "pending") {
+            data = [
+                { id: "R101", name: "John Doe", status: "Pending" },
+                { id: "R102", name: "Jane Smith", status: "Pending" }
+            ];
+        } else if (type === "approved") {
+            data = [
+                { id: "R201", name: "John Doe", status: "Approved" },
+                { id: "R202", name: "Jane Smith", status: "Approved" }
+            ];
+        }
+
+        // Populate the table with the selected data
+        data.forEach(item => {
+            let row = `<tr>
+                <td>${item.id}</td>
+                <td>${item.name}</td>
+                <td>${item.status}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+    }
+
+    updateFarmerTable();
+    updateLandTable();
+    updateRequestTable();
 });
