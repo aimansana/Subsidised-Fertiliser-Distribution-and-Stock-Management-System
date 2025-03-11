@@ -12,8 +12,8 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
-            <img src="images/farmer1.jpg" alt="Profile Picture">
-            <h2>Farmer Panel</h2>
+            <img src="images/field_officer.jpeg" alt="Profile Picture">
+            <h2>Farmer Dashboard</h2>
         </div>
         <ul class="nav-links">
             <li><a href="#" onclick="showSection('profile')"><i class="fas fa-user"></i> Profile</a></li>
@@ -33,49 +33,66 @@
 
         <!-- Profile Section -->
         <section id="profile" class="section active">
-            <h2><i class="fas fa-user"></i> Profile</h2>
-            <img src="images/farmer1.jpg" class="profile-pic" alt="Profile Picture">
-            <p><i class="fas fa-user"></i> <strong>Name:</strong> John Doe</p>
-            <p><i class="fas fa-phone"></i> <strong>Phone:</strong> +91 9876543210</p>
-            <p><i class="fas fa-venus-mars"></i> <strong>Sex:</strong> Male</p>
-            <p><i class="fas fa-users"></i> <strong>Category:</strong> General</p>
-            <p><i class="fas fa-id-card"></i> <strong>Aadhaar No:</strong> 1234-5678-9101</p>
+           <div class="profile-container">
+                <table class="profile-table">
+                    <tr>
+                        <th>Name</th>
+                        <td>John Doe</td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td>+91 9876543210</td>
+                    </tr>
+                    <tr>
+                        <th>Sex</th>
+                        <td>Male</td>
+                    </tr>
+                    <tr>
+                        <th>Category</th>
+                        <td>General</td>
+                    </tr>
+                    <tr>
+                        <th>Aadhar No</th>
+                        <td>1234-5678-9101</td>
+                    </tr>
+                </table>
+            </div>
         </section>
         
 
-        <!-- Land Details Section -->
+        <!-- Land Details -->
         <section id="land" class="section">
             <h2>Land Details</h2>
             <table>
                 <tr>
                     <th>Land ID</th>
                     <th>Location</th>
-                    <th>Size (Acres)</th>
                     <th>Soil Type</th>
+                    <th>Size (Acres)</th>
                 </tr>
                 <tr>
                     <td>001</td>
                     <td>Village A</td>
-                    <td>5</td>
                     <td>Loamy</td>
+                    <td>5</td>
                 </tr>
                 <tr>
                     <td>002</td>
                     <td>Village B</td>
+                    <td>Clay</td>
                     <td>3</td>
-                    <td>Sandy</td>
                 </tr>
             </table>
         </section>
 
         <!-- Requests Section -->
         <section id="requests" class="section">
-            <h2>Fertilizer Requests</h2>
+            <h2>Requests</h2>
             <table>
                 <tr>
                     <th>Request ID</th>
                     <th>Land ID</th>
-                    <th>Fertilizer</th>
+                    <th>Fertilizer Name</th>
                     <th>Quantity</th>
                     <th>Request Date</th>
                     <th>Status</th>
@@ -86,18 +103,18 @@
                     <td>Urea</td>
                     <td>50kg</td>
                     <td>2025-02-25</td>
-                    <td>Pending</td>
+                    <td>Approved</td>
                 </tr>
             </table>
         </section>
 
-        <!-- Apply Request Section -->
+        <!-- Apply Request -->
         <section id="apply-request" class="section">
             <h2>Apply for Fertilizer</h2>
             <form>
                 <label>Land ID:</label>
                 <input type="text" placeholder="Enter Land ID">
-                <label>Fertilizer:</label>
+                <label>Fertilizer Name:</label>
                 <input type="text" placeholder="Enter Fertilizer Name">
                 <label>Quantity (kg):</label>
                 <input type="number" placeholder="Enter Quantity">
@@ -108,7 +125,7 @@
         <!-- Support Section -->
         <section id="support" class="section">
             <h2>Support</h2>
-            <p>Contact us at <strong>support@agriculture.gov</strong></p>
+            <p>For any issues, contact: <strong>support@agriculture.gov</strong></p>
         </section>
     </div>
 
