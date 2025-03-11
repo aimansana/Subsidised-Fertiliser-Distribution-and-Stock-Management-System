@@ -1,101 +1,92 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Selecting navigation links
-    const profileLink = document.getElementById("profile-link");
-    const farmersLink = document.getElementById("manage-farmers-link");
-    const landLink = document.getElementById("manage-land-link");
-    const requestsLink = document.getElementById("manage-requests-link");
-    const analyticsLink = document.getElementById("analytics-link");
-    const logoutLink = document.getElementById("logout");
-
-    // Selecting sections
+    // **TABS MANAGEMENT**
     const sections = document.querySelectorAll(".section");
-    const profileSection = document.getElementById("profile-section");
-    const farmersSection = document.getElementById("manage-farmers-section");
-    const landSection = document.getElementById("manage-land-section");
-    const requestsSection = document.getElementById("manage-requests-section");
-    const analyticsSection = document.getElementById("analytics-section");
+    const sidebarLinks = document.querySelectorAll(".sidebar ul li a");
 
-    // Function to hide all sections and show only the selected one
-    function showSection(section) {
-        sections.forEach((sec) => sec.classList.remove("active"));
-        section.classList.add("active");
-    }
-
-    // Event listeners for tab navigation
-    profileLink.addEventListener("click", () => showSection(profileSection));
-    farmersLink.addEventListener("click", () => showSection(farmersSection));
-    landLink.addEventListener("click", () => showSection(landSection));
-    requestsLink.addEventListener("click", () => showSection(requestsSection));
-    analyticsLink.addEventListener("click", () => {
-        showSection(analyticsSection);
-        updateChart(); // Load the chart when Analytics is opened
-    });
-
-    // Logout Event (Temporary)
-    logoutLink.addEventListener("click", () => {
-        alert("Logging out...");
-        window.location.href = "login.html"; // Redirect to login page
-    });
-
-    // Sample data for Farmers, Land & Requests tables
-    const farmersData = [
-        { name: "Ram Singh", land: "5 acres", crop: "Wheat" },
-        { name: "Mohan Patel", land: "3 acres", crop: "Rice" }
-    ];
-    const landData = [
-        { id: "L001", location: "Village A", soil: "Clay" },
-        { id: "L002", location: "Village B", soil: "Sandy" }
-    ];
-    const requestsData = [
-        { id: "R101", landId: "L001", fertilizer: "Urea", qty: "50kg", status: "Approved" },
-        { id: "R102", landId: "L002", fertilizer: "DAP", qty: "30kg", status: "Pending" }
-    ];
-
-    // Function to populate a table
-    function populateTable(data, tableId) {
-        const tableBody = document.getElementById(tableId);
-        tableBody.innerHTML = "";
-        data.forEach((row) => {
-            const tr = document.createElement("tr");
-            Object.values(row).forEach((val) => {
-                const td = document.createElement("td");
-                td.textContent = val;
-                tr.appendChild(td);
-            });
-            tableBody.appendChild(tr);
+    sidebarLinks.forEach(link => {
+        link.addEventListener("click", function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute("data-target");
+            showSection(targetId);
         });
+    });
+
+    function showSection(sectionId) {
+        sections.forEach(section => section.classList.remove("active"));
+        document.getElementById(sectionId)?.classList.add("active");
     }
 
-    // Populate the tables on page load
-    populateTable(farmersData, "farmer-list");
-    populateTable(landData, "land-list");
-    populateTable(requestsData, "request-list");
+    // **DUMMY DATA**
+    const farmersData = [
+        { id: "F201", name: "Raj Sharma", land: "5 acres", crop: "Wheat" },
+        { id: "F202", name: "Amit Verma", land: "3 acres", crop: "Rice" },
+        { id: "F203", name: "Suresh Kumar", land: "4 acres", crop: "Maize" }
+    ];
 
-    // Chart.js for Analytics
-    let chartInstance;
-    function updateChart() {
-        const ctx = document.getElementById("request-chart").getContext("2d");
+    const requestsData = [
+        { id: "R101", farmer: "Raj Sharma", status: "Pending" },
+        { id: "R102", farmer: "Amit Verma", status: "Approved" },
+        { id: "R103", farmer: "Suresh Kumar", status: "Pending" }
+    ];
 
-        if (chartInstance) {
-            chartInstance.destroy(); // Destroy the existing chart before creating a new one
+    // **TABLE RENDERING FUNCTION**
+    function renderTable(tableId, data, headers) {
+        const tableBody = document.getElementById(tableId);
+        if (!tableBody) return;
+
+        tableBody.innerHTML = data.length
+            ? data.map(item => `<tr>${headers.map(header => `<td>${item[header]}</td>`).join("")}</tr>`).join("")
+            : "<tr><td colspan='3'>No records found</td></tr>";
+    }
+
+    // **LOAD INITIAL DATA**
+    renderTable("farmer-list", farmersData, ["id", "name", "land", "crop"]);
+    renderTable("request-table-body", requestsData, ["id", "farmer", "status"]);
+
+    // **TOGGLE FORMS**
+    function setupFormToggle(buttonId, formId) {
+        const button = document.getElementById(buttonId);
+        const form = document.getElementById(formId);
+        if (!button || !form) return;
+
+        button.addEventListener("click", () => form.style.display = "block");
+        form.querySelector(".close-btn").addEventListener("click", () => form.style.display = "none");
+    }
+
+    setupFormToggle("add-farmer-btn", "add-farmer-form");
+    setupFormToggle("search-farmer-btn", "search-farmer-form");
+
+    // **ADD FARMER FUNCTIONALITY**
+    document.getElementById("submit-farmer")?.addEventListener("click", function () {
+        const name = document.getElementById("farmer-name").value.trim();
+        const land = document.getElementById("farmer-land").value.trim();
+        const crop = document.getElementById("farmer-crop").value.trim();
+
+        if (!name || !land || !crop) {
+            alert("Please fill in all fields.");
+            return;
         }
 
-        chartInstance = new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: ["Farmers", "Lands", "Requests"],
-                datasets: [
-                    {
-                        label: "Total Count",
-                        data: [45, 20, 55], // Dummy data
-                        backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"]
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
-    }
+        farmersData.push({ id: `F${farmersData.length + 201}`, name, land, crop });
+        renderTable("farmer-list", farmersData, ["id", "name", "land", "crop"]);
+        document.getElementById("add-farmer-form").style.display = "none";
+    });
+
+    // **SEARCH FARMER FUNCTIONALITY**
+    document.getElementById("submit-search")?.addEventListener("click", function () {
+        const searchId = document.getElementById("search-farmer-id").value.trim();
+        const farmer = farmersData.find(f => f.id === searchId);
+
+        alert(farmer ? `Farmer Found!\nName: ${farmer.name}\nLand: ${farmer.land}\nCrop: ${farmer.crop}` : "Farmer not found!");
+        document.getElementById("search-farmer-form").style.display = "none";
+    });
+
+    // **LOGOUT**
+    document.getElementById("logout")?.addEventListener("click", function () {
+        alert("Logging out...");
+        window.location.href = "login.html";
+    });
+
+    // **SET DEFAULT ACTIVE SECTION**
+    showSection("profile-section");
 });
