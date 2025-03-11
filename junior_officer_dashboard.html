@@ -5,22 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Junior Officer Dashboard</title>
     <link rel="stylesheet" href="junior_officer_dashboard.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" crossorigin="anonymous"></script> <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- FontAwesome -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="logo">
-                <h2>Junior Officer</h2>
+                <h2>Fertilizer Management</h2>
             </div>
             <ul>
                 <li><a href="#" onclick="showSection('profile')"><i class="fas fa-user"></i> Profile</a></li>
                 <li><a href="#" onclick="showSection('field-officers')"><i class="fas fa-users"></i> Field Officers</a></li>
                 <li><a href="#" onclick="showSection('requests')"><i class="fas fa-file-alt"></i> Requests</a></li>
                 <li><a href="#" onclick="showSection('analytics')"><i class="fas fa-chart-bar"></i> Analytics</a></li>
-                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </div>
 
@@ -29,21 +30,20 @@
             <div class="header">
                 <h2>Dashboard</h2>
                 <div class="user-info">
-                    
-                    <p>Welcome, Junior Officer</p>
+                    <img src="user-avatar.png" alt="User Avatar">
+                    <p>Junior Officer</p>
                 </div>
             </div>
 
-            <!-- Profile Section (Default View) -->
-            <div class="section" id="profile">
+            <!-- Profile Section -->
+            <div class="section active" id="profile">
                 <h3><i class="fas fa-user"></i> Your Profile</h3>
                 <div class="profile-container">
-                    <img src="images/farmer1.jpg" alt="Profile Picture" class="profile-pic">
-                    <table>
+                    <img src="images/field_officer2.jpeg" alt="Profile Picture" class="profile-pic">
+                    <table class="profile-table">
                         <tr><th>Name:</th><td>John Doe</td></tr>
                         <tr><th>Address:</th><td>123 Street, City</td></tr>
                         <tr><th>Sex:</th><td>Male</td></tr>
-                        <tr><th>Category:</th><td>General</td></tr>
                         <tr><th>Designation:</th><td>Junior Officer</td></tr>
                         <tr><th>Email:</th><td>johndoe@email.com</td></tr>
                         <tr><th>Phone:</th><td>9876543210</td></tr>
@@ -52,9 +52,9 @@
             </div>
 
             <!-- Field Officers Section -->
-            <div class="section" id="field-officers" style="display: none;">
+            <div class="section" id="field-officers">
                 <h3><i class="fas fa-users"></i> Field Officer Details</h3>
-                <table>
+                <table class="data-table">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -63,24 +63,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>John Doe</td>
-                            <td>123-456-7890</td>
-                            <td>Excellent</td>
-                        </tr>
-                        <tr>
-                            <td>Jane Smith</td>
-                            <td>234-567-8901</td>
-                            <td>Good</td>
-                        </tr>
+                        <tr><td>John Doe</td><td>123-456-7890</td><td>⭐ Excellent</td></tr>
+                        <tr><td>Jane Smith</td><td>234-567-8901</td><td>🌟 Good</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <!-- Requests Section -->
-            <div class="section" id="requests" style="display: none;">
+            <div class="section" id="requests">
                 <h3><i class="fas fa-file-alt"></i> Fertilizer Requests</h3>
-                <table>
+                <table class="data-table">
                     <thead>
                         <tr>
                             <th>Request ID</th>
@@ -93,10 +85,18 @@
                         <tr>
                             <td>001</td>
                             <td>Farmer A</td>
-                            <td>Pending</td>
+                            <td><i class="fas fa-hourglass-half"></i> Pending</td>
                             <td>
-                                <button>Approve</button>
-                                <button>Reject</button>
+                                <button onclick="approveRequest(this)" class="approve-btn"><i class="fas fa-check"></i> Approve</button>
+                                <button onclick="rejectRequest(this)" class="reject-btn"><i class="fas fa-times"></i> Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>002</td>
+                            <td>Farmer B</td>
+                            <td><i class="fas fa-check-circle"></i> Approved</td>
+                            <td>
+                                <button disabled class="disabled-btn"><i class="fas fa-ban"></i> N/A</button>
                             </td>
                         </tr>
                     </tbody>
@@ -104,13 +104,14 @@
             </div>
 
             <!-- Analytics Section -->
-            <div class="section" id="analytics" style="display: none;">
-                <h3><i class="fas fa-chart-bar"></i> Request Statistics</h3>
-                <canvas id="requestChart"></canvas>
+            <div class="section" id="analytics">
+                <h3><i class="fas fa-chart-bar"></i> Analytics</h3>
+                <canvas id="requestsChart"></canvas>
             </div>
+
         </div>
     </div>
-
+    
     <script src="junior_officer_dashboard.js"></script>
 </body>
 </html>
