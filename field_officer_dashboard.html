@@ -5,122 +5,335 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Field Officer Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="field_officer_dashboard.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style> 
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F5F5DC;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: #556B2F;
+            color: white;
+            padding-top: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .sidebar ul li:hover {
+            background-color: #6B8E23;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .sidebar .logo img {
+            width: 80px;
+            border-radius: 50%;
+            border: 3px solid beige;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #3D6A41;
+            text-align: left;
+        }
+
+        th {
+            background-color: #A6D1B2;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-pic {
+            width: 100px;
+            border-radius: 50%;
+        }
+
+        .profile-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #3D6A41;
+        }
+
+        .profile-table th, .profile-table td {
+            padding: 10px;
+            border: 1px solid #3D6A41;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">
-            <h2>🌿 Field Officer</h2>
-        </div>
-        <ul>
-            <li><a href="#" id="profile-link"><i class="fas fa-user"></i> Profile</a></li>
-            <li><a href="#" id="manage-farmers-link"><i class="fas fa-users"></i> Farmers</a></li>
-            <li><a href="#" id="manage-land-link"><i class="fas fa-map"></i> Land</a></li>
-            <li><a href="#" id="manage-requests-link"><i class="fas fa-tasks"></i> Requests</a></li>
-            <li><a href="#" id="analytics-link"><i class="fas fa-chart-bar"></i> Analytics</a></li>
-            <li><a href="login.html" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-        </ul>
+<div class="sidebar">
+    <div class="logo">
+        <img src="images/firm_logo1.png" alt="Logo">
+        <h2><i class="fa-solid fa-leaf"></i> Field Officer</h2>
     </div>
+    <ul>
+        <li><a href="#" data-target="profile-section"><i class="fa-solid fa-user"></i> Profile</a></li>
+        <li><a href="#" data-target="manage-farmers-section"><i class="fa-solid fa-tractor"></i> Farmers</a></li>
+        <li><a href="#" data-target="manage-land-section"><i class="fa-solid fa-tree"></i> Land</a></li>
+        <li><a href="#" data-target="request-section"><i class="fa-solid fa-file-alt"></i> Requests</a></li>
+        <li><a href="#" data-target="analytics-section"><i class="fa-solid fa-chart-bar"></i> Analytics</a></li>
+        <li><a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+    </ul>
+    <!-- Sections -->
+<section id="profile-section">Profile Content</section>
+<section id="manage-farmers-section" style="display: none;">Farmers Content</section>
+<section id="manage-land-section" style="display: none;">Land Content</section>
+<section id="request-section" style="display: none;">Requests Content</section>
+<section id="analytics-section" style="display: none;">Analytics Content</section>    
+</div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <header>
-            <h1>Dashboard</h1>
-        </header>
+<div class="main-content">
+    <header>
+        <h1>Dashboard</h1>
+    </header>
 
-        <!-- Profile Section -->
-        <section id="profile-section" class="section active">
-            <h3><i class="fas fa-user"></i> Your Profile</h3>
-            <div class="profile-container">
-                <img src="images/farmer1.jpg" alt="Profile Picture" class="profile-pic">
-                <table>
-                    <tr><th>Name:</th><td>John Doe</td></tr>
-                    <tr><th>Designation:</th><td>Field Officer</td></tr>
-                    <tr><th>Email:</th><td>johndoe@email.com</td></tr>
-                    <tr><th>Phone:</th><td>9876543210</td></tr>
-                </table>
-            </div>
-        </section>
-
-        <!-- Farmers Management Section -->
-        <section id="manage-farmers-section" class="section">
-            <h2>Manage Farmers</h2>
-            <button class="btn" id="add-farmer-btn">+ Add Farmer</button>
-            <button class="btn" id="search-farmer-btn">🔍 Search by ID</button> <!-- Search Button -->
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Land Area</th>
-                        <th>Crop Type</th>
-                    </tr>
-                </thead>
-                <tbody id="farmer-list"></tbody>
+    <section id="profile-section" class="section active">
+        <h3>Your Profile</h3>
+        <div class="profile-container">
+            <img src="images/farmer1.jpg" alt="Profile Picture" class="profile-pic">
+            <table class="profile-table">
+                <tr><th>Name:</th><td>John Doe</td></tr>
+                <tr><th>Designation:</th><td>Field Officer</td></tr>
+                <tr><th>Email:</th><td>johndoe@email.com</td></tr>
+                <tr><th>Phone:</th><td>9876543210</td></tr>
             </table>
-        </section>
-        
-        <!-- Add Farmer Popup Form -->
-        <div id="add-farmer-form" class="popup-form">
-            <h3>Add Farmer</h3>
-            <label>Farmer Name: <input type="text" id="farmer-name"></label><br>
-            <label>Land Area: <input type="text" id="farmer-land"></label><br>
-            <label>Crop Type: <input type="text" id="farmer-crop"></label><br>
-            <button id="submit-farmer">Submit</button>
-            <button id="close-farmer-form">Close</button>
         </div>
-        
-        <!-- Search by ID Popup -->
-        <div id="search-farmer-form" class="popup-form">
-            <h3>Search Farmer</h3>
-            <label>Enter Farmer ID: <input type="text" id="search-farmer-id"></label><br>
-            <button id="submit-search">Search</button>
-            <button id="close-search-form">Close</button>
-        </div>
-        
-        <!-- Manage Land Section -->
-        <section id="manage-land-section" class="section">
-            <h2>Manage Land</h2>
-            <button class="btn" id="add-land-btn">+ Add Land</button>
-            <table>
-                <thead>
-                    <tr><th>Land ID</th><th>Location</th><th>Soil Type</th></tr>
-                </thead>
-                <tbody id="land-list"></tbody>
-            </table>
-        </section>
+    </section>
 
-        <!-- Add Land Popup Form -->
-        <div id="add-land-form" class="popup-form">
-            <h3>Add Land</h3>
-            <label>Location: <input type="text" id="land-location"></label><br>
-            <label>Soil Type: <input type="text" id="land-soil"></label><br>
-            <button id="submit-land">Submit</button>
-            <button id="close-land-form">Close</button>
-        </div>
+    <section id="manage-farmers-section" class="section">
+        <h2>Manage Farmers</h2>
+        <button id="add-farmer-btn">Add Farmer</button>
+        <button id="search-btn">Search by ID</button>  
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Land Area</th>
+                    <th>Crop Type</th>
+                </tr>
+            </thead>
+            <tbody id="farmer-list"></tbody>
+        </table>
+    </section>
 
-        <!-- Analytics Section -->
-        <section id="analytics-section" class="section">
-            <h2>Analytics</h2>
-            <canvas id="request-chart"></canvas>
-            <div class="analytics-buttons">
-                <button id="show-farmers">View All Farmers</button>
-                <button id="show-requests">All Pending Requests</button>
-                <button id="show-approved">All Approved Requests</button>
-            </div>
-            <table>
-                <thead>
-                    <tr><th>ID</th><th>Type</th><th>Count</th></tr>
-                </thead>
-                <tbody id="analytics-table-body"></tbody>
-            </table>
-        </section>
-    </div>
+    <section id="manage-land-section" class="section">
+        <h2>Manage Land</h2>
+        <button id="add-land-btn">+ Add Land</button>
+        <button id="search-land-btn">Search by ID</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Location</th>
+                    <th>Soil Type</th>
+                </tr>
+            </thead>
+            <tbody id="land-list"></tbody>
+        </table>
+    </section>
+    <section id="request-section" class="section">
+        <h2>Manage Requests</h2>
+        <button id="add-request-btn">+ Add Request</button>
+        <button id="search-request-btn">Search by ID</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Farmer Name</th>
+                    <th>Request Type</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="request-list"></tbody>
+        </table>
+    </section>
 
-    <script src="field_officer_dashboard.js"></script>
+
+    <section id="analytics-section" class="section">
+        <h2>Analytics</h2>
+        <canvas id="analytics-chart"></canvas>
+    </section>
+
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // ----------------- Tab Switching -----------------
+    const tabs = document.querySelectorAll('a[data-target]');
+    const sections = document.querySelectorAll('section');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = tab.getAttribute('data-target');
+
+            sections.forEach(section => {
+                section.style.display = section.id === targetId ? 'block' : 'none';
+            });
+        });
+    });
+
+    // ----------------- Sample Data -----------------
+    let farmers = [
+        { id: 'F001', name: 'John Doe', landArea: '5 acres', cropType: 'Wheat' },
+    ];
+    let lands = [
+        { id: 'L001', location: 'Village A', soilType: 'Loamy' },
+    ];
+
+    // ----------------- Render Table -----------------
+    function renderTable(data, tableBodyId, headers) {
+        const tableBody = document.getElementById(tableBodyId);
+        if (!tableBody) return;
+        tableBody.innerHTML = data.length
+            ? data.map(item => `<tr>${headers.map(h => `<td>${item[h]}</td>`).join('')}</tr>`).join('')
+            : `<tr><td colspan='${headers.length}'>No records found</td></tr>`;
+    }
+
+    renderTable(farmers, 'farmer-list', ['id', 'name', 'landArea', 'cropType']);
+    renderTable(lands, 'land-list', ['id', 'location', 'soilType']);
+
+    // ----------------- Initialize Chart -----------------
+    let analyticsChart;
+    const ctx = document.getElementById('analytics-chart');
+    if (ctx) {
+        analyticsChart = new Chart(ctx.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Farmers', 'Lands'],
+                datasets: [{
+                    label: 'Count',
+                    data: [farmers.length, lands.length],
+                    backgroundColor: ['#4CAF50', '#6B8E23']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // ----------------- Update Chart -----------------
+    function updateAnalyticsChart() {
+        if (analyticsChart) {
+            analyticsChart.data.datasets[0].data = [farmers.length, lands.length];
+            analyticsChart.update();
+        }
+    }
+
+    // ----------------- Add Farmer -----------------
+    document.getElementById("add-farmer-btn")?.addEventListener("click", () => {
+        const id = prompt("Enter Farmer ID:");
+        const name = prompt("Enter Farmer Name:");
+        const landArea = prompt("Enter Land Area:");
+        const cropType = prompt("Enter Crop Type:");
+
+        if (id && name && landArea && cropType) {
+            farmers.push({ id, name, landArea, cropType });
+            renderTable(farmers, 'farmer-list', ['id', 'name', 'landArea', 'cropType']);
+            updateAnalyticsChart();
+            alert("Farmer added successfully!");
+        } else {
+            alert("All fields are required!");
+        }
+    });
+
+    // ----------------- Add Land -----------------
+    document.getElementById("add-land-btn")?.addEventListener("click", () => {
+        const id = prompt("Enter Land ID:");
+        const location = prompt("Enter Location:");
+        const soilType = prompt("Enter Soil Type:");
+
+        if (id && location && soilType) {
+            lands.push({ id, location, soilType });
+            renderTable(lands, 'land-list', ['id', 'location', 'soilType']);
+            updateAnalyticsChart();
+            alert("Land added successfully!");
+        } else {
+            alert("All fields are required!");
+        }
+    });
+
+    // ----------------- Search by ID -----------------
+    document.getElementById("search-btn")?.addEventListener("click", () => {
+        const searchId = prompt("Enter ID to Search:");
+
+        const farmer = farmers.find(f => f.id === searchId);
+        const land = lands.find(l => l.id === searchId);
+
+        if (farmer) {
+            alert(`Farmer Found:\nID: ${farmer.id}\nName: ${farmer.name}\nLand Area: ${farmer.landArea}\nCrop Type: ${farmer.cropType}`);
+        } else if (land) {
+            alert(`Land Found:\nID: ${land.id}\nLocation: ${land.location}\nSoil Type: ${land.soilType}`);
+        } else {
+            alert("No record found with this ID.");
+        }
+    });
+
+    // ----------------- Logout Functionality -----------------
+    document.getElementById("logout-button")?.addEventListener("click", () => {
+        window.location.href = 'index.html';
+    });
+
+    // Show the first tab by default
+    if (sections.length > 0) {
+        sections.forEach((section, index) => {
+            section.style.display = index === 0 ? 'block' : 'none';
+        });
+    }
+});
+</script>
+
 </body>
 </html>
