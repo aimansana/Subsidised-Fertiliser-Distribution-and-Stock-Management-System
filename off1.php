@@ -4,726 +4,439 @@ if (!isset($_SESSION['username'])) {
     header("Location: OfficerLogin.php");
     exit();
 }
-
+//best off1
 include 'connection.php';
+include 'functions.php';
 
 $username = $_SESSION['username'];
 
 // Fetch officer's ID
-$stmt = $conn->prepare("SELECT offID FROM officer_login WHERE username = ?");
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$stmt->bind_result($offID);
-$stmt->fetch();
-$stmt->close();
+$officer = fetchSingleRow($conn, "SELECT offID FROM officer_login WHERE username = ?", "s", $username);
+$offID = $officer['offID'];
 
 // Fetch officer's details
-$stmt = $conn->prepare("SELECT Fname, Lname, phone_no, email, age, sex FROM officers WHERE offID = ?");
-$stmt->bind_param("i", $offID);
-$stmt->execute();
-$stmt->bind_result($oFname, $oLname, $ophone_no, $oemail, $oage, $osex);
-$stmt->fetch();
-$stmt->close();
+$officerDetails = fetchSingleRow($conn, "SELECT * FROM officers WHERE offID = ?", "i", $offID);
 
 $msg1 = $msg2 = $msg3 = "";
 $land_details = $requests = [];
 $farmerID = $firstName = $lastName = $age = $telNo = $sex = $addy = "";
-$showUpdateForm = false; // Track if update form should be shown
+$showUpdateForm = false;
 
+// Fetch all farmers under the officer
+$farmers = fetchAllRows($conn, "SELECT * FROM farmers WHERE registeredBy = ?", "i", $offID);
 
-//fetch all farmers under the officer
-$query = "SELECT * FROM farmers WHERE registeredBy = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $offID);
-$stmt->execute();
-$result = $stmt->get_result();
-$farmers = [];
-while ($row = $result->fetch_assoc()) {
-    $farmers[] = $row;
-}
-$stmt->close();
+// Fetch all land under the officer
+$lands = fetchAllRows($conn, "SELECT * FROM farmer_land WHERE registeredBy = ? ORDER BY landID", "i", $offID);
 
-//fetch all land under the officer
-$query = "SELECT * FROM farmer_land WHERE registeredBy = ? order by landID";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $offID);
-$stmt->execute();
-$result = $stmt->get_result();
-$lands = [];
-while ($row = $result->fetch_assoc()) {
-    $lands[] = $row;
-}
-$stmt->close();
-
-//fetch all fertilizer requests under the officer
-$query = "SELECT fr.farmerID, fr.requestID, fr.landID, f.fertName, fr.quantityRequested, fr.requestDate, fr.status
-FROM fertilizer_requests fr
-JOIN fertilizers f ON fr.fertID = f.fertID
-WHERE fr.registeredBy = ?
-ORDER BY fr.requestDate DESC";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $offID);
-$stmt->execute();
-$result = $stmt->get_result();
-$fertilizer_requests = [];
-while ($row = $result->fetch_assoc()) {
-    $fertilizer_requests[] = $row;
-}
-$stmt->close();
+// Fetch all fertilizer requests under the officer
+$fertilizer_requests = fetchAllRows($conn, "SELECT fr.farmerID, fr.requestID, fr.landID, f.fertName, fr.quantityRequested, fr.requestDate, fr.status FROM fertilizer_requests fr JOIN fertilizers f ON fr.fertID = f.fertID WHERE fr.registeredBy = ? ORDER BY fr.requestDate DESC", "i", $offID);
 
 // Display total counts
-$query = "SELECT 
-    (SELECT COUNT(*) FROM farmers WHERE registeredBy = ?) AS farmer_count,
-    (SELECT COUNT(*) FROM farmer_land WHERE registeredBy = ?) AS land_count,
-    (SELECT COUNT(*) FROM fertilizer_requests WHERE registeredBy = ?) AS request_count";
+$counts = fetchSingleRow($conn, "SELECT (SELECT COUNT(*) FROM farmers WHERE registeredBy = ?) AS farmer_count, (SELECT COUNT(*) FROM farmer_land WHERE registeredBy = ?) AS land_count, (SELECT COUNT(*) FROM fertilizer_requests WHERE registeredBy = ?) AS request_count", "iii", $offID, $offID, $offID);
+$farmer_count = $counts['farmer_count'];
+$land_count = $counts['land_count'];
+$request_count = $counts['request_count'];
 
-$stmt = $conn->prepare($query);
-$stmt->bind_param("iii", $offID, $offID, $offID);
-$stmt->execute();
-$stmt->bind_result($farmer_count, $land_count, $request_count);
-$stmt->fetch();
-$stmt->close();
-
-// Step 1: Search FarmerID
+// Search Farmer by ID
 if (isset($_POST['btnSearchID'])) {
     $farmerID = $_POST['txtFarmerID'];
+    $farmer = fetchSingleRow($conn, "SELECT * FROM farmers WHERE FarmerID = ? AND registeredBy = ?", "ii", $farmerID, $offID);
 
-    $query = "SELECT * FROM farmers WHERE FarmerID = ? AND registeredBy= ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ii", $farmerID, $offID);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Fetch farmer's details
-    if ($record = $result->fetch_assoc()) {
-        $firstName = $record['FName'];
-        $lastName = $record['LName'];
-        $age = $record['age'];
-        $sex = $record['sex'];
-        $telNo = $record['phone_no'];
-        $addy = $record['addy'];
-
-        // Fetch farmer's land details
-        $query1="SELECT landID, landlocation, soiltype FROM farmer_land WHERE farmerID = ?";
-        $stmt1 = $conn->prepare($query1);
-        $stmt1->bind_param("i", $farmerID);
-        $stmt1->execute();
-        $result = $stmt1->get_result();
-        while ($row = $result->fetch_assoc()) {
-            $land_details[] = $row;
-        }
-        $stmt1->close();
-
-        // Fetch farmer's fertilizer request history
-        $query2="SELECT fr.requestID, fr.landID, f.fertName, fr.quantityRequested, fr.requestDate, fr.status
-        FROM fertilizer_requests fr
-        JOIN fertilizers f ON fr.fertID = f.fertID
-        WHERE fr.farmerID = ?
-        ORDER BY fr.requestDate DESC";
-        $stmt2 = $conn->prepare($query2);
-        $stmt2->bind_param("i", $farmerID);
-        $stmt2->execute();
-        $result = $stmt2->get_result();
-        while ($row = $result->fetch_assoc()) {
-            $requests[] = $row;
-        }
-        $stmt2->close();
-
+    if ($farmer) {
+        $land_details = fetchAllRows($conn, "SELECT landID, landlocation, soiltype FROM farmer_land WHERE farmerID = ?", "i", $farmerID);
+        $requests = fetchAllRows($conn, "SELECT fr.requestID, fr.landID, f.fertName, fr.quantityRequested, fr.requestDate, fr.status FROM fertilizer_requests fr JOIN fertilizers f ON fr.fertID = f.fertID WHERE fr.farmerID = ? ORDER BY fr.requestDate DESC", "i", $farmerID);
     } else {
         $msg1 = "No such Farmer ID exists.";
     }
-    $stmt->close();
-
 }
 
-//search land using landID
+// Search Land by ID
 if (isset($_POST['btnSearchLand'])) {
     $landID = $_POST['txtLandID'];
-
-    $query = "SELECT * FROM farmer_land WHERE landID = ? AND registeredBy= ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ii", $landID, $offID);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Fetch land details
-    if ($record = $result->fetch_assoc()) {
-        $landID = $record['landID'];
-        $landsize= $record['landSize'];
-        $landlocation = $record['landLocation'];
-        $soiltype = $record['soilType'];
-        $farmerID = $record['farmerID'];
-
-
-    } else {
-        $msg1 = "No such Land ID exists.";
-    }
-    $stmt->close();
+    $land = fetchSingleRow($conn, "SELECT * FROM farmer_land WHERE landID = ? AND registeredBy = ?", "ii", $landID, $offID);
+    $msg1 = $land ? "" : "No such Land ID exists.";
 }
 
-//search fertilizer request using requestID
+// Search Fertilizer Request by ID
 if (isset($_POST['btnSearchRequest'])) {
     $requestID = $_POST['txtRequestID'];
-
-    $query = "SELECT fr.requestID, fr.landID, f.fertName, fr.quantityRequested, fr.requestDate, fr.status
-    FROM fertilizer_requests fr
-    JOIN fertilizers f ON fr.fertID = f.fertID
-    WHERE fr.requestID = ? AND fr.registeredBy= ?
-    ORDER BY fr.requestDate DESC";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ii", $requestID, $offID);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Fetch fertilizer request details
-    if ($record = $result->fetch_assoc()) {
-        $requestID = $record['requestID'];
-        $landID = $record['landID'];
-        $fertName = $record['fertName'];
-        $quantityRequested = $record['quantityRequested'];
-        $requestDate = $record['requestDate'];
-        $status = $record['status'];
-
-    } else {
-        $msg1 = "No such Request ID exists.";
-    }
-    $stmt->close();
+    $request = fetchSingleRow($conn, "SELECT fr.requestID, fr.landID, f.fertName, fr.quantityRequested, fr.requestDate, fr.status FROM fertilizer_requests fr JOIN fertilizers f ON fr.fertID = f.fertID WHERE fr.requestID = ? AND fr.registeredBy = ?", "ii", $requestID, $offID);
+    $msg1 = $request ? "" : "No such Request ID exists.";
 }
 
-// Step 3: Update Farmer Data
+// Update Farmer Data
 if (isset($_POST['btn_update_farmer'])) {
-    $farmerID = $_POST['txtFarmerID'];
-    $firstName = $_POST['txtFirstName'];
-    $lastName = $_POST['txtLastName'];
-    $age = $_POST['txtage'];
-    $sex = $_POST['txtsex'];
-    $telNo = $_POST['txtTelNo'];
-    $addy = $_POST['txtaddy'];
-
-    $query = "UPDATE farmers SET fname = ?, lname = ?, age = ?, sex = ?, phone_no = ?, addy=? WHERE FarmerID = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssisssi", $firstName, $lastName, $age, $sex, $telNo, $addy , $farmerID);
-    $result = $stmt->execute();
-
-    $msg2 = $result ? "Record updated successfully." : "Failed updating the record: " . $stmt->error;
-    $stmt->close();
+    $result = executeQuery($conn, "UPDATE farmers SET fname = ?, lname = ?, age = ?, sex = ?, phone_no = ?, addy = ? WHERE FarmerID = ?", "ssisssi", $_POST['txtFirstName'], $_POST['txtLastName'], $_POST['txtage'], $_POST['txtsex'], $_POST['txtTelNo'], $_POST['txtaddy'], $_POST['txtFarmerID']);
+    header("Location: off1.php");
+    exit();
 }
 
-//update land details
+// Update Land Details
 if (isset($_POST['btn_update_land'])) {
-    $landID = $_POST['txtLandID'];
-    $soiltype = $_POST['txtSoilType'];
-    $farmerID = $_POST['txtFarmerID'];
-
-    $query = "UPDATE farmer_land SET soiltype = ?, farmerID = ? WHERE landID = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssi", $soiltype, $farmerID, $landID);
-    $result = $stmt->execute();
-
-    $msg2 = $result ? "Record updated successfully." : "Failed updating the record: " . $stmt->error;
-    $stmt->close();
+    $result = executeQuery($conn, "UPDATE farmer_land SET soiltype = ?, farmerID = ? WHERE landID = ?", "sii", $_POST['txtSoilType'], $_POST['txtFarmerID'], $_POST['txtLandID']);
+    header("Location: off1.php");
+    exit();
 }
 
 // Add New Farmer
 if (isset($_POST['btn_add'])) {
-    $firstName = $_POST['txtNewFirstName'];
-    $lastName = $_POST['txtNewLastName'];
-    $age = $_POST['txtNewAge'];
-    $sex = $_POST['txtNewSex'];
-    $telNo = $_POST['txtNewTelNo'];
-    $addy = $_POST['txtNewAddy'];
-
-    $query = "INSERT INTO farmers (fname, lname, age, sex, phone_no, addy, registeredBy) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssisssi", $firstName, $lastName, $age, $sex, $telNo, $addy, $offID);
-    $result = $stmt->execute();
-
-    $msg3 = $result ? "New farmer added successfully." : "Failed to add farmer: " . $stmt->error;
-    $stmt->close();
+    $hashedPassword = password_hash($_POST['txtNewPass'], PASSWORD_DEFAULT);
+    executeQuery($conn, "INSERT INTO farmers (fname, lname, age, sex, phone_no, addy, registeredBy) VALUES (?, ?, ?, ?, ?, ?, ?)", "ssisssi", $_POST['txtNewFirstName'], $_POST['txtNewLastName'], $_POST['txtNewAge'], $_POST['txtNewSex'], $_POST['txtNewTelNo'], $_POST['txtNewAddy'], $offID);
+    header("Location: off1.php");
+    exit();
 }
 
 // Add New Land
 if (isset($_POST['btn_add_land'])) {
-    $farmerID = $_POST['txtNewFarmerID'];
-    $landlocation = $_POST['txtNewLandLocation'];
-    $landsize = $_POST['txtNewLandSize'];
-    $soiltype = $_POST['txtNewSoilType'];
-
-    $query = "SELECT COUNT(*) FROM farmers WHERE FarmerID = ? AND registeredBy = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ii", $farmerID, $offID);
-    $stmt->execute();
-    $stmt->bind_result($farmerExists);
-    $stmt->fetch();
-    $stmt->close();
-
-    if ($farmerExists > 0) {
-
-    $query = "INSERT INTO farmer_land (farmerID, landlocation,landsize, soiltype, registeredBy) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("issi", $farmerID, $landlocation,$landsize, $soiltype, $offID);
-    $result = $stmt->execute();
-
-    $msg3 = $result ? "New land added successfully." : "Failed to add land: " . $stmt->error;
-    $stmt->close();
-} else {
-    $msg3 = "Error: The provided Farmer ID does not belong to this officer.";
-}
+    executeQuery($conn, "INSERT INTO farmer_land (farmerID, landlocation, landsize, soiltype, registeredBy) VALUES (?, ?, ?, ?, ?)", "isdsi", $_POST['txtNewFarmerID'], $_POST['txtNewLandLocation'], $_POST['txtNewLandSize'], $_POST['txtNewSoilType'], $offID);
+    header("Location: off1.php");
+    exit();
 }
 
 // Add New Fertilizer Request
 if (isset($_POST['btn_add_request'])) {
-    $farmerID = $_POST['txtNewFarmerID'];
-    $landID = $_POST['txtNewLandID'];
-    $fertID = $_POST['txtNewFertID'];
-    $quantityRequested = $_POST['txtNewQuantityRequested'];
-    
-    $query = "SELECT COUNT(*) FROM farmers WHERE FarmerID = ? AND registeredBy = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ii", $farmerID, $offID);
-    $stmt->execute();
-    $stmt->bind_result($farmerExists);
-    $stmt->fetch();
-    $stmt->close();
-
-    if ($farmerExists > 0) {
-
-        $query = "SELECT COUNT(*) FROM farmer_land WHERE landID = ? AND registeredBy = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("ii", $landID, $offID);
-        $stmt->execute();
-        $stmt->bind_result($landExists);
-        $stmt->fetch();
-        $stmt->close();
-
-        if ($landExists > 0) {
-    $query = "INSERT INTO fertilizer_requests (landID, fertID, quantityRequested, registeredBy) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("iiii", $landID, $fertID, $quantityRequested, $offID);
-    $result = $stmt->execute();
-
-    $msg3 = $result ? "New fertilizer request added successfully." : "Failed to add fertilizer request: " . $stmt->error;
-    $stmt->close();
-        }
-        else {
-            $msg3 = "Error: The provided Land ID does not belong to this officer.";
-        }
-} else {
-    $msg3 = "Error: The provided Farmer ID does not belong to this officer.";
+    executeQuery($conn, "INSERT INTO fertilizer_requests (landID, farmerID, fertID, quantityRequested, registeredBy) VALUES (?, ?, ?, ?, ?)", "iiiii", $_POST['txtNewLandID'], $_POST['txtNewFarmerID'], $_POST['txtNewFertID'], $_POST['txtNewQuantityRequested'], $offID);
+    header("Location: off1.php");
+    exit();
 }
-}
-
-//delete farmer
-if (isset($_POST['btn_delete'])) {
-    $farmerID = $_POST['txtFarmerID'];
-
-    $query = "DELETE FROM farmers WHERE FarmerID = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $farmerID);
-    $result = $stmt->execute();
-
-    $msg2 = $result ? "Record deleted successfully." : "Failed deleting the record: " . $stmt->error;
-    $stmt->close();
-}
-
-//delete land
-if (isset($_POST['btn_delete_land'])) {
-    $landID = $_POST['txtLandID'];
-
-    $query = "DELETE FROM farmer_land WHERE landID = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $landID);
-    $result = $stmt->execute();
-
-    $msg2 = $result ? "Record deleted successfully." : "Failed deleting the record: " . $stmt->error;
-    $stmt->close();
-}
-
-//delete fertilizer request
-if (isset($_POST['btn_delete_request'])) {
-    $requestID = $_POST['txtRequestID'];
-
-    $query = "DELETE FROM fertilizer_requests WHERE requestID = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $requestID);
-    $result = $stmt->execute();
-
-    $msg2 = $result ? "Record deleted successfully." : "Failed deleting the record: " . $stmt->error;
-    $stmt->close();
-}
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Officer's Dashboard</title>
-</head>
+    <title>Field Officer Dashboard</title>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom CSS (Your stylesheet) -->
+    <link rel="stylesheet" href="off1.css"></head>
 <body>
 
-<h1>Field Officer's Dashboard</h1>
-        <h2>Welcome, <?php echo htmlspecialchars($oFname) . " " . htmlspecialchars($oLname); ?>!</h2>
-            <h3>Officer's Profile</h3>
-                <p><strong>Name:</strong> <?php echo htmlspecialchars($oFname) . " " . htmlspecialchars($oLname); ?></p>
-                <p><strong>Phone No:</strong> <?php echo htmlspecialchars($ophone_no); ?></p>
-                <p><strong>Age:</strong> <?php echo htmlspecialchars($oage); ?></p>
-                <p><strong>Sex:</strong> <?php echo htmlspecialchars($osex); ?></p>
-<hr>
-<h2>Search Farmer by ID</h2>
-<form method="post">
-    <label for="txtFarmerID">Enter Farmer ID:</label>
-    <input type="text" id="txtFarmerID" name="txtFarmerID" required>
-    <button type="submit" name="btnSearchID">Search</button>
-</form>
-<?php if (!empty($msg1)) echo "<p>$msg1</p>"; ?>
+<div class="sidebar">
+    <div class="logo">
+        <img src="images/firm_logo1.png" alt="Logo">
+        <h2><i class="fa-solid fa-leaf"></i> Field Officer</h2>
+    </div>
+    <ul>
+        <li><a href="#" data-target="profile-section"><i class="fa-solid fa-user"></i> Profile</a></li>
+        <li><a href="#" data-target="manage-farmers-section"><i class="fa-solid fa-tractor"></i> Farmers</a></li>
+        <li><a href="#" data-target="manage-land-section"><i class="fa-solid fa-tree"></i> Land</a></li>
+        <li><a href="#" data-target="request-section"><i class="fa-solid fa-file-alt"></i> Requests</a></li>
+        <li><a href="#" data-target="analytics-section"><i class="fa-solid fa-chart-bar"></i> Analytics</a></li>
+        <li><a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+    </ul>
+    <!-- Sections -->
+<section id="profile-section">Profile Content</section>
+<section id="manage-farmers-section" style="display: none;">Farmers Content</section>
+<section id="manage-land-section" style="display: none;">Land Content</section>
+<section id="request-section" style="display: none;">Requests Content</section>
+<section id="analytics-section" style="display: none;">Analytics Content</section>    
+</div>
 
-<?php if (!empty($firstName)) : ?>
-<h3>Farmer Details</h3>
-<p><strong>Farmer ID:</strong> <?php echo htmlspecialchars($farmerID); ?></p>
-<p><strong>First Name:</strong> <?php echo htmlspecialchars($firstName); ?></p>
-<p><strong>Last Name:</strong> <?php echo htmlspecialchars($lastName); ?></p>
-<p><strong>Age:</strong> <?php echo htmlspecialchars($age); ?></p>
-<p><strong>Sex:</strong> <?php echo htmlspecialchars($sex); ?></p>
-<p><strong>Phone Number:</strong> <?php echo htmlspecialchars($telNo); ?></p>
-<p><strong>Address:</strong> <?php echo htmlspecialchars($addy); ?></p>
+<div class="main-content">
+    <header>
+        <h1>Dashboard</h1>
+    </header>
 
-<h2>Update Farmer Details</h2>
-<form method="post">
-    <input type="hidden" name="txtFarmerID" value="<?php echo htmlspecialchars($farmerID); ?>">
-    
-    <label for="txtFirstName">First Name:</label>
-    <input type="text" id="txtFirstName" name="txtFirstName" value="<?php echo htmlspecialchars($firstName); ?>" required>
-    <br>
+    <section id="profile-section" class="section active">
+        <h3>Your Profile</h3>
+        <div class="profile-container">
+            <img src="images/farmer1.jpg" alt="Profile Picture" class="profile-pic">
+            <table class="profile-table">
+                <tr><th>ID:</th><td><?php echo htmlspecialchars($officerDetails['offID']) ?></td></tr>
+                <tr><th>Name:</th><td><?php echo htmlspecialchars($officerDetails['Fname']) . " " . htmlspecialchars($officerDetails['Lname']); ?></td></tr>
+                <tr><th>Designation:</th><td>Field Officer</td></tr>
+                <tr><th>Email:</th><td><?php echo htmlspecialchars($officerDetails['email']); ?> </td></tr>
+                <tr><th>Phone:</th><td><?php echo htmlspecialchars($officerDetails['phone_no']); ?> </td></tr>
+                <tr><th>Age:</th><td><?php echo htmlspecialchars($officerDetails['age']); ?></td></tr>
+                <tr><th>Sex:</th><td><?php echo htmlspecialchars($officerDetails['sex']); ?></td></tr>
+            </table>
+        </div>
+    </section>
 
-    <label for="txtLastName">Last Name:</label>
-    <input type="text" id="txtLastName" name="txtLastName" value="<?php echo htmlspecialchars($lastName); ?>" required>
-    <br>
-
-    <label for="txtage">Age:</label>
-    <input type="number" id="txtage" name="txtage" value="<?php echo htmlspecialchars($age); ?>" required>
-    <br>
-
-    <label for="txtsex">Sex:</label>
-    <select id="txtsex" name="txtsex" required>
-        <option value="Male" <?php echo ($sex == 'Male') ? 'selected' : ''; ?>>Male</option>
-        <option value="Female" <?php echo ($sex == 'Female') ? 'selected' : ''; ?>>Female</option>
-        <option value="Other" <?php echo ($sex == 'Other') ? 'selected' : ''; ?>>Other</option>
-    </select>
-    <br>
-
-    <label for="txtTelNo">Phone Number:</label>
-    <input type="tel" id="txtTelNo" name="txtTelNo" value="<?php echo htmlspecialchars($telNo); ?>" required>
-    <br>
-
-    <label for="txtaddy">Address:</label>
-    <input type="text" id="txtaddy" name="txtaddy" value="<?php echo htmlspecialchars($addy); ?>" required>
-    <br>
-
-    <button type="submit" name="btn_update">Save</button>
-</form>
-<br>
-
-<h3>Land Details</h3>
-<?php if (!empty($land_details)): ?>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Land ID</th>
-                <th>Location</th>
-                <th>Soil Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($land_details as $land): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($land['landID']); ?></td>
-                    <td><?php echo htmlspecialchars($land['landlocation']); ?></td>
-                    <td><?php echo htmlspecialchars($land['soiltype']); ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php else: ?>
-    <p>No land records found.</p>
-<?php endif; ?>
-
-<h3>Fertilizer Request History</h3> 
-                <?php if (!empty($requests)): ?>
-                    <table border="1">
-                        <thead>
-                            <tr>
-                                <th>Request ID</th>
-                                <th>Land ID</th>
-                                <th>Fertilizer Name</th>
-                                <th>Quantity Requested</th>
-                                <th>Request Date</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($requests as $req): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($req['requestID']); ?></td>
-                                    <td><?php echo htmlspecialchars($req['landID']); ?></td>
-                                    <td><?php echo htmlspecialchars($req['fertName']); ?></td>
-                                    <td><?php echo htmlspecialchars($req['quantityRequested']); ?></td>
-                                    <td><?php echo htmlspecialchars($req['requestDate']); ?></td>
-                                    <td><?php echo htmlspecialchars($req['status']); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                <?php else: ?>
-                    <p class="no-data">No fertilizer requests found.</p>
-                <?php endif; ?>
-<?php else: ?>
-    <p>No farmer details found.</p>
-<?php endif; ?>
-<h2>Add New Farmer</h2>
+    <section id="manage-farmers-section" class="section">
+        <h2>Manage Farmers</h2>
         <form method="post">
-            <label for="txtNewFirstName">First Name:</label>
-            <input type="text" name="txtNewFirstName" required placeholder="First Name">
+        <label for="txtFarmerID">Enter Farmer ID:</label>
+        <input type="text" id="txtFarmerID" name="txtFarmerID" required>
+        <button type="submit" name="btnSearchID" id="search-btn">Search</button>
+    </form>
+    <?php if (!empty($msg1)) echo "<p>$msg1</p>"; ?>
+
+<?php if (!empty($farmer)) : ?>
+    <h3>Farmer Details</h3>
+    <p><strong>Farmer ID:</strong> <?php echo htmlspecialchars($farmer['farmerID']); ?></p>
+    <p><strong>First Name:</strong> <?php echo htmlspecialchars($farmer['FName']); ?></p>
+    <p><strong>Last Name:</strong> <?php echo htmlspecialchars($farmer['LName']); ?></p>
+    <p><strong>Age:</strong> <?php echo htmlspecialchars($farmer['age']); ?></p>
+    <p><strong>Sex:</strong> <?php echo htmlspecialchars($farmer['sex']); ?></p>
+    <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($farmer['phone_no']); ?></p>
+    <p><strong>Address:</strong> <?php echo htmlspecialchars($farmer['addy']); ?></p>
+    <p><strong>category:</strong> <?php echo htmlspecialchars($farmer['category']); ?></p>
+    <p><strong>adhar no.:</strong> <?php echo htmlspecialchars($farmer['adhar']); ?></p>
+
+    <h2>Update Farmer Details</h2>
+    <form method="post">
+        <input type="hidden" name="txtFarmerID" value="<?php echo htmlspecialchars($farmer['farmerID']); ?>">
+        <label>First Name: </label>
+            <input type="text" name="txtFirstName" value="<?php echo htmlspecialchars($farmer['FName']); ?>" required><br>
+        <label>Last Name: </label>
+            <input type="text" name="txtLastName" value="<?php echo htmlspecialchars($farmer['LName']); ?>" required><br>
+        <label>Age: </label>
+            <input type="number" name="txtage" value="<?php echo htmlspecialchars($farmer['age']); ?>" required><br>
+        <label>Sex:</label>
+            <select name="txtsex" required>
+                <option value="Male" <?php echo ($farmer['sex'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                <option value="Female" <?php echo ($farmer['sex'] == 'Female') ? 'selected' : ''; ?>>Female</option>
+                <option value="Other" <?php echo ($farmer['sex'] == 'Other') ? 'selected' : ''; ?>>Other</option>
+            </select><br>
+        <label>Phone Number: </label>
+            <input type="tel" name="txtTelNo" value="<?php echo htmlspecialchars($farmer['phone_no']); ?>" required><br>
+        <label>Address: </label>
+            <input type="text" name="txtaddy" value="<?php echo htmlspecialchars($farmer['addy']); ?>" required><br>
+        <label>category: </label>
+            <input type="text" name="txtcategory" value="<?php echo htmlspecialchars($farmer['category']); ?>" required><br>
+        <label>adhar no.: </label>
+            <input type="text" name="txtadhar" value="<?php echo htmlspecialchars($farmer['adhar']); ?>" required><br>
+        <button type="submit" name="btn_update_farmer">Save</button>
+    </form>
+
+<?php endif; ?>
+
+
+    <h2>Add New Farmer</h2>
+    <form method="post">
+        <label>First Name: </label>
+            <input type="text" name="txtNewFirstName" required>
             <br>
-            <label for="txtNewLastName">Last Name:</label>
-            <input type="text" name="txtNewLastName" required placeholder="Last Name">
+        <label>Last Name: </label>
+            <input type="text" name="txtNewLastName" required>
             <br>
-            <label for="txtNewSex">sex:</label>
-            <select name="txtNewSex" required>                  
+
+        <label>Sex:</label>
+            <select name="txtNewSex" required>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
             </select>
             <br>
-            <label for="txtNewAge">Age:</label>
-            <input type="number" name="txtNewAge" required placeholder="Age">
+
+        <label>Age: </label>
+            <input type="number" name="txtNewAge" required>
             <br>
-            <label for="txtNewTelNo">Phone Number:</label>
-            <input type="tel" name="txtNewTelNo" required placeholder="Phone Number">
+
+        <label>Phone Number: </label>
+            <input type="tel" name="txtNewTelNo" required>
             <br>
-            <label for="txtNewAddy">Address:</label>
-            <input type="text" name="txtNewAddy" required placeholder="Address">
+
+        <label>Address: </label>
+            <input type="text" name="txtNewAddy" required>
             <br>
-            <button type="submit" name="btn_add">Add Farmer</button>
-        </form>
-<hr>
-<h2>Search Land by ID</h2>
-<form method="post">
-    <label for="txtLandID">Enter Land ID:</label>
-    <input type="text" id="txtLandID" name="txtLandID" required>
-    <button type="submit" name="btnSearchLand">Search</button>
-</form>
-<?php if (!empty($msg1)) echo "<p>$msg1</p>"; ?>
 
-<?php if (!empty($landID)) : ?>
-<h3>Land Details</h3>
-<p><strong>Land ID:</strong> <?php echo htmlspecialchars($landID); ?></p>
-<p><strong>Location:</strong> <?php echo htmlspecialchars($landlocation); ?></p>
-<p><strong>land size:</strong> <?php echo htmlspecialchars($landsize ); ?></p>
-<p><strong>Soil Type:</strong> <?php echo htmlspecialchars($soiltype); ?></p>
-<p><strong>Farmer ID:</strong> <?php echo htmlspecialchars($farmerID); ?></p>
+        <label>category: </label>
+            <input type="text" name="txtNewCategory" required>
+            <br>
 
-<h2>Update Land Details</h2>
-<form method="post">
-    <input type="hidden" name="txtLandID" value="<?php echo htmlspecialchars($landID); ?>">
-    
-    <label for="txtSoilType">Soil Type:</label>
-    <input type="text" id="txtSoilType" name="txtSoilType" value="<?php echo htmlspecialchars($soiltype); ?>" required>
-    <br>
+        <label>adhar no.: </label>
+            <input type="text" name="txtNewAdhar" required>
+            <br>
 
-    <label for="txtFarmerID">Farmer ID:</label>
-    <input type="number" id="txtFarmerID" name="txtFarmerID" value="<?php echo htmlspecialchars($farmerID); ?>" required>
-    <br>
+        <label>Username: </label>
+            <input type="text" name="txtNewUser" required>
+            <br>
 
-    <button type="submit" name="btn_update_land">Save</button>
-</form>
+        <label>Password: </label>
+            <input type="password" name="txtNewPass" required>
+            <br>
 
-<?php else: ?>
-    <p>No land details found.</p>
+        <button type="submit" name="btn_add" id="add-farmer-btn">Add Farmer</button>
+    </form>
+
+<h3>All Farmers</h3>
+<table>
+    <tr>
+        <th>Farmer ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+        <th>sex</th>
+        <th>Phone Number</th>
+        <th>Address</th>
+        <th>category</th>
+        <th>adhar no.</th>
+    </tr>
+    <?php foreach ($farmers as $farmer) : ?>
+        <tr>
+            <td><?php echo $farmer['farmerID']; ?></td>
+            <td><?php echo $farmer['FName']; ?></td>
+            <td><?php echo $farmer['LName']; ?></td>
+            <td><?php echo $farmer['age']; ?></td>
+            <td><?php echo $farmer['sex']; ?></td>
+            <td><?php echo $farmer['phone_no']; ?></td>
+            <td><?php echo $farmer['addy']; ?></td>
+            <td><?php echo $farmer['category']; ?></td>
+            <td><?php echo $farmer['adhar']; ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+</section>
+
+    <section id="manage-land-section" class="section">
+        <h2>Manage Land</h2>
+        <h2>Search Land by ID</h2>
+    <form method="post">
+        <label for="txtLandID">Enter Land ID:</label>
+        <input type="text" id="txtLandID" name="txtLandID" required>
+        <button type="submit" name="btnSearchLand" id="search-land-btn">Search</button>
+    </form>
+    <?php if (!empty($msg1)) echo "<p>$msg1</p>"; ?>
+
+<?php if (!empty($land)) : ?>
+    <h3>Land Details</h3>
+    <p><strong>Land ID:</strong> <?php echo htmlspecialchars($land['landID']); ?></p>
+    <p><strong>Farmer ID:</strong> <?php echo htmlspecialchars($land['farmerID']); ?></p>
+    <p><strong>Location:</strong> <?php echo htmlspecialchars($land['landLocation']); ?></p>
+    <p><strong>Size:</strong> <?php echo htmlspecialchars($land['landSize']); ?></p>
+    <p><strong>Soil Type:</strong> <?php echo htmlspecialchars($land['soilType']); ?></p>
+
+    <h2>Update Land Details</h2>
+    <form method="post">
+        <input type="hidden" name="txtLandID" value="<?php echo htmlspecialchars($land['landID']); ?>">
+        <label>Soil Type: </label>
+            <input type="text" name="txtSoilType" value="<?php echo htmlspecialchars($land['soilType']); ?>" required><br>
+        <label>Farmer ID:</label>
+            <input type="number" name="txtFarmerID" value="<?php echo htmlspecialchars($land['farmerID']); ?>" required><br>
+        <button type="submit" name="btn_update_land">Save</button>
+    </form>
+    <?php endif; ?>
+
+    <h2>Add New Land</h2>
+    <form method="post">
+        <label>Farmer ID: </label>
+            <input type="number" name="txtNewFarmerID" required><br>
+        <label>Location: </label>
+            <input type="text" name="txtNewLandLocation" required><br>
+        <label>Size: </label>
+            <input type="number" name="txtNewLandSize" required><br>
+        <label>Soil Type: </label>
+            <input type="text" name="txtNewSoilType" required><br>
+        <button type="submit" name="btn_add_land" id="add-land-btn" >Add Land</button>
+    </form>
+
+
+    <h3> All Lands</h3>
+        <table>
+    <tr>
+        <th>Land ID</th>
+        <th>Farmer ID</th>
+        <th>Location</th>
+        <th>Size</th>
+        <th>Soil Type</th>
+    </tr>
+    <?php foreach ($lands as $land) : ?>
+        <tr>
+            <td><?php echo $land['landID']; ?></td>
+            <td><?php echo $land['farmerID']; ?></td>
+            <td><?php echo $land['landLocation']; ?></td>
+            <td><?php echo $land['landSize']; ?></td>
+            <td><?php echo $land['soilType']; ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+        
+    </section>
+    <section id="request-section" class="section">
+        <h2>Manage Requests</h2>
+        <h2>Search Fertilizer Request by ID</h2>
+    <form method="post">
+        <label for="txtRequestID">Enter Request ID:</label>
+        <input type="text" id="txtRequestID" name="txtRequestID" required>
+        <button type="submit" name="btnSearchRequest" id="search-request-btn">Search</button>
+    </form>
+    <?php if (!empty($msg1)) echo "<p>$msg1</p>"; ?>
+    <?php if (!empty($request)) : ?>
+
+    <h3>Fertilizer Request Details</h3>
+    <p><strong>Request ID:</strong> <?php echo htmlspecialchars($request['requestID']); ?></p>
+    <p><strong>Land ID:</strong> <?php echo htmlspecialchars($request['landID']); ?></p>
+    <p><strong>Fertilizer Name:</strong> <?php echo htmlspecialchars($request['fertName']); ?></p>
+    <p><strong>Quantity Requested:</strong> <?php echo htmlspecialchars($request['quantityRequested']); ?></p>
+    <p><strong>Request Date:</strong> <?php echo htmlspecialchars($request['requestDate']); ?></p>
+    <p><strong>Status:</strong> <?php echo htmlspecialchars($request['status']); ?></p>
+
+    <form method="post">
+        <input type="hidden" name="txtRequestID" value="<?php echo htmlspecialchars($request['requestID']); ?>">
+        <label>Status:</label>
+            <select name="txtStatus" required>
+                <option value="Pending" <?php echo ($request['status'] == 'Pending') ? 'selected' : ''; ?>>Pending</option>
+                <option value="Approved" <?php echo ($request['status'] == 'Approved') ? 'selected' : ''; ?>>Approved</option>
+                <option value="Rejected" <?php echo ($request['status'] == 'Rejected') ? 'selected' : ''; ?>>Rejected</option>
+            </select><br>
+        <button type="submit" name="btn_update_request">Save</button>
+    </form>
+
 <?php endif; ?>
-<h2>Add New Land</h2>
-        <form method="post">
-            <lable for="txtNewFarmerID">Farmer ID:</lable>
-            <input type="number" name="txtNewFarmerID" required placeholder="Farmer ID">
-            <br>
-            <label for="txtNewLandLocation">Location:</label>
-            <input type="text" name="txtNewLandLocation" required placeholder="Location">
-            <br>
-            <label for="txtNewLandSize">Land Size:</label>
-            <input type="number" step="0.01" name="txtNewLandSize" required placeholder="Land Size">
-            <br>
-            <label for="txtNewSoilType">Soil Type:</label>
-            <input type="text" name="txtNewSoilType" required placeholder="Soil Type">
-            <br>
-            <button type="submit" name="btn_add_land">Add Land</button>
-        </form>
-        <?php if (!empty($msg3)) echo "<p>$msg3</p>"; ?>
-        <hr>
-<h2>Search Fertilizer Request by ID</h2>
-<form method="post">
-    <label for="txtRequestID">Enter Request ID:</label>
-    <input type="text" id="txtRequestID" name="txtRequestID" required>
-    <button type="submit" name="btnSearchRequest">Search</button>
-</form>
-<?php if (!empty($msg1)) echo "<p>$msg1</p>"; ?>
 
-<?php if (!empty($requestID)) : ?>
-<h3>Fertilizer Request Details</h3>
-<p><strong>Request ID:</strong> <?php echo htmlspecialchars($requestID); ?></p>
-<p><strong>Land ID:</strong> <?php echo htmlspecialchars($landID); ?></p>
-<p><strong>Fertilizer Name:</strong> <?php echo htmlspecialchars($fertName); ?></p>
-<p><strong>Quantity Requested:</strong> <?php echo htmlspecialchars($quantityRequested); ?></p>
-<p><strong>Request Date:</strong> <?php echo htmlspecialchars($requestDate); ?></p>
-<p><strong>Status:</strong> <?php echo htmlspecialchars($status); ?></p>
-
-<h2>Update Fertilizer Request Details</h2>
-<form method="post">
-    <input type="hidden" name="txtRequestID" value="<?php echo htmlspecialchars($requestID); ?>">
-    
-    <label for="txtLandID">Land ID:</label>
-    <input type="number" id="txtLandID" name="txtLandID" value="<?php echo htmlspecialchars($landID); ?>" required>
-    <br>
-
-    <label for="txtFertID">Fertilizer ID:</label>
-    <input type="number" id="txtFertID" name="txtFertID" value="<?php echo htmlspecialchars($fertID); ?>" required>
-    <br>
-
-    <label for="txtQuantityRequested">Quantity Requested:</label>
-    <input type="number" id="txtQuantityRequested" name="txtQuantityRequested" value="<?php echo htmlspecialchars($quantityRequested); ?>" required>
-    <br>
-
-    <button type="submit" name="btn_update_request">Save</button>
-</form>
-<br>
-<?php else: ?>
-    <p>No fertilizer request details found.</p>
-<?php endif; ?>
-<h2>Add New Fertilizer Request</h2>
-        <form method="post">
-            <label for="txtNewLandID">Land ID:</label>
-            <input type="number" name="txtNewLandID" required placeholder="Land ID">
-            <br>
-            <label for="txtNewFertID">Fertilizer ID:</label>
-            <input type="number" name="txtNewFertID" required placeholder="Fertilizer ID">
-            <br>
-            <label for="txtNewQuantityRequested">Quantity Requested:</label>
-            <input type="number" name="txtNewQuantityRequested" required placeholder="Quantity Requested">
-            <br>
-            <button type="submit" name="btn_add_request">Add Request</button>
-        </form>
-        <?php if (!empty($msg1)) echo "<p>$msg1</p>"; ?>
-        <hr>
-
-<h2>Manage Farmer Records</h2>
-<?php if (!empty($farmers)): ?>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Farmer ID</th>
-                <th>Name</th>
-                <th>Phone no</th>
-                <th>Age</th>
-                <th>Sex</th>
-                <th>Address</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($farmers as $farmer): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($farmer['farmerID']); ?></td>
-                    <td><?php echo htmlspecialchars($farmer['FName']) . " " . htmlspecialchars($farmer['LName']); ?></td>
-                    <td><?php echo htmlspecialchars($farmer['phone_no']); ?></td>
-                    <td><?php echo htmlspecialchars($farmer['age']); ?></td>
-                    <td><?php echo htmlspecialchars($farmer['sex']); ?></td>
-                    <td><?php echo htmlspecialchars($farmer['addy']); ?></td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php else: ?>
-    <p>No farmer records found.</p>
-<?php endif; ?>
-<hr>
-
-<h2>Manage Land Records</h2>
-<?php if (!empty($lands)): ?>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Land ID</th>
-                <th>Farmer ID</th>
-                <th>Location</th>
-                <th>Soil Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($lands as $land): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($land['landID']); ?></td>
-                    <td><?php echo htmlspecialchars($land['farmerID']); ?></td>
-                    <td><?php echo htmlspecialchars($land['landLocation']); ?></td>
-                    <td><?php echo htmlspecialchars($land['soilType']); ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php else: ?>
-    <p>No land records found.</p>
-<?php endif; ?>
-<hr>
-<h2>Manage Fertilizer Requests</h2>
-<?php if (!empty($fertilizer_requests)): ?>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Request ID</th>
-                <th>Land ID</th>
-                <th>Farmer ID</th>
-                <th>Fertilizer Name</th>
-                <th>Quantity Requested</th>
-                <th>Request Date</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($fertilizer_requests as $req): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($req['requestID']); ?></td>
-                    <td><?php echo htmlspecialchars($req['landID']); ?></td>
-                    <td><?php echo htmlspecialchars($req['farmerID']); ?></td>
-                    <td><?php echo htmlspecialchars($req['fertName']); ?></td>
-                    <td><?php echo htmlspecialchars($req['quantityRequested']); ?></td>
-                    <td><?php echo htmlspecialchars($req['requestDate']); ?></td>
-                    <td><?php echo htmlspecialchars($req['status']); ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php else: ?>
-    <p class="no-data">No fertilizer requests found.</p>
-<?php endif; ?>
-<hr>
-<h2>Statistics</h2>
+        <h2>Add New Fertilizer Request</h2>
+    <form method="post">
+        <label>Land ID:</label>
+             <input type="number" name="txtNewLandID" required><br>
+        <label>Farmer ID:</label>
+             <input type="number" name="txtNewFarmerID" required><br>
+        <label>Fertilizer ID: </label>
+            <input type="number" name="txtNewFertID" required><br>
+        <label>Quantity Requested: </label>
+            <input type="number" name="txtNewQuantityRequested" required><br>
+        <button type="submit" name="btn_add_request" id="add-request-btn">Add Request</button>
+    </form>
+        <h3>All Fertilizer Requests</h3>
 <table border="1">
-    <thead>
+    <tr>
+        <th>Request ID</th>
+        <th>Land ID</th>
+        <th>Fertilizer Name</th>
+        <th>Quantity Requested</th>
+        <th>Request Date</th>
+        <th>Status</th>
+    </tr>
+    <?php foreach ($fertilizer_requests as $request) : ?>
         <tr>
-            <th>Category</th>
-            <th>Total count</th>
+            <td><?php echo $request['requestID']; ?></td>
+            <td><?php echo $request['landID']; ?></td>
+            <td><?php echo $request['fertName']; ?></td>
+            <td><?php echo $request['quantityRequested']; ?></td>
+            <td><?php echo $request['requestDate']; ?></td>
+            <td><?php echo $request['status']; ?></td>
         </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Farmers</td>
-            <td><?php echo $farmer_count; ?></td>
-        </tr>
-        <tr>
-            <td>Lands</td>
-            <td><?php echo $land_count; ?></td>
-        </tr>
-        <tr>
-            <td>Fertilizer Requests</td>
-            <td><?php echo $request_count; ?></td>
-        </tr>
-    </tbody>
+    <?php endforeach; ?>
+</table>
+    </section>
+
+
+    <section id="analytics-section" class="section">
+
+        <h2>Analytics</h2>
+        <!-- Chart Container -->
+<div style="width: 80%; max-width: 600px; margin: auto;">
+<canvas id="analytics-chart" width="600" height="400"></canvas>
+</div>
+
+<!-- Pass PHP data to JavaScript -->
+<script>
+    const farmerCount = <?php echo $farmer_count; ?>;
+    const landCount = <?php echo $land_count; ?>;
+    const requestCount = <?php echo $request_count; ?>;
+</script>
+    </section>
+
+</div>
+<script src="off1.js"> </script>
+
 </body>
 </html>
