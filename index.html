@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subsidized Fertilization Distribution</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+    <style> /* General Styles */
+        body {
+          background-color: bisque;
+          font-family: Arial, sans-serif;
+          margin: 5px;;
+          padding: 10;
+          text-align: center;
+        }
+        
+        /* Top Bar */
+        .top-bar {
+          background-color: rgb(84,121,2);
+          color:burlywood;
+          padding: 10px;
+          font-size: 16px;
+        }
+        
+        /* Navigation */
+        nav {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background-color:darkgray;
+          padding: 15px;
+        }
+        
+        nav ul {
+          list-style: none;
+          display: flex;
+          margin: 0;
+          padding: 0;
+        }
+        
+        nav ul li {
+          margin: 0 15px;
+        }
+        
+        nav ul li a {
+          color:black;
+          text-decoration: none;
+          font-size: 18px;
+          display: flex;
+          align-items: center;
+        }
+        
+        nav ul li a i {
+          margin-right: 8px;
+        }
+        
+        /* Logo */
+        .logo img {
+          height: 100px;
+        }
+        
+        /* Hero Section */
+        .hero {
+          background: url('images/background.jpg') center/cover no-repeat;
+          padding: 100px 20px;
+          color:black;
+        }
+        
+        .hero h1 {
+          font-size: 32px;
+        }
+        
+        .btn {
+          background-color: #ff9900;
+          color: white;
+          padding: 10px 20px;
+          text-decoration: none;
+          display: inline-block;
+          margin-top: 10px;
+        }
+      /* Slideshow */
+        .slideshow-container {
+          position: relative;
+          max-width: 80%;
+          margin:2px;
+        }
+        
+        .slide {
+          display: none;
+          width: 80%;
+         }
+        
+        .active-slide {
+          display: block;
+        }
+        
+        /* Image Button */
+        #imageButton {
+          background-color: #ff9900;
+          color: white;
+          border: none;
+          padding: 10px;
+          cursor: pointer;
+          margin-top: 20px;
+        }
+       /* Hide the image container initially */
+#image-container {
+    display: none;
+    margin-top: 10px;
+}
+
+/* Styling for the "Show Images" button */
+.image-btn {
+    background-color: #ff9900;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.image-btn:hover {
+    background-color: #cc7a00;
+}
+
+/* Style for images inside the gallery */
+#image-container img {
+    width: 250px; /* Adjust size as needed */
+    height: auto;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Videos */
+.video-container {
+    display: flex;
+    justify-content:right;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+        
+.video-container video {
+width: 65%;
+}
+/* Popup Styles */
+.popup {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 40px;
+    padding: 40px;
+    background-color:rgb(227, 118, 118);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    text-align: center;
+    font-family:Courier;
+    font-style: italic;
+    z-index: 1000;
+}
+
+.popup-content {
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Style the popup button */
+.popup-btn {
+    background-color: #ff9900;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup-btn:hover {
+    background-color: #cc7a00;
+}
+.history-content {
+        display: none; /* Initially hidden */
+        margin-top: 20px;
+        padding: 15px;
+        background-color:maroon;
+        border-radius: 10px;
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 2px 2px 10px rgba(215, 103, 103, 0.2);
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: green;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    button:hover {
+        background-color: lightpink;
+    }
+.accordion {
+    background-color: #004d00;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.3s;
+}
+
+.accordion.active, .accordion:hover {
+    background-color: #006600;
+}
+
+    .panel {
+       padding: 0 15px;
+       background-color:maroon;
+       max-height: 0;
+       overflow: hidden;
+       transition: max-height 0.2s ease-out;
+    }
+
+/* Footer */
+    footer {
+      background-color: olive;
+      color: olivedrab;
+      padding: 10px;
+      margin-top: 20px;
+      flex-shrink: 0;
+      display: block !important;
+    }
+   #popup, #popup-overlay {
+       display: none !important;
+    }
+
+ </style>
+</head>
+<body >
+  <!-- Popup Message -->
+  <button id="openPopup" class="popup-btn">Show Message</button>
+
+    <div class="popup-overlay" id="popup-overlay"></div>
+    <div class="popup" id="popup">
+        <p>Welcome to the Subsidized Fertilization Distribution System!</p>
+        <button onclick="closePopup()">OK</button>
+    </div>
+    <header>
+        <div class="top-bar">
+            <span class="gov-text"><i class="fas fa-landmark"></i> भारत सरकार | Government of India, Ministry of Agriculture & Farmers Welfare</span>
+        </div>
+        <nav>
+            <div class="logo">
+                <img src="images/firm_logo1.png" alt="Left Logo">
+            </div>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="aboutUs.html"><i class="fas fa-info-circle"></i> aboutUs</a></li>
+                <li><a href="farmer_tab.html"><i class="fas fa-tractor"></i> Farmer</a></li>
+                <li><a href="officers_login.html"><i class="fas fa-user-tie"></i> Officer</a></li>
+                <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+            <div class="logo">
+                <img src="images/Bharat_logo.jpg" alt="Right Logo">
+            </div>
+        </nav>
+    </header>
+    <section id="home" class="hero">
+        <h1 style="color:brown; font-family: 'Courier New', Courier, monospace;">Subsidized Fertilizer Distribution System</h1>
+        <p style="color: brown;font-family: 'Courier New', Courier, monospace;">Ensuring fair and timely distribution of fertilizers to farmers.</p>
+    </section>
+   
+    <section id="slideshow">
+        <h2 style="color:brown; font-family:Courier; text-align:left;"> Growth of nation depends on its soil! </h2>
+        <div class="slideshow-container">
+            <img class="slide" src="images/fertilizer5.jpg" alt="Slide 1">
+            <img class="slide" src="images/farmer4.jpg" alt="Slide 2">
+            <img class="slide" src="images/farmer1.jpg" alt="Slide 3">
+        </div>
+    </section>
+    <button onclick="toggleHistory()">Show Our History</button>
+   <!-- Hidden History Section -->
+<div id="historySection" class="history-content">
+    <h5>Our History</h3>
+    <p>The government has always recognized the importance of fertilizers in ensuring a thriving agricultural sector. Over the years, multiple subsidy schemes have been introduced to support farmers, but challenges like corruption, unequal distribution, and delays persisted.</p>
+    <p>To address these concerns, the Subsidized Fertilization Distribution Management System was introduced, leveraging digital technology to provide a transparent, traceable, and accountable method for fertilizer distribution.</p>
+    <p>Since its launch, the system has helped millions of farmers access fertilizers at subsidized rates, streamlining the process from registration to distribution. This initiative continues to evolve, incorporating new technologies and government policies to better serve farmers nationwide.</p>
+</div>
+    
+    <section id="gallery">
+        <button id="toggle-images" class="image-btn">Show Images</button>
+        <div id="image-container" class="hidden">
+            <img src="images/ministers.jpg" alt="Farm 1">
+            <img src="images/farmer2.jpg" alt="Farm 2">
+        </div>
+    </section>
+    
+    <section id="videos">
+        <h2>Watch Videos</h2>
+        <div class="video-container">
+            <video controls>
+                <source src="videos/farmer_video.mp4" type="video/mp4">
+            </video>
+        </div>
+    </section>
+    
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <p><i class="fas fa-envelope"></i> Email: support@fertilizerdistribution.com</p>
+        <p><i class="fas fa-phone"></i> Phone: +123 456 7890</p>
+    </section>
+    
+    <footer style="background-color:olivedrab; color: white; padding: 20px;">
+      <!-- Existing Content -->
+      <h2>Know More About Us</h2>
+      <button class="accordion">✨ What Makes Us Different from Others?</button>
+      <div class="panel">
+        <p>
+            Unlike traditional fertilizer distribution systems that suffer from delays, corruption, and inefficiencies, we provide:
+        </p>
+        <ul>
+            <li>✅ <strong>Digital & Transparent Process:</strong> No hidden charges, no black marketing—farmers can track their requests in real time.</li>
+            <li>✅ <strong>Role-Based Access:</strong> Officers at different levels ensure smooth, systematic distribution without manipulation.</li>
+            <li>✅ <strong>Fair Subsidy Allocation:</strong> Farmers receive the right amount of fertilizers based on their land area and crop needs.</li>
+            <li>✅ <strong>Instant Notifications & Updates:</strong> Farmers stay informed about stock availability, application status, and government schemes.</li>
+            <li>✅ <strong>Quality Control Measures:</strong> Ensures only high-quality fertilizers are supplied, reducing soil damage and improving yields.</li>
+            <li>✅ <strong>24/7 Support & Complaint Redressal:</strong> Farmers can reach out anytime for assistance, ensuring their concerns are addressed.</li>
+        </ul>
+        <p>
+            We are not just a system—we are a mission to empower farmers with a fair, hassle-free, and efficient way to access what they rightfully deserve.
+        </p>
+    </div>
+      <button class="accordion">🌿 What Good Does It Do to Farmers?</button>
+      <div class="panel">
+        <p>
+          Our platform is built for farmers to bring maximum benefits with minimal effort:
+      </p>
+      <ul>
+          <li>✔ <strong>Saves Time & Effort:</strong> No need to visit multiple offices—farmers can apply for subsidies and track their applications from home.</li>
+          <li>✔ <strong>Prevents Exploitation:</strong> Eliminates middlemen and prevents overpricing or stock hoarding.</li>
+          <li>✔ <strong>Improves Agricultural Productivity:</strong> Ensures timely fertilizer supply, leading to better yields and higher income.</li>
+          <li>✔ <strong>Provides Financial Relief:</strong> Subsidized rates reduce financial burdens, making fertilizers affordable.</li>
+          <li>✔ <strong>Ensures Government Support Reaches the Right Hands:</strong> Direct verification and approval prevent corruption and misallocation.</li>
+      </ul>
+      <p>
+          Through this system, farmers gain access, control, and empowerment—ensuring their hard work translates into better harvests and financial stability.
+      </p>
+      </div>
+      <button class="accordion">✅ Do You Think We Are Trusted?</button>
+      <div class="panel">
+        <p>Yes! Backed by government regulations, real-time tracking, and verified officer approvals, our system ensures transparency and trustworthiness.</p>
+        <ul>
+          <li>✅ <strong>Government Regulation & Oversight:</strong> Ensuring fairness and legality.</li>
+          <li>✅ <strong>Verified & Accountable Officer System:</strong> Multiple levels of approval reduce fraud and errors.</li>
+          <li>✅ <strong>Thousands of Successful Transactions:</strong> Farmers across the country have already benefited.</li>
+          <li>✅ <strong>Real-time Tracking & Transparency:</strong> No hidden processes—farmers always know where their application stands.</li>
+          <li>✅ <strong>Strong Security Measures:</strong> Protecting farmer data and ensuring privacy.</li>
+      </ul>
+      <p>
+          Farmers and officers trust us because we deliver results. Our focus is to serve, support, and sustain the backbone of our economy—the farmers.
+      </p>
+      <p>
+          If you’re a farmer, you can rely on us for timely, fair, and transparent fertilizer distribution.
+      </p>
+      </div> 
+        <p>&copy; 2025 Subsidized Fertilization Distribution System. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

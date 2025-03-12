@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+         /* General Page Styling */
+         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation Bar */
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #004d00;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 12px;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            background-color: #008000;
+            border-radius: 5px;
+        }
+        /* Contact Us Section */
+        .contact-section {
+            padding: 40px;
+            text-align: center;
+            background-color: bisque;
+            color: brown;
+        }
+
+        .contact-section h1 {
+            font-size: 32px;
+            color: darkgreen;
+        }
+
+        .contact-info {
+            text-align: left;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #e6ccff; /* Light Purple */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-info p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .contact-info strong {
+            color: darkblue;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        /* Popup Message */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            bottom: 10%;
+            transform: translateX(-50%);
+            width: 350px;
+            padding: 15px;
+            background-color: #d8b3ff; /* Light Purple */
+            color: black;
+            text-align: center;
+            border-radius: 50px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="aboutUs.html">About</a></li>
+            <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="contact-section">
+        <h1>Contact Us</h1>
+        <p>If you have any inquiries, concerns, or require assistance, feel free to reach out to us:</p>
+        
+        <div class="contact-info">
+            <p><strong>Head Office Address:</strong> [Add Location Here]</p>
+            <p><strong>Phone Number:</strong> [Add Contact Number]</p>
+            <p><strong>Email Address:</strong> [Add Official Email]</p>
+            <p><strong>Working Hours:</strong> Monday – Friday | 9:00 AM – 6:00 PM</p>
+            <p>For district-wise contacts, please visit our <strong>Regional Distribution Page</strong> for officer-specific contact details.</p>
+        </div>
+    </section>
+
+    <div class="popup" id="popup">
+        Thank you for visiting our Contact Page! 😊
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Subsidized Fertilization Distribution System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Show popup after 5 seconds
+        setTimeout(() => {
+            document.getElementById("popup").style.display = "block";
+            
+            // Hide popup after 4 seconds
+            setTimeout(() => {
+                document.getElementById("popup").style.display = "none";
+            }, 4000);
+        }, 5000);
+    </script>
+
+</body>
+</html>
