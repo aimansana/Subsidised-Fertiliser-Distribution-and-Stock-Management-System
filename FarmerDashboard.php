@@ -44,24 +44,31 @@ if (isset($_POST['submitrequest'])) {
     $quantity = $_POST['quantity'];
 
     // Validate Land ID (Check if land belongs to the farmer)
-    $landExists = fetchSingleRow($conn, "SELECT COUNT(*) FROM farmer_land WHERE farmerID = ? AND landID = ?", "ii", $farmerID, $landID);
+    $landExists = fetchSingleRow($conn, "SELECT * FROM farmer_land WHERE farmerID = ? AND landID = ?", "ii", $farmerID, $landID);
+    $landIDexists=$landExists['landID']??null;
+    if($landIDexists==null){
+        echo "<script>alert('Invalid Land ID');</script>";
+    }
 
     // Validate Fertilizer ID (Check if fertilizer exists)
-    $fertExists = fetchSingleRow($conn, "SELECT COUNT(*) FROM fertilizers WHERE fertID = ?", "i", $fertID);
+    $fertExists = fetchSingleRow($conn, "SELECT * FROM fertilizers WHERE fertID = ?", "i", $fertID);
+    $fertIDexists=$fertExists['fertID']??null;
+    if($fertIDexists==null){
+        echo "<script>alert('Invalid Fertilizer ID');</script>";
+    }
 
   
-    if ($landExists > 0 && $fertExists > 0) {
+    if ($landExists && $fertExists) {
         // Insert the fertilizer request if both exist       
         $result = executeQuery($conn,"INSERT INTO fertilizer_requests (farmerID, landID, fertID, quantityRequested,registeredBy, requestDate) VALUES (?, ?, ?,?, ?, NOW())", "iiiii", $farmerID, $landID, $fertID, $quantity,$offID);
         if ($result) {
+            echo "<script>alert('Request submitted successfully!');</script>";
             header("Location: FarmerDashboard.php");
            exit();
         }
         else {
             echo "<script>alert('Error in submitting request. Try again!');</script>";
         }
-    } else {
-        echo "Invalid Land ID or Fertilizer ID";
     }
 }
 
@@ -205,3 +212,4 @@ if (isset($_POST['submitrequest'])) {
                
 </body>
 </html>
+
