@@ -1,0 +1,96 @@
+/* Add to your existing CSS file */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f1e1; /* Beige background */
+    color: #333;
+}
+
+.container {
+    display: flex;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #556b2f; /* Olive Green */
+    color: white;
+    padding: 20px;
+}
+
+.header h2 {
+    text-align: center;
+    font-size: 24px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    margin: 15px 0;
+}
+
+ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+ul li a:hover {
+    background-color: #6b8e23; /* Lighter Olive Green */
+    padding-left: 10px;
+    transition: 0.3s;
+}
+
+ul li a i {
+    margin-right: 10px;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+}
+
+h1 {
+    color: #556b2f; /* Olive Green */
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+section h2 {
+    font-size: 22px;
+    color: #556b2f;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f4f1e1; /* Beige background for table header */
+}
+
+table td button {
+    padding: 8px 16px;
+    background-color: #556b2f; /* Olive Green for buttons */
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+table td button:hover {
+    background-color: #6b8e23; /* Lighter Olive Green on hover */
+}

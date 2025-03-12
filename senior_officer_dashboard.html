@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Officer Dashboard</title>
+    <link rel="stylesheet" href="senior_officer_dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Dashboard</h2>
+        </div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="junior_officers.html">Junior Officers</a></li>
+            <li><a href="requests.html">Request Management</a></li>
+            <li><a href="stock.html">Stock Management</a></li>
+            <li><a href="logout.html">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h1>Welcome, Senior Officer (State Level)</h1>
+        </header>
+
+        <!-- Junior Officers Performance -->
+        <section class="officer-performance">
+            <div class="card">
+                <h2>Junior Officer Performance</h2>
+                <div class="officer-list">
+                    <div class="officer-card">
+                        <h3>John Doe</h3>
+                        <p>Requests Handled: 150</p>
+                        <p>Approval Rate: 85%</p>
+                    </div>
+                    <div class="officer-card">
+                        <h3>Jane Smith</h3>
+                        <p>Requests Handled: 200</p>
+                        <p>Approval Rate: 75%</p>
+                    </div>
+                    <!-- Add more officers as required -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Dashboard -->
+        <section class="analytics">
+            <div class="card">
+                <h2>Request Trends</h2>
+                <canvas id="requestTrendsChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Stock Management -->
+        <section class="stock-management">
+            <div class="card">
+                <h2>Stock Management</h2>
+                <div class="stock-details">
+                    <p>Available Stock: <span id="availableStock">500</span> units</p>
+                    <button onclick="allocateStock()">Allocate Stock</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="senior_officer_dashboard.js"></script>
+</body>
+</html>
