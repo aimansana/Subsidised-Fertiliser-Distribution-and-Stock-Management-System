@@ -129,7 +129,7 @@ if (isset($_POST['btn_add_request'])) {
         <li><a href="#" data-target="manage-land-section"><i class="fa-solid fa-tree"></i> Land</a></li>
         <li><a href="#" data-target="request-section"><i class="fa-solid fa-file-alt"></i> Requests</a></li>
         <li><a href="#" data-target="analytics-section"><i class="fa-solid fa-chart-bar"></i> Analytics</a></li>
-        <li><a href="index.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+        <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
     </ul>
     <!-- Sections -->
 <section id="profile-section">Profile Content</section>
