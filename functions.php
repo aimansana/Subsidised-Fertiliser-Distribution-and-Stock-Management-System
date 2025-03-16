@@ -2,6 +2,16 @@
 
 // Functions for database operations
 
+// Function to get a single value
+function getSingleValue($conn, $query, $param_type, $param_value) {
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param($param_type, $param_value);
+    $stmt->execute();
+    $stmt->bind_result($value);
+    $stmt->fetch();
+    $stmt->close();
+    return $value;
+}
 
 // Function to fetch a single row
 function fetchSingleRow($conn, $query, $paramTypes, ...$params) {

@@ -20,7 +20,7 @@ $farmer= fetchSingleRow($conn, "SELECT FarmerID FROM farmer_login WHERE username
 $farmerID = $farmer['FarmerID']??null;
 
 // Fetch farmer's personal details
-$farmerDetails=fetchSingleRow($conn,"SELECT fname, lname, phone_no, age, sex FROM farmers WHERE farmerID = ?","i",$farmerID);
+$farmerDetails=fetchSingleRow($conn,"SELECT fname, lname, phone_no, age, sex,category,adhar FROM farmers WHERE farmerID = ?","i",$farmerID);
 
 // Fetch land details
 $land_details =fetchAllRows($conn," SELECT landID, landlocation, soiltype FROM farmer_land WHERE farmerID = ?", "i", $farmerID);
@@ -34,8 +34,9 @@ ORDER BY fr.requestDate DESC
 ", "i", $farmerID);
 
 $off=fetchSingleRow($conn,"SELECT registeredBy FROM farmers WHERE farmerID=?","i",$farmerID);
-$offID=$off['registeredBy']??null;
-
+$FoffID=$off['registeredBy'];
+$supervisor = fetchSingleRow($conn, "SELECT supervisorID FROM officers WHERE offID = ?", "i", $FoffID);
+$JoffID = $supervisor['supervisorID'];
 
 //apply request
 if (isset($_POST['submitrequest'])) {
@@ -60,7 +61,7 @@ if (isset($_POST['submitrequest'])) {
   
     if ($landExists && $fertExists) {
         // Insert the fertilizer request if both exist       
-        $result = executeQuery($conn,"INSERT INTO fertilizer_requests (farmerID, landID, fertID, quantityRequested,registeredBy, requestDate) VALUES (?, ?, ?,?, ?, NOW())", "iiiii", $farmerID, $landID, $fertID, $quantity,$offID);
+        $result = executeQuery($conn,"INSERT INTO fertilizer_requests (farmerID, landID, fertID, quantityRequested,registeredBy,reviewedBy ,requestDate) VALUES (?, ?, ?,?,?, ?, NOW())", "iiiiii", $farmerID, $landID, $fertID, $quantity,$FoffID,$JoffID);
         if ($result) {
             echo "<script>alert('Request submitted successfully!');</script>";
             header("Location: FarmerDashboard.php");
@@ -99,7 +100,7 @@ if (isset($_POST['submitrequest'])) {
             <li><a href="#" onclick="showSection('requests')"><i class="fas fa-tasks"></i> Requests</a></li>
             <li><a href="#" onclick="showSection('apply-request')"><i class="fas fa-file-signature"></i> Apply Request</a></li>
             <li><a href="#" onclick="showSection('support')"><i class="fas fa-headset"></i> Support</a></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
@@ -122,9 +123,9 @@ if (isset($_POST['submitrequest'])) {
             <p><i class="fas fa-venus-mars"></i> 
             <strong>Age:</strong> <?php echo $farmerDetails['age']; ?></p>
             <p><i class="fas fa-users"></i> 
-            <strong>Category:</strong> General</p>
+            <strong>Category:</strong> <?php echo $farmerDetails['category']; ?></</p>
             <p><i class="fas fa-id-card"></i> 
-            <strong>Aadhaar No:</strong> 1234-5678-9101</p>
+            <strong>Aadhaar No:</strong><?php echo $farmerDetails['adhar']; ?></p>
         </section>
         
 
@@ -212,4 +213,3 @@ if (isset($_POST['submitrequest'])) {
                
 </body>
 </html>
-

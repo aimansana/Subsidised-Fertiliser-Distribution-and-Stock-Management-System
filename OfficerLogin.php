@@ -1,54 +1,58 @@
 <?php 
-session_start(); // Ensure session is started at the beginning
+session_start(); 
 require_once('connection.php');
+require_once('functions.php'); // Import helper functions
 
 $msg = ""; // Initialize message variable
 
 if (isset($_POST['btnLogin'])) {
-    $username = $_POST['txtUName'];
-    $password = $_POST['txtPsw'];
+    $username = trim($_POST['txtUName']);
+    $password = trim($_POST['txtPsw']);
+    $selectedRole = trim($_POST['officerType']);
 
-    // Use prepared statement to prevent SQL Injection
-    $stmt = $conn->prepare("SELECT password FROM Officer_login WHERE username = ? LIMIT 1");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if (empty($selectedRole)) {
+        $msg = "Please select your role.";
+    } else {
+        // Fetch officer ID and hashed password
+        $officer = fetchSingleRow($conn, "SELECT offID, password FROM officer_login WHERE username = ?", "s", $username);
 
-    if ($row = $result->fetch_assoc()) {
-        
-        // Verify password using password_verify()
-        if (password_verify($password, $row['password'])) {
-            $_SESSION['username'] = $username;
+        if ($officer) {
+            $offID = $officer['offID'];
+            $hashedPassword = $officer['password'];
 
-            $stmt = $conn->prepare("SELECT offID FROM officer_login WHERE username = ?");
-            $stmt->bind_param("s", $username);
-            $stmt->execute();
-            $stmt->bind_result($offID);
-            $stmt->fetch();
-            $stmt->close();
+            // Verify password
+            if (password_verify($password, $hashedPassword)) {
+                // Fetch role from `officers` table
+                $role = getSingleValue($conn, "SELECT role FROM officers WHERE offID = ?", "i", $offID);
 
-            $stmt = $conn->prepare("SELECT role FROM officers WHERE offID = ?");
-            $stmt->bind_param("i", $offID);
-            $stmt->execute();
-            $stmt->bind_result($role);
-            $stmt->fetch();
-            $stmt->close();
-            echo $role;
-            
-            switch ($role) {
-                case 'Field Officer': header("Location: off1.php"); exit();
-                case 'Junior Officer': header("Location: Off2.php"); exit();
-                case 'Senior Officer': header("Location: Off3.php"); exit();
-                case 'Quality Control Officer': header("Location: Off4.php"); exit();
-                case 'Subsidy Payment Officer': header("Location: Off5.php"); exit();
-                default: $msg = "Invalid depat id";
+                if ($role && strtolower($role) === strtolower($selectedRole)) {
+                    $_SESSION['username'] = $username;
+                    $_SESSION['role'] = $role;
+
+                    // Redirect based on role
+                    $dashboardPages = [
+                        'Field Officer' => 'off1.php',
+                        'Junior Officer' => 'Off2.php',
+                        'Senior Officer' => 'Off3.php',
+                        'Quality Control Officer' => 'Off5.php',
+                        'Subsidy Payment Officer' => 'Off4.php'
+                    ];
+
+                    if (isset($dashboardPages[$role])) {
+                        header("Location: " . $dashboardPages[$role]);
+                        exit();
+                    } else {
+                        $msg = "Invalid role.";
+                    }
+                } else {
+                    $msg = "Error: Selected role does not match your assigned role.";
+                }
+            } else {
+                $msg = "Invalid Username or Password.";
             }
+        } else {
+            $msg = "Invalid Username or Password.";
         }
-        else {
-            $msg = "Invalid Username or Password";
-        }
-    }else {
-        $msg = "Invalid Username or Password";
     }
 }
 ?>
@@ -72,13 +76,13 @@ if (isset($_POST['btnLogin'])) {
             <form id="officerLoginForm" method="POST" action="OfficerLogin.php">
                 <div class="input-group">
                     <label for="officerType">Select Officer Type</label>
-                    <select id="officerType" required>
+                    <select id="officerType" name="officerType" required> <!-- Added name attribute -->
                         <option value="">-- Select Role --</option>
-                        <option value="field">Field Officer</option>
-                        <option value="junior">Junior Officer</option>
-                        <option value="senior">Senior Officer</option>
-                        <option value="quality">Quality Control Officer</option>
-                        <option value="subsidy">Subsidy Payment Officer</option>
+                        <option value="Field Officer">Field Officer</option>
+                        <option value="Junior Officer">Junior Officer</option>
+                        <option value="Senior Officer">Senior Officer</option>
+                        <option value="Quality Control Officer">Quality Control Officer</option>
+                        <option value="Subsidy Payment Officer">Subsidy Payment Officer</option>
                     </select>
                 </div>
 
@@ -93,15 +97,10 @@ if (isset($_POST['btnLogin'])) {
                 </div>
 
                 <button type="submit" name="btnLogin" class="login-btn">Login</button>
-                <p class="error-msg" id="errorMsg"></p>
+                <p class="error-msg"><?= $msg ?></p>
             </form>
         </div>
     </div>
-
-    <!--
-    <script src="OfficerLogin.js"></script>
-    check js file 
-    -->
 
 </body>
 </html>
