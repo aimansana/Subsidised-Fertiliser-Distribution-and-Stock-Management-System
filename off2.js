@@ -57,3 +57,4 @@ document.addEventListener("DOMContentLoaded", function () {
     createChart('farmersChart', officerLabels, farmerData, 'Number of Farmers', 'green');
     createChart('statusChart', statusLabels, statusData, 'Request Status', ['green', 'blue', 'red', 'orange', 'purple']);
 });
+
