@@ -47,6 +47,7 @@ $requests = fetchAllRows($conn, "
     ORDER BY f.requestDate DESC
 ", "i", $offID);
 
+
 //count status
 $statusCounts = [
     'Pending' => 0,
@@ -221,7 +222,6 @@ $conn->close();
                         <th>#</th>
                         <th>Request ID</th>
                         <th>Land ID</th>
-                        <th>Farmer ID</th>
                         <th>Quantity Requested</th>
                         <th>Request Date</th>
                         <th>Status</th>
@@ -234,7 +234,6 @@ $conn->close();
                         <td><?php echo $index++; ?></td>
                         <td><?php echo $req['requestID']; ?></td>
                         <td><?php echo $req['landID']; ?></td>
-                        <td><?php echo $req['farmerID']; ?></td>
                         <td><?php echo $req['quantityRequested']; ?></td>
                         <td><?php echo $req['requestDate']; ?></td>
                         <td><?php echo $req['status']; ?></td>
@@ -291,7 +290,6 @@ $conn->close();
                         <tr>
                         <th>Request ID</th>
                     <th>Land ID</th>
-                    <th>Farmer ID</th>
                     <th>Quantity Requested</th>
                     <th>Request Date</th>
                     <th>RegisterdBy</th>
@@ -302,7 +300,6 @@ $conn->close();
                         <tr>
                         <td><?php echo $search; ?></td>
                     <td><?php echo $searchreq['landID']; ?></td>
-                    <td><?php echo $searchreq['farmerID']; ?></td>
                     <td><?php echo $searchreq['quantityRequested']; ?></td>
                     <td><?php echo $searchreq['requestDate']; ?></td>
                     <td><?php echo $searchreq['registeredBy']; ?></td>
@@ -323,7 +320,6 @@ $conn->close();
                 <th>#</th>
                 <th>Request ID</th>
                 <th>Land ID</th>
-                <th>Farmer ID</th>
                 <th>Quantity Requested</th>
                 <th>Request Date</th>
                 <th>Status</th>
@@ -336,7 +332,6 @@ $conn->close();
                     <td><?php echo $index++; ?></td>
                     <td><?php echo $request['requestID']; ?></td>
                     <td><?php echo $request['landID']; ?></td>
-                    <td><?php echo $request['farmerID']; ?></td>
                     <td><?php echo $request['quantityRequested']; ?></td>
                     <td><?php echo $request['requestDate']; ?></td>
                     <td><?php echo $request['status']; ?></td>
@@ -354,7 +349,6 @@ $conn->close();
                 <th>#</th>
                 <th>Request ID</th>
                 <th>Land ID</th>
-                <th>Farmer ID</th>
                 <th>Quantity Requested</th>
                 <th>Request Date</th>
                 <th>Status</th>
@@ -369,7 +363,6 @@ $conn->close();
                         <td><?php echo $index++; ?></td>
                         <td><?php echo $request['requestID']; ?></td>
                         <td><?php echo $request['landID']; ?></td>
-                        <td><?php echo $request['farmerID']; ?></td>
                         <td><?php echo $request['quantityRequested']; ?></td>
                         <td><?php echo $request['requestDate']; ?></td>
                         <td><?php echo $request['status']; ?></td>
@@ -481,3 +474,4 @@ $conn->close();
     <script src="off2.js"></script>
 </body>
 </html>
+
