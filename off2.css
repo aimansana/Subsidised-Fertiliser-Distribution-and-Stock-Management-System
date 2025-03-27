@@ -21,6 +21,7 @@ body {
 .sidebar .logo h2 {
     text-align: center;
     color: #F4E1C1; /* Soft beige */
+    height:35px;
 }
 
 .sidebar ul {
@@ -81,6 +82,25 @@ button {
 .section.active {
     display: block;
 }
+/* Logo Styling */
+.sidebar .logo img {
+    display: block;
+    margin: 0 auto;
+    max-width: 80%; /* Adjust width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Profile Picture Styling */
+.profile-container img {
+    display: block;
+    width: 100px; /* Set a fixed width */
+    height: 100px; /* Set a fixed height */
+    object-fit: cover; /* Ensure it maintains aspect ratio without distortion */
+    border-radius: 50%; /* Make it circular */
+    margin: 10px auto; /* Center align */
+    border: 2px solid black; /* Optional border */
+}
+
 
 /* Buttons */
 .approve-btn {
@@ -125,5 +145,6 @@ canvas {
     display: block;
     margin: auto;
 }
+
 
 
