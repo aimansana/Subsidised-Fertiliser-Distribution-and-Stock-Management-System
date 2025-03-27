@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2025 at 12:17 PM
+-- Generation Time: Mar 27, 2025 at 10:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -200,7 +200,7 @@ INSERT INTO `fertilizer_requests` (`requestID`, `farmerID`, `landID`, `fertID`, 
 (2, 18, 115, 2, 20, '2025-03-01 18:30:00', 'Approved', 9, 4),
 (3, 19, 116, 3, 30, '2025-03-02 18:30:00', 'Rejected', 11, 5),
 (4, 20, 117, 4, 400, '2025-03-03 18:30:00', 'Approved', 13, 6),
-(5, 17, 114, 5, 550, '2025-03-04 18:30:00', 'Pending', 8, 3),
+(5, 17, 114, 5, 550, '2025-03-04 18:30:00', 'Approved', 8, 3),
 (6, 18, 115, 6, 600, '2025-03-05 18:30:00', 'Approved', 10, 4),
 (13, 1, 13, 2, 15, '2025-03-13 08:42:34', 'Pending', 7, 3);
 
@@ -219,30 +219,31 @@ CREATE TABLE `officers` (
   `email` varchar(100) DEFAULT NULL,
   `age` int(11) DEFAULT NULL,
   `sex` enum('Male','Female','Other') DEFAULT NULL,
-  `supervisorID` int(11) DEFAULT NULL
+  `supervisorID` int(11) DEFAULT NULL,
+  `regionID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `officers`
 --
 
-INSERT INTO `officers` (`offID`, `Fname`, `Lname`, `role`, `phone_no`, `email`, `age`, `sex`, `supervisorID`) VALUES
-(1, 'Rajesh', 'Verma', 'Senior Officer', '9876543210', 'rajesh.verma@gov.in', 50, 'Male', NULL),
-(2, 'Anita', 'Sharma', 'Senior Officer', '9123456780', 'anita.sharma@gov.in', 48, 'Female', NULL),
-(3, 'Vikram', 'Singh', 'Junior Officer', '9988776655', 'vikram.singh@gov.in', 42, 'Male', 1),
-(4, 'Meera', 'Kapoor', 'Junior Officer', '8765432109', 'meera.kapoor@gov.in', 40, 'Female', 1),
-(5, 'Suresh', 'Yadav', 'Junior Officer', '9876123456', 'suresh.yadav@gov.in', 43, 'Male', 2),
-(6, 'Priya', 'Rao', 'Junior Officer', '9123456789', 'priya.rao@gov.in', 39, 'Female', 2),
-(7, 'Amit', 'Kumar', 'Field Officer', '7896541230', 'amit.kumar@gov.in', 35, 'Male', 3),
-(8, 'Sneha', 'Patil', 'Field Officer', '7023456789', 'sneha.patil@gov.in', 32, 'Female', 3),
-(9, 'Ravi', 'Das', 'Field Officer', '8009123456', 'ravi.das@gov.in', 34, 'Male', 4),
-(10, 'Poonam', 'Joshi', 'Field Officer', '9988771122', 'poonam.joshi@gov.in', 31, 'Female', 4),
-(11, 'Manoj', 'Sharma', 'Field Officer', '7665432109', 'manoj.sharma@gov.in', 36, 'Male', 5),
-(12, 'Anjali', 'Nair', 'Field Officer', '7896123450', 'anjali.nair@gov.in', 33, 'Female', 5),
-(13, 'Karan', 'Gupta', 'Field Officer', '8080765432', 'karan.gupta@gov.in', 37, 'Male', 6),
-(14, 'Divya', 'Menon', 'Field Officer', '7554236789', 'divya.menon@gov.in', 30, 'Female', 6),
-(15, 'Arun', 'Mishra', 'Quality Control Officer', '8123456789', 'arun.mishra@gov.in', 45, 'Male', NULL),
-(16, 'Neha', 'Gupta', 'Subsidy Payment Officer', '9098765432', 'neha.gupta@gov.in', 41, 'Female', NULL);
+INSERT INTO `officers` (`offID`, `Fname`, `Lname`, `role`, `phone_no`, `email`, `age`, `sex`, `supervisorID`, `regionID`) VALUES
+(1, 'Rajesh', 'Verma', 'Senior Officer', '9876543210', 'rajesh.verma@gov.in', 50, 'Male', NULL, 1),
+(2, 'Anita', 'Sharma', 'Senior Officer', '9123456780', 'anita.sharma@gov.in', 48, 'Female', NULL, 2),
+(3, 'Vikram', 'Singh', 'Junior Officer', '9988776655', 'vikram.singh@gov.in', 42, 'Male', 1, 3),
+(4, 'Meera', 'Kapoor', 'Junior Officer', '8765432109', 'meera.kapoor@gov.in', 40, 'Female', 1, 4),
+(5, 'Suresh', 'Yadav', 'Junior Officer', '9876123456', 'suresh.yadav@gov.in', 43, 'Male', 2, 5),
+(6, 'Priya', 'Rao', 'Junior Officer', '9123456789', 'priya.rao@gov.in', 39, 'Female', 2, 6),
+(7, 'Amit', 'Kumar', 'Field Officer', '7896541230', 'amit.kumar@gov.in', 35, 'Male', 3, 7),
+(8, 'Sneha', 'Patil', 'Field Officer', '7023456789', 'sneha.patil@gov.in', 32, 'Female', 3, 8),
+(9, 'Ravi', 'Das', 'Field Officer', '8009123456', 'ravi.das@gov.in', 34, 'Male', 4, 9),
+(10, 'Poonam', 'Joshi', 'Field Officer', '9988771122', 'poonam.joshi@gov.in', 31, 'Female', 4, 10),
+(11, 'Manoj', 'Sharma', 'Field Officer', '7665432109', 'manoj.sharma@gov.in', 36, 'Male', 5, 11),
+(12, 'Anjali', 'Nair', 'Field Officer', '7896123450', 'anjali.nair@gov.in', 33, 'Female', 5, 12),
+(13, 'Karan', 'Gupta', 'Field Officer', '8080765432', 'karan.gupta@gov.in', 37, 'Male', 6, 13),
+(14, 'Divya', 'Menon', 'Field Officer', '7554236789', 'divya.menon@gov.in', 30, 'Female', 6, 14),
+(15, 'Arun', 'Mishra', 'Quality Control Officer', '8123456789', 'arun.mishra@gov.in', 45, 'Male', NULL, NULL),
+(16, 'Neha', 'Gupta', 'Subsidy Payment Officer', '9098765432', 'neha.gupta@gov.in', 41, 'Female', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -286,12 +287,65 @@ INSERT INTO `officer_login` (`offID`, `username`, `password`) VALUES
 
 CREATE TABLE `quality_inspections` (
   `inspectionID` int(11) NOT NULL,
-  `fertID` int(11) DEFAULT NULL,
-  `officerID` int(11) DEFAULT NULL,
-  `inspectionDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `result` enum('Passed','Failed') NOT NULL,
-  `remarks` text DEFAULT NULL
+  `inspection_date` date NOT NULL,
+  `inspectorID` int(11) NOT NULL,
+  `regionID` int(11) NOT NULL,
+  `supplier` varchar(255) NOT NULL,
+  `packaging_condition` enum('Good','Damaged','Poor Labeling') NOT NULL,
+  `weight_check` enum('Correct','Underweight','Overweight') NOT NULL,
+  `appearance` enum('Normal','Clumping','Foreign Materials Present') NOT NULL,
+  `color_odor` enum('Normal','Unusual') NOT NULL,
+  `storage_facility` enum('Good','Poor Ventilation','Pests/Rodents Present') NOT NULL,
+  `handling_practices` enum('Proper','Rough Handling','Moisture Exposure') NOT NULL,
+  `batch_matches` enum('Yes','No') NOT NULL,
+  `tampering_signs` enum('Yes','No') NOT NULL,
+  `complaints` enum('Yes','No') NOT NULL,
+  `approval_status` enum('Approved','Rejected','Further Testing Needed') NOT NULL,
+  `comments` text DEFAULT NULL,
+  `signature` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `quality_inspections`
+--
+
+INSERT INTO `quality_inspections` (`inspectionID`, `inspection_date`, `inspectorID`, `regionID`, `supplier`, `packaging_condition`, `weight_check`, `appearance`, `color_odor`, `storage_facility`, `handling_practices`, `batch_matches`, `tampering_signs`, `complaints`, `approval_status`, `comments`, `signature`, `created_at`) VALUES
+(1, '2025-03-28', 15, 3, 'Agro Fert Pvt Ltd', 'Good', 'Correct', 'Normal', 'Normal', 'Good', 'Proper', 'Yes', 'No', 'No', 'Approved', 'Batch meets all quality standards.', NULL, '2025-03-27 20:59:30'),
+(2, '2025-03-28', 15, 4, 'Green Growers Ltd', 'Damaged', 'Underweight', 'Clumping', 'Unusual', 'Poor Ventilation', 'Moisture Exposure', 'No', 'Yes', 'Yes', 'Further Testing Needed', 'Lab testing required before approval.', NULL, '2025-03-27 20:59:30'),
+(3, '2025-03-28', 15, 5, 'Harvest Fertilizers', 'Poor Labeling', 'Correct', 'Foreign Materials Present', 'Unusual', 'Pests/Rodents Present', 'Rough Handling', 'No', 'Yes', 'No', 'Rejected', 'Contaminated batch, rejected for distribution.', NULL, '2025-03-27 20:59:30');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `regions`
+--
+
+CREATE TABLE `regions` (
+  `regionID` int(11) NOT NULL,
+  `regionName` varchar(255) NOT NULL,
+  `supervisorRegion` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `regions`
+--
+
+INSERT INTO `regions` (`regionID`, `regionName`, `supervisorRegion`) VALUES
+(1, 'Maharashtra', NULL),
+(2, 'Karnataka', NULL),
+(3, 'Pune', 1),
+(4, 'Nagpur', 1),
+(5, 'Bengaluru', 2),
+(6, 'Mysuru', 2),
+(7, 'Hinjewadi', 3),
+(8, 'Hadapsar', 3),
+(9, 'Wardha', 4),
+(10, 'Chandrapur', 4),
+(11, 'Whitefield', 5),
+(12, 'Jayanagar', 5),
+(13, 'Chamundi Hills', 6),
+(14, 'Vijayanagar', 6);
 
 -- --------------------------------------------------------
 
@@ -382,8 +436,15 @@ ALTER TABLE `officer_login`
 --
 ALTER TABLE `quality_inspections`
   ADD PRIMARY KEY (`inspectionID`),
-  ADD KEY `fertID` (`fertID`),
-  ADD KEY `officerID` (`officerID`);
+  ADD KEY `inspectorID` (`inspectorID`),
+  ADD KEY `regionID` (`regionID`);
+
+--
+-- Indexes for table `regions`
+--
+ALTER TABLE `regions`
+  ADD PRIMARY KEY (`regionID`),
+  ADD KEY `supervisorRegion` (`supervisorRegion`);
 
 --
 -- Indexes for table `subsidy_payments`
@@ -438,7 +499,13 @@ ALTER TABLE `officers`
 -- AUTO_INCREMENT for table `quality_inspections`
 --
 ALTER TABLE `quality_inspections`
-  MODIFY `inspectionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `inspectionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `regions`
+--
+ALTER TABLE `regions`
+  MODIFY `regionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `subsidy_payments`
@@ -503,8 +570,14 @@ ALTER TABLE `officer_login`
 -- Constraints for table `quality_inspections`
 --
 ALTER TABLE `quality_inspections`
-  ADD CONSTRAINT `quality_inspections_ibfk_1` FOREIGN KEY (`fertID`) REFERENCES `fertilizers` (`fertID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `quality_inspections_ibfk_2` FOREIGN KEY (`officerID`) REFERENCES `officers` (`offID`) ON DELETE SET NULL;
+  ADD CONSTRAINT `quality_inspections_ibfk_1` FOREIGN KEY (`inspectorID`) REFERENCES `officers` (`offID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `quality_inspections_ibfk_2` FOREIGN KEY (`regionID`) REFERENCES `regions` (`regionID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `regions`
+--
+ALTER TABLE `regions`
+  ADD CONSTRAINT `regions_ibfk_1` FOREIGN KEY (`supervisorRegion`) REFERENCES `regions` (`regionID`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `subsidy_payments`
@@ -518,3 +591,4 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
