@@ -91,7 +91,7 @@ if (isset($_POST['submitrequest'])) {
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
-            <img src="images/farmer1.jpg" alt="Profile Picture">
+            <img src="images/firm_logo1.png" alt="Profile Picture">
             <h2>Farmer Panel</h2>
         </div>
         <ul class="nav-links">

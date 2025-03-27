@@ -1,3 +1,5 @@
+document.getElementById("analytics").style.display = "block";
+
 document.addEventListener("DOMContentLoaded", function () {
     // Function to switch sections
     function showSection(sectionId) {
@@ -25,35 +27,53 @@ document.addEventListener("DOMContentLoaded", function () {
         firstSection.style.display = 'block';
     }
 
-    // Chart configuration
-    const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false, // Prevents oversized graphs
-        scales: { y: { beginAtZero: true } }
-    };
+    // Read the JSON data from the script tag
+    const chartDataElement = document.getElementById("chart-data");
+    if (chartDataElement) {
+        const chartData = JSON.parse(chartDataElement.textContent);
 
-    // Function to create a chart if the element exists
-    function createChart(canvasId, labels, data, labelName, backgroundColor) {
-        let canvas = document.getElementById(canvasId);
-        if (canvas) {
-            let ctx = canvas.getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: labelName,
-                        data: data,
-                        backgroundColor: backgroundColor
-                    }]
-                },
-                options: chartOptions
-            });
+        // Extract values
+        const officerLabels = chartData.officerLabels;
+        const requestData = chartData.requestData;
+        const farmerData = chartData.farmerData;
+        const statusLabels = chartData.statusLabels;
+        const statusData = chartData.statusData;
+
+        // Chart configuration
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false, // Prevents oversized graphs
+            scales: { y: { beginAtZero: true } }
+        };
+
+        // Function to create a chart if the element exists
+        function createChart(canvasId, labels, data, labelName, backgroundColor) {
+            let canvas = document.getElementById(canvasId);
+            if (canvas) {
+                let ctx = canvas.getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: labelName,
+                            data: data,
+                            backgroundColor: backgroundColor
+                        }]
+                    },
+                    options: chartOptions
+                });
+            }
         }
-    }
 
-    // Initialize all charts
-    createChart('requestsChart', officerLabels, requestData, 'Number of Requests', 'blue');
-    createChart('farmersChart', officerLabels, farmerData, 'Number of Farmers', 'green');
-    createChart('statusChart', statusLabels, statusData, 'Request Status', ['green', 'blue', 'red', 'orange', 'purple']);
+        // Initialize all charts
+        createChart('requestsChart', officerLabels, requestData, 'Number of Requests', 'blue');
+        createChart('farmersChart', officerLabels, farmerData, 'Number of Farmers', 'green');
+        createChart('statusChart', statusLabels, statusData, 'Request Status', ['green', 'blue', 'red', 'orange', 'purple']);
+    }
 });
+document.querySelector('a[href="logout.php"]').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = 'logout.php';
+});
+

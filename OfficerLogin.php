@@ -32,18 +32,17 @@ if (isset($_POST['btnLogin'])) {
                     // Redirect based on role
                     $dashboardPages = [
                         'Field Officer' => 'off1.php',
-                        'Junior Officer' => 'Off2.php',
-                        'Senior Officer' => 'Off3.php',
-                        'Quality Control Officer' => 'Off5.php',
-                        'Subsidy Payment Officer' => 'Off4.php'
+                        'Junior Officer' => 'off2.php',
+                        'Senior Officer' => 'off3.php',
+                        'Quality Control Officer' => 'off5.php',
+                        'Subsidy Payment Officer' => 'off4.php'
                     ];
 
                     if (isset($dashboardPages[$role])) {
                         header("Location: " . $dashboardPages[$role]);
                         exit();
-                    } else {
-                        $msg = "Invalid role.";
                     }
+                    
                 } else {
                     $msg = "Error: Selected role does not match your assigned role.";
                 }
@@ -64,19 +63,18 @@ if (isset($_POST['btnLogin'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Officer Login | Fertilizer Distribution</title>
     <link rel="stylesheet" href="OfficerLogin.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" defer></script>
 </head>
 <body>
     <div class="login-container">
         <div class="login-box">
-            <img src="images/indialogoimages6.jpeg" alt="Bharat Logo" class="logo">
+            <img src="images/firm_logo1.png" alt="Bharat Logo" class="logo">
             <h2>Officer Login</h2>
             <p class="subtext">Access your panel to manage fertilizer distribution.</p>
             
-            <form id="officerLoginForm" method="POST" action="OfficerLogin.php">
+            <form method="POST" action="OfficerLogin.php">
                 <div class="input-group">
                     <label for="officerType">Select Officer Type</label>
-                    <select id="officerType" name="officerType" required> <!-- Added name attribute -->
+                    <select id="officerType" name="officerType" required>
                         <option value="">-- Select Role --</option>
                         <option value="Field Officer">Field Officer</option>
                         <option value="Junior Officer">Junior Officer</option>
@@ -101,6 +99,5 @@ if (isset($_POST['btnLogin'])) {
             </form>
         </div>
     </div>
-
 </body>
 </html>

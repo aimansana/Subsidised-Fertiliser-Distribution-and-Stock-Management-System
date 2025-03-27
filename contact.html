@@ -1,38 +1,42 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
-         /* General Page Styling */
-         body {
-            font-family: Arial, sans-serif;
+        /* General Page Styling */
+        body {
             margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            scroll-behavior: smooth;
+            font-family: Arial, sans-serif;
+            background-color: beige;
+            color: #333;
+        }
+        /* Top Bar */
+        .top-bar {
+            background-color: #4A772F;
+            color: #f5deb3;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
         }
 
-        /* Navigation Bar */
+        /* Navigation */
         nav {
             display: flex;
-            justify-content: center;
-            background-color: #004d00;
-            padding: 10px 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2c3e50;
+            padding: 15px 5%;
         }
 
         nav ul {
             list-style: none;
             display: flex;
-            padding: 0;
             margin: 0;
+            padding: 0;
         }
 
         nav ul li {
@@ -43,115 +47,211 @@
             color: white;
             text-decoration: none;
             font-size: 18px;
+            font-weight: 500;
             padding: 8px 12px;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
         }
 
-        nav ul li a:hover,
+        nav ul li a:hover, 
         nav ul li a.active {
             background-color: #008000;
-            border-radius: 5px;
-        }
-        /* Contact Us Section */
-        .contact-section {
-            padding: 40px;
-            text-align: center;
-            background-color: bisque;
-            color: brown;
         }
 
-        .contact-section h1 {
-            font-size: 32px;
-            color: darkgreen;
+        .logo img {
+            height: 50px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: url('images/phone2.jpg') center/cover no-repeat;
+            background-color: bisque;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            text-align: center;
+            padding: 50px 20px;
+            background:lightcoral;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 20px auto;
         }
 
         .contact-info {
-            text-align: left;
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #e6ccff; /* Light Purple */
+            margin-top: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .contact-info a {
+            color: #ff5733;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Contact Cards */
+        .contact-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 50px 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-box {
+            background: lightpink;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 250px;
+            text-align: center;
+            transition: transform 0.3s ease-in;
         }
 
-        .contact-info p {
-            font-size: 18px;
+        .contact-box:hover {
+            transform: scale(1.05);
+        }
+
+        .contact-box i {
+            font-size: 30px;
+            color: orange;
+            margin-bottom: 10px;
+        }
+
+        .contact-box h3 {
             margin: 10px 0;
-        }
-
-        .contact-info strong {
-            color: darkblue;
         }
 
         /* Footer */
         footer {
-            background-color: #333;
+            background: #333;
             color: white;
             text-align: center;
-            padding: 10px;
+            padding: 15px;
             margin-top: 20px;
         }
 
-        /* Popup Message */
+        /* Popup Notification */
         .popup {
-            display: none;
             position: fixed;
-            left: 50%;
-            bottom: 10%;
-            transform: translateX(-50%);
-            width: 350px;
-            padding: 15px;
-            background-color: #d8b3ff; /* Light Purple */
-            color: black;
-            text-align: center;
-            border-radius: 50px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
+            bottom: 20px;
+            right: 20px;
+            background: #ff5733;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            display: none;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
     </style>
 </head>
 <body>
+    <!-- Header Section -->
+    <header>
+        <div class="top-bar">
+            <span><i class="fas fa-landmark"></i> भारत सरकार | Government of India, Ministry of Agriculture & Farmers Welfare</span>
+        </div>
+        <nav>
+            <div class="logo">
+                <img src="images/firm_logo1.png" alt="Left Logo">
+            </div>
+            <ul>
+                <li><a href="./index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="./aboutUs.html" class="active"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="./FarmerLogin.php"><i class="fas fa-tractor"></i> Farmer</a></li>
+                <li><a href="./OfficerLogin.php"><i class="fas fa-user-tie"></i> Officer</a></li>
+                <li><a href="./contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                <li><a href="./chat.php">🤖 ChatAI</a></li>
+            </ul>
+            <div class="logo">
+                <img src="images/nationallogo.jpg" alt="Right Logo">
+            </div>
+        </nav>
+    </header>
 
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="aboutUs.html">About</a></li>
-            <li><a href="contact.html" class="active">Contact</a></li>
-        </ul>
-    </nav>
+    <!-- Hero Section -->
+    <header class="hero"></header>
 
+    <!-- Contact Information Section -->
     <section class="contact-section">
         <h1>Contact Us</h1>
         <p>If you have any inquiries, concerns, or require assistance, feel free to reach out to us:</p>
         
         <div class="contact-info">
-            <p><strong>Head Office Address:</strong> Karnataka </p>
-            <p><strong>Phone Number:</strong>9734523784</p>
-            <p><strong>Email Address:</strong>Fertilizer@gmail.com</p>
-            <p><strong>Working Hours:</strong> Monday – Friday | 9:00 AM – 6:00 PM</p>
-            <p>For district-wise contacts, please visit our <strong>Regional Distribution Page</strong> for officer-specific contact details.</p>
+            <p><strong>📍 Head Office Address:</strong> Karnataka, India</p>
+            <p><strong>📞 Phone Number:</strong> <a href="tel:+919734523784">+91 97345 23784</a></p>
+            <p><strong>📧 Email Address:</strong> <a href="mailto:Fertilizer@gmail.com">Fertilizer@gmail.com</a></p>
+            <p><strong>🕒 Working Hours:</strong> Monday – Friday | 9:00 AM – 6:00 PM</p>
+            <p>For district-wise contacts, please visit our <a href="#">Regional Distribution Page</a> for officer-specific contact details.</p>
         </div>
     </section>
 
+    <!-- Contact Cards -->
+    <section class="contact-container">
+        <div class="contact-box">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3>VISIT US</h3>
+            <p>Karnataka, India</p>
+        </div>
+        <div class="contact-box">
+            <i class="fas fa-phone"></i>
+            <h3>CALL US</h3>
+            <p><a href="tel:+919734523784">+91 97345 23784</a></p>
+        </div>
+        <div class="contact-box">
+            <i class="fas fa-envelope"></i>
+            <h3>EMAIL US</h3>
+            <p><a href="mailto:Fertilizer@gmail.com">Fertilizer@gmail.com</a></p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Subsidized Fertilization Distribution Management System</p>
+    </footer>
+
+    <!-- Popup Notification -->
     <div class="popup" id="popup">
         Thank you for visiting our Contact Page! 😊
     </div>
 
-    <footer>
-        <p>&copy; 2025 Subsidized Fertilization Distribution System. All rights reserved.</p>
-    </footer>
-
     <script>
-        // Show popup after 5 seconds
-        setTimeout(() => {
-            document.getElementById("popup").style.display = "block";
-            
-            // Hide popup after 4 seconds
+        // Contact Card Animation
+        document.addEventListener("DOMContentLoaded", function () {
+            const boxes = document.querySelectorAll(".contact-box");
+            boxes.forEach(box => {
+                box.style.opacity = "0";
+                box.style.transform = "translateY(20px)";
+                setTimeout(() => {
+                    box.style.opacity = "1";
+                    box.style.transform = "translateY(0)";
+                    box.style.transition = "all 0.6s ease-in-out";
+                }, 200);
+            });
+
+            // Popup Notification
+            const popup = document.getElementById("popup");
+            popup.style.display = "block";
             setTimeout(() => {
-                document.getElementById("popup").style.display = "none";
-            }, 4000);
-        }, 5000);
+                popup.style.display = "none";
+            }, 3000);
+        });
     </script>
 
 </body>

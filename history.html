@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subsidized Fertilization Distribution</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="index4.css">
+    <style>
+        /* Styling for history button */
+        .history-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+        }
+
+        /* Hidden history content */
+        .history-content {
+            display: none;
+            margin: 20px;
+            padding: 15px;
+            background: #f4f4f4;
+            border-left: 5px solid green;
+        }
+
+        /* Title styling */
+        .history-title {
+            color: darkgreen;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: darkred;
+        }
+
+        /* Visible class when button is clicked */
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- History Button -->
+    <button id="historyBtn" class="history-btn">Show Our History</button>
+
+    <!-- Hidden History Section -->
+    <div id="historySection" class="history-content">
+        <h3 class="history-title">Our Journey Through Time</h3>
+
+        <p>
+            Fertilizers have always been pivotal in strengthening the agricultural backbone of our nation. Recognizing their critical role, the government initiated numerous subsidy schemes to empower farmers. However, obstacles like <span class="highlight">corruption</span>, <span class="highlight">unequal distribution</span>, and <span class="highlight">process delays</span> often hindered progress.
+        </p>
+
+        <div class="history-highlight">
+            <h4>The Turning Point</h4>
+            <p>
+                To overcome these challenges, the <strong>Subsidized Fertilization Distribution Management System</strong> was introduced. This digital system brought a wave of transformation by ensuring transparency, traceability, and accountability in fertilizer distribution.
+            </p>
+        </div>
+
+        <p>
+            Since its inception, the system has empowered millions of farmers to access fertilizers at subsidized rates, simplifying the journey from <span class="highlight">registration</span> to <span class="highlight">distribution</span>. As it continues to evolve, it integrates the latest technologies and aligns with updated government policies to ensure lasting agricultural prosperity.
+        </p>
+    </div>
+
+    <script>
+        document.getElementById("historyBtn").addEventListener("click", function() {
+            var historySection = document.getElementById("historySection");
+            if (historySection.classList.contains("show")) {
+                historySection.classList.remove("show");
+                this.innerText = "Show Our History";
+            } else {
+                historySection.classList.add("show");
+                this.innerText = "Hide Our History";
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,67 +1,35 @@
-// Show selected section and hide others
-function showSection(sectionId) {
-    const sections = document.querySelectorAll('.section');
-    sections.forEach(section => {
-        section.classList.remove('active');
+document.addEventListener("DOMContentLoaded", function() {
+    let ctx = document.getElementById("requestsChart").getContext("2d");
+    
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Total Requests", "Pending", "Approved", "Rejected"],
+            datasets: [{
+                label: "Requests Overview",
+                data: [150, 30, 100, 20],
+                backgroundColor: ["#3498db", "#f39c12", "#2ecc71", "#e74c3c"]
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
     });
-    document.getElementById(sectionId).classList.add('active');
-}
-
-// Default view - show profile section
-document.addEventListener("DOMContentLoaded", () => {
-    showSection('profileSection');
 });
-
-// Stock Chart
-const ctx = document.getElementById('stockChart').getContext('2d');
-new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['District A', 'District B'],
-        datasets: [{
-            label: 'Stock Available',
-            data: [200, 300],
-            backgroundColor: ['#4CAF50', '#FFC107'],
-        }]
-    },
-    options: {
-        responsive: true,
-    }
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("off3.php")
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("profile-img").src = data.profile_image || "default.jpg";
+            document.getElementById("officer-img").src = data.profile_image || "default.jpg";
+            document.getElementById("officer-name").textContent = data.name;
+            document.getElementById("officer-name-detail").textContent = data.name;
+            document.getElementById("officer-designation").textContent = data.designation;
+            document.getElementById("officer-email").textContent = data.email;
+            document.getElementById("officer-phone").textContent = data.phone;
+        })
+        .catch(error => console.error("Error fetching officer data:", error));
 });
-
-// Allocate Stock Function
-function allocateStock(districtId) {
-    let currentStock = parseInt(document.getElementById(districtId).textContent);
-    if (currentStock >= 50) {
-        document.getElementById(districtId).textContent = currentStock - 50;
-        alert("50 units allocated.");
-    } else {
-        alert("Not enough stock available!");
-    }
-}
-
-// Approve Request
-function approveRequest() {
-    alert("Request Approved.");
-}
-
-// Reject Request
-function rejectRequest() {
-    alert("Request Rejected.");
-}
-
-// Assign Officer
-function assignOfficer() {
-    const district = document.getElementById('districtSelect').value;
-    const officerName = document.getElementById('officerName').value;
-    if (officerName) {
-        document.getElementById('assignmentResult').textContent = `${officerName} assigned to ${district}.`;
-    } else {
-        alert("Please enter an officer name.");
-    }
-}
-
-// Logout
-function logout() {
-    window.location.href = "index.html";
-}

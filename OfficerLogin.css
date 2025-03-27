@@ -1,95 +1,100 @@
-/* General Styles */
-body {
-    font-family: 'Arial', sans-serif;
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
     margin: 0;
     padding: 0;
-    background: url('images/field_officer.jpeg') no-repeat center center/cover;
-    height: 100vh;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    background: url('images/farmerlogin1.jpg'); /* Change to your image path */
+    background-size: cover;
+    background-position: center;
 }
 
-/* Login Container */
 .login-container {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 40px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    position: relative;
     width: 350px;
+    text-align: center;
 }
 
 .login-box {
-    background: white;
+    background: rgba(255, 255, 255, 0.15);
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
-/* Logo */
 .logo {
-    width: 70px;
+    width: 80px;
+    height: 80px;
     margin-bottom: 10px;
 }
 
-/* Titles */
 h2 {
-    color: #2E8B57;
-    margin-bottom: 5px;
+    color: white;
+    font-size: 22px;
+    margin-bottom: 10px;
 }
 
 .subtext {
-    color: #555;
+    color: white;
     font-size: 14px;
+    margin-bottom: 20px;
 }
 
-/* Input Fields */
 .input-group {
+    margin-bottom: 15px;
     text-align: left;
-    margin: 15px 0;
 }
 
 label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
+    font-size: 14px;
+    color:white;
 }
 
 input, select {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-input:focus, select:focus {
-    border-color: #2E8B57;
-    outline: none;
-}
-
-/* Login Button */
-.login-btn {
-    background: #2E8B57;
-    color: white;
-    padding: 12px;
-    width: 100%;
+    margin-top: 5px;
+    border-radius: 10px;
     border: none;
-    border-radius: 5px;
-    font-size: 18px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: black;
+}
+
+::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.login-btn {
+    width: 100%;
+    padding: 10px;
+    background: #2ecc71;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
     cursor: pointer;
-    margin-top: 15px;
-    transition: background 0.3s ease;
+    transition: 0.3s;
 }
 
 .login-btn:hover {
-    background: #1E5E3D;
+    background: #27ae60;
 }
 
-/* Error Message */
 .error-msg {
-    color: red;
+    color: #e74c3c;
     font-size: 14px;
     margin-top: 10px;
 }
+

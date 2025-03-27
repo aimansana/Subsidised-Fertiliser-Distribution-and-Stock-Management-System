@@ -1,7 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-echo "Error reporting is ON<br>";
 session_start();
 if (!isset($_SESSION['username'])) {
     header("Location: OfficerLogin.php");
@@ -21,17 +18,9 @@ $username = $_SESSION['username'];
 // Fetch officer's ID
 $officer = fetchSingleRow($conn, "SELECT offID FROM officer_login WHERE username = ?", "s", $username);
 $offID = $officer['offID'] ?? null;
-if (!$offID) {
-    die("Error: Officer ID not found for username = " . $username);
-}
-
 
 // Fetch officer's details
 $officerDetails = fetchSingleRow($conn, "SELECT Fname, Lname, phone_no, email, age, sex FROM officers WHERE offID = ?", "i", $offID);
-if (!$officerDetails) {
-    die("Error: No officer details found for offID = " . $offID);
-}
-
 
 
 //ALL RECORDS
@@ -133,20 +122,7 @@ if (isset($_POST['approvebtn']) || isset($_POST['rejectbtn'])) {
 }
 
 $conn->close();
-//for analytic 
 ?>
-
-<script>
-    var requestData = <?php echo json_encode(array_column($field_officers, 'request_count')); ?>;
-    var requestLabels = <?php echo json_encode(array_column($field_officers, 'offID')); ?>;
-
-    var farmerData = <?php echo json_encode(array_column($field_officers, 'farmer_count')); ?>;
-    var farmerLabels = <?php echo json_encode(array_column($field_officers, 'offID')); ?>;
-
-    var statusData = <?php echo json_encode(array_values($statusCounts)); ?>;
-    var statusLabels = <?php echo json_encode(array_keys($statusCounts)); ?>;
-</script>
-
 
 
 <!DOCTYPE html>
@@ -157,9 +133,8 @@ $conn->close();
     <title>Junior Officer Dashboard</title>
     <link rel="stylesheet" href="off2.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- FontAwesome -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Chart.js -->
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
@@ -167,8 +142,7 @@ $conn->close();
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="logo">
-            <img src="images/firm_logo1.png" alt="Logo">
-                <h2>junior officer</h2>
+                <h2>Fertilizer Management</h2>
             </div>
             <ul>
     <li><a href="#" data-section="profile"><i class="fas fa-user"></i> Profile</a></li>
@@ -179,20 +153,23 @@ $conn->close();
     <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
     </ul>
 
-    </div>
+        </div>
 
         <!-- Main Content -->
         <div class="main-content">
             <div class="header">
-                <p>Junior Officer</p>
-            
+                <h2>Dashboard</h2>
+                <div class="user-info">
+                    
+                    <p>Junior Officer</p>
+                </div>
             </div>
 
             <!-- Profile Section -->
             <div class="section active" id="profile">
-                <h2><i class="fas fa-user"></i>Your Profile</h3>
-                <h2>Welcome, <?php echo isset($officerDetails['Fname']) ? $officerDetails['Fname'] . " " . $officerDetails['Lname'] : "Guest"; ?></h2>
-                    <div class="profile-container">
+                <h3><i class="fas fa-user"></i>Junior Officer Dashboard</h3>
+                <h2>Welcome, <?php echo $officerDetails['Fname'] . " " . $officerDetails['Lname']; ?></h2>
+                <div class="profile-container">
                     <img src="images/farmer1.jpg" alt="Profile Picture" class="profile-pic">
                     <table class="profile-table">
                         <tr><th>First name:</th><td><?php echo $officerDetails['Fname']; ?></td></tr>
@@ -408,103 +385,99 @@ $conn->close();
             <?php endforeach; ?>
         </tbody>
     </table>
-<!-- Analytics Section -->
-<div class="section" id="analytics">
-    <h3><i class="fas fa-chart-bar"></i> Analytics</h3>
 
-    <!-- Requests by Officers Table -->
-    <h4>Requests by Officers</h4>
-    <table border="1">
-        <thead>
+
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="section" id="analytics">
+            <h3><i class="fas fa-chart-bar"></i>Analytics</h3>
+
+<!-- Requests by Officers Table -->
+<h4>Requests by Officers</h4>
+<table border="1">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Officer ID</th>
+            <th>No. of Requests</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $index = 1; ?>
+        <?php foreach ($field_officers as $field_officer): ?>
             <tr>
-                <th>#</th>
-                <th>Officer ID</th>
-                <th>No. of Requests</th>
+                <td><?php echo $index++; ?></td>
+                <td><?php echo $field_officer['offID']; ?></td>
+                <td><?php echo $field_officer['request_count']; ?></td>
             </tr>
-        </thead>
-        <tbody>
-            <?php $index = 1; ?>
-            <?php foreach ($field_officers as $field_officer): ?>
-                <tr>
-                    <td><?php echo $index++; ?></td>
-                    <td><?php echo $field_officer['offID']; ?></td>
-                    <td><?php echo $field_officer['request_count']; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<canvas id="requestsChart" ></canvas>
+
+<!-- Count of Farmers Table -->
+<h4>Count of Farmers</h4>
+<table border="1">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Officer ID</th>
+            <th>No. of Farmers</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $index = 1; ?>
+        <?php foreach ($field_officers as $field_officer): ?>
+            <tr>
+                <td><?php echo $index++; ?></td>
+                <td><?php echo $field_officer['offID']; ?></td>
+                <td><?php echo $field_officer['farmer_count']; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<canvas id="farmersChart"></canvas>
+
+<!-- Count of Request Status Table -->
+<h4>Count of Request Status</h4>
+<table border="1">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Status</th>
+            <th>Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $index = 1; ?>
+        <?php foreach ($statusCounts as $status => $count): ?>
+            <tr>
+                <td><?php echo $index++; ?></td>
+                <td><?php echo $status; ?></td>
+                <td><?php echo $count; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<canvas id="statusChart"></canvas>
+
+<!-- Pass PHP data to JavaScript -->
+<script>
+    const officerLabels = <?php echo json_encode(array_column($field_officers, 'offID')); ?>;
+    const requestData = <?php echo json_encode(array_column($field_officers, 'request_count')); ?>;
+    const farmerData = <?php echo json_encode(array_column($field_officers, 'farmer_count')); ?>;
+    const statusLabels = <?php echo json_encode(array_keys($statusCounts)); ?>;
+    const statusData = <?php echo json_encode(array_values($statusCounts)); ?>;
+</script>
+            </div>
+
+        </div>
+    </div>
     
-    <canvas id="requestsChart"></canvas>
-
-    <!-- Count of Farmers Table -->
-    <h4>Count of Farmers</h4>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Officer ID</th>
-                <th>No. of Farmers</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php $index = 1; ?>
-            <?php foreach ($field_officers as $field_officer): ?>
-                <tr>
-                    <td><?php echo $index++; ?></td>
-                    <td><?php echo $field_officer['offID']; ?></td>
-                    <td><?php echo $field_officer['farmer_count']; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
-    <canvas id="farmersChart"></canvas>
-
-    <!-- Count of Request Status Table -->
-    <h4>Count of Request Status</h4>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Status</th>
-                <th>Count</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php $index = 1; ?>
-            <?php foreach ($statusCounts as $status => $count): ?>
-                <tr>
-                    <td><?php echo $index++; ?></td>
-                    <td><?php echo $status; ?></td>
-                    <td><?php echo $count; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
-    <canvas id="statusChart"></canvas>
-
-    <!-- Pass PHP data to JavaScript -->
-    <pre><?php print_r($field_officers); ?></pre>
-
-    <script id="chart-data" type="application/json">
-    <?php
-        $chartData = [
-            "officerLabels" => array_column($field_officers, 'offID'),
-            "requestData" => array_column($field_officers, 'request_count'),
-            "farmerData" => array_column($field_officers, 'farmer_count'),
-            "statusLabels" => array_keys($statusCounts),
-            "statusData" => array_values($statusCounts)
-        ];
-        echo json_encode($chartData, JSON_PRETTY_PRINT);
-    ?>
-    </script>
-
-</div> <!-- End of Analytics Section -->
-
-<!-- Ensure Chart.js and off2.js Load -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
- <script src="off2.js"></script> 
-
+    <script src="off2.js"></script>
 </body>
 </html>

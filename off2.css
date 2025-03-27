@@ -16,11 +16,20 @@ body {
     color: white;
     height: 100vh;
     padding: 20px;
+    border-right: 2px solid black; /* Adds border on the right side */
 }
 
 .sidebar .logo h2 {
     text-align: center;
     color: #F4E1C1; /* Soft beige */
+    height: 35px;
+}
+
+.sidebar .logo img {
+    display: block;
+    margin: 0 auto;
+    max-width: 80%; /* Adjust width */
+    height: auto; /* Maintain aspect ratio */
 }
 
 .sidebar ul {
@@ -45,44 +54,14 @@ body {
     flex-grow: 1;
     padding: 20px;
 }
+
+/* Buttons */
 button {
     border: 2px solid black;
     padding: 10px 15px;
     cursor: pointer;
 }
-.sidebar {
-    border-right: 2px solid black; /* Adds border on the right side */
-}
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 2px solid black; /* Adds border around the table */
-}
 
-.data-table th, .data-table td {
-    border: 1px solid black; /* Adds border around table cells */
-    padding: 10px;
-    text-align: left;
-}
-
-
-/* Header */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Sections */
-.section {
-    display: none;
-}
-
-.section.active {
-    display: block;
-}
-
-/* Buttons */
 .approve-btn {
     background-color: green;
     color: white;
@@ -100,23 +79,57 @@ button {
     color: white;
     padding: 5px;
 }
-.profile-container {
-    border: 2px solid black;
-    padding: 15px;
-    border-radius: 8px; /* Optional: makes the border rounded */
-    box-shadow: 2px 2px 5px gray; /* Optional: adds a shadow effect */
-}
+
+/* Tables */
+.data-table,
 .profile-table {
     width: 100%;
     border-collapse: collapse;
     border: 2px solid black; /* Border around the entire table */
 }
 
+.data-table th, .data-table td,
 .profile-table th, .profile-table td {
     border: 1px solid black; /* Borders around table cells */
     padding: 10px;
     text-align: left;
 }
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Sections */
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+/* Profile Picture Styling */
+.profile-container {
+    border: 2px solid black;
+    padding: 15px;
+    border-radius: 8px; /* Optional: makes the border rounded */
+    box-shadow: 2px 2px 5px gray; /* Optional: adds a shadow effect */
+}
+
+.profile-container img {
+    display: block;
+    width: 100px; /* Set a fixed width */
+    height: 100px; /* Set a fixed height */
+    object-fit: cover; /* Ensure it maintains aspect ratio without distortion */
+    border-radius: 50%; /* Make it circular */
+    margin: 10px auto; /* Center align */
+    border: 2px solid black; /* Optional border */
+}
+
+/* Canvas */
 canvas {
     max-width: 400px; /* Adjust for your layout */
     max-height: 250px;
@@ -125,5 +138,3 @@ canvas {
     display: block;
     margin: auto;
 }
-
-

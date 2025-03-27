@@ -1,11 +1,13 @@
 <?php
 
-// Functions for database operations
-
 // Function to get a single value
-function getSingleValue($conn, $query, $param_type, $param_value) {
+function getSingleValue($conn, $query, $param_type = "", ...$param_values) {
     $stmt = $conn->prepare($query);
-    $stmt->bind_param($param_type, $param_value);
+    if (!$stmt) return null; // Prevent errors if query fails
+    
+    if ($param_type) { 
+        $stmt->bind_param($param_type, ...$param_values);
+    }
     $stmt->execute();
     $stmt->bind_result($value);
     $stmt->fetch();
@@ -14,29 +16,42 @@ function getSingleValue($conn, $query, $param_type, $param_value) {
 }
 
 // Function to fetch a single row
-function fetchSingleRow($conn, $query, $paramTypes, ...$params) {
+function fetchSingleRow($conn, $query, $paramTypes = "", ...$params) {
     $stmt = $conn->prepare($query);
-    $stmt->bind_param($paramTypes, ...$params);
+    if (!$stmt) return null;
+
+    if ($paramTypes) {
+        $stmt->bind_param($paramTypes, ...$params);
+    }
     $stmt->execute();
     $result = $stmt->get_result();
     return $result->fetch_assoc();
 }
 
 // Function to fetch multiple rows
-function fetchAllRows($conn, $query, $paramTypes, ...$params) {
+function fetchAllRows($conn, $query, $paramTypes = "", ...$params) {
     $stmt = $conn->prepare($query);
-    $stmt->bind_param($paramTypes, ...$params);
+    if (!$stmt) return []; // Return empty array instead of null
+
+    if ($paramTypes) {
+        $stmt->bind_param($paramTypes, ...$params);
+    }
     $stmt->execute();
     $result = $stmt->get_result();
-    return $result->fetch_all(MYSQLI_ASSOC);
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 }
 
 // Function for Insert, Update, and Delete queries
-function executeQuery($conn, $query, $paramTypes, ...$params) {
+function executeQuery($conn, $query, $paramTypes = "", ...$params) {
     $stmt = $conn->prepare($query);
-    $stmt->bind_param($paramTypes, ...$params);
+    if (!$stmt) return false;
+
+    if ($paramTypes) {
+        $stmt->bind_param($paramTypes, ...$params);
+    }
     $result = $stmt->execute();
     $stmt->close();
     return $result;
 }
+
 ?>

@@ -1,99 +1,127 @@
-/* Reset */
-* {
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    background: #f4f4f4;
 }
 
-body {
-    font-family: 'Poppins', sans-serif;
-    background: #f0f0f0;
+.dashboard-container {
+    display: flex;
 }
 
 /* Sidebar */
 .sidebar {
     width: 250px;
-    height: 100vh;
-    background: linear-gradient(180deg, #4B5320, #556B2F);
-    position: fixed;
-    padding-top: 20px;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    background: #0a3d62;
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
 }
 
-.sidebar-header {
-    color: #fff;
+.sidebar .profile {
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 24px;
+}
+
+.sidebar img {
+    width: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
 }
 
 .sidebar ul {
     list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 15px 10px;
 }
 
 .sidebar ul li a {
-    padding: 15px;
-    display: block;
-    color: #fff;
+    color: white;
     text-decoration: none;
-    transition: 0.3s;
-}
-
-.sidebar ul li a:hover {
-    background: #3c4e2c;
-}
-
-/* Main Content */
-.main-content {
-    margin-left: 260px;
-    padding: 20px;
-}
-
-header h1 {
-    color: #4B5320;
-}
-
-/* Cards */
-.card {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-}
-
-/* Sections */
-.section {
-    display: none;
-}
-
-.section.active {
-    display: block;
-}
-
-/* Profile Section */
-.profile-container {
     display: flex;
     align-items: center;
 }
 
-.profile-image {
+.sidebar ul li a i {
+    margin-right: 10px;
+}
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+header h2 {
+    color: #333;
+}
+
+/* Stats Section */
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.stat-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 23%;
+}
+
+.stat-card h4 {
+    margin: 0;
+    color: #444;
+}
+
+.stat-card p {
+    font-size: 22px;
+    font-weight: bold;
+    color: #0a3d62;
+}
+
+/* Charts Section */
+.charts {
+    margin-top: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+/* Officer Profile Section */
+.officer-profile {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.officer-img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     margin-right: 20px;
 }
 
-/* Buttons */
-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.officer-info h3 {
+    margin: 0;
+    color: #0a3d62;
 }
 
-button:hover {
-    background-color: #45a049;
+.officer-info p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.officer-info i {
+    margin-right: 8px;
+    color: #0a3d62;
 }

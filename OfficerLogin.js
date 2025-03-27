@@ -1,5 +1,5 @@
 document.getElementById("officerLoginForm").addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault(); // Prevent default form submission
 
     let officerType = document.getElementById("officerType").value;
     let username = document.getElementById("username").value.trim();
@@ -11,17 +11,27 @@ document.getElementById("officerLoginForm").addEventListener("submit", function 
         return;
     }
 
-    // Dummy authentication (Replace this with real authentication later)
-    if (username === "admin" && password === "password") {
-        errorMsg.textContent = "";
-        
-        // Store officer type in session storage
-        sessionStorage.setItem("officerType", officerType);
-        sessionStorage.setItem("officerName", username);
+    // Send login data to the server using fetch()
+    fetch("officerLogin.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `officerType=${encodeURIComponent(officerType)}&txtUName=${encodeURIComponent(username)}&txtPsw=${encodeURIComponent(password)}&btnLogin=1`
+    })
+    .then(response => response.text())
+    .then(data => {
+        if (data.includes("Invalid") || data.includes("Error")) {
+            errorMsg.textContent = data; // Show error message from PHP
+        } else {
+            // Store officer type in session storage (optional)
+            sessionStorage.setItem("officerType", officerType);
+            sessionStorage.setItem("officerName", username);
 
-        // Redirect to the main officer dashboard
-        window.location.href = "officer_dashboard.html";
-    } else {
-        errorMsg.textContent = "Invalid username or password!";
-    }
+            // Redirect to the dashboard
+            window.location.href = data; // PHP should return the dashboard URL
+        }
+    })
+    .catch(error => {
+        console.error("Login Error:", error);
+        errorMsg.textContent = "Something went wrong. Try again!";
+    });
 });
