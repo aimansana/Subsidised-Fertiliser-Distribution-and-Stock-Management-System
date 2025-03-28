@@ -4,7 +4,7 @@ if (!isset($_SESSION['username'])) {
     header("Location: OfficerLogin.php");
     exit();
 }
-//best off1
+
 include 'connection.php';
 include 'functions.php';
 
@@ -16,6 +16,53 @@ $offID = $officer['offID'];
 
 // Fetch officer's details
 $officerDetails = fetchSingleRow($conn, "SELECT * FROM officers WHERE offID = ?", "i", $offID);
+
+// Fetch Junior Officers and their stock
+$juniorOfficers = fetchAllRows($conn, "
+    SELECT o.offID, o.regionID, COALESCE(fs.total_stock, 0) AS total_stock
+    FROM officers o
+    LEFT JOIN fertilizer_stock fs ON o.offID = fs.officerID
+    WHERE o.supervisorID = ?
+", "i", $offID);
+
+// Set total stock available
+$totalstock = 5000;
+$allocatedstock = 0;
+
+if (isset($_POST['stockbtn'])) {
+    $allocations = $_POST['allocations']; // Get input as associative array
+    $total_allocated = array_sum($allocations); // Sum of all inputs
+
+    if ($total_allocated <= $totalstock) {
+        foreach ($allocations as $juniorID => $amount) {
+            if ($amount > 0) {
+                // Store allocation in the fertilizer_allocation table
+                $query = "INSERT INTO fertilizer_allocation (officerID, amount_allocated, allocated_by) VALUES (?, ?, ?)";
+                executeQuery($conn, $query, "iii", $juniorID, $amount, $offID);
+
+                // Check if junior officer already has a stock record
+                $existingStock = fetchSingleRow($conn, "SELECT total_stock FROM fertilizer_stock WHERE officerID = ?", "i", $juniorID);
+
+                if ($existingStock) {
+                    // Update existing stock
+                    $updateQuery = "UPDATE fertilizer_stock SET total_stock = total_stock + ? WHERE officerID = ?";
+                    executeQuery($conn, $updateQuery, "di", $amount, $juniorID);
+                } else {
+                    // Insert new stock record
+                    $insertQuery = "INSERT INTO fertilizer_stock (officerID, total_stock) VALUES (?, ?)";
+                    executeQuery($conn, $insertQuery, "id", $juniorID, $amount);
+                }
+
+                $allocatedstock += $amount;
+            }
+        }
+
+        echo "<script>alert('Stock allocated successfully!');</script>";
+    } else {
+        echo "<script>alert('Total allocated stock exceeds available stock!');</script>";
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -24,95 +71,76 @@ $officerDetails = fetchSingleRow($conn, "SELECT * FROM officers WHERE offID = ?"
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Senior Officer Dashboard</title>
-    <link rel="stylesheet" href="off3.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="">
+    
 </head>
 <body>
     
-    <div class="sidebar">
-        <img src=".png" alt="Logo">
-        <div class="sidebar-header">Dashboard</div>
-        <ul>
-            <li><a href="#" onclick="showSection('profileSection')">Profile</a></li>
-            <li><a href="#" onclick="showSection('stockSection')">Stock Overview</a></li>
-            <li><a href="#" onclick="showSection('districtSection')">District Management</a></li>
-            <li><a href="#" onclick="showSection('requestSection')">Requests</a></li>
-            <li><a href="#" onclick="showSection('officerSection')">Officer Management</a></li>
-            <li><a href="logout.php" >Logout</a></li>
-        </ul>
-    </div>
+    <header>
+        <h1>Senior Officer Dashboard</h1>
+    </header>
 
-    <div class="main-content">
-        <header>
-            <h1>Senior Officer Dashboard</h1>
-        </header>
+    <h2>Profile</h2>
+    <h3>Your Profile</h3>
+    <table class="profile-table">
+        <tr><th>ID:</th><td><?= htmlspecialchars($officerDetails['offID']) ?></td></tr>
+        <tr><th>Name:</th><td><?= htmlspecialchars($officerDetails['Fname'] . " " . $officerDetails['Lname']); ?></td></tr>
+        <tr><th>Designation:</th><td>Senior Officer</td></tr>
+        <tr><th>Email:</th><td><?= htmlspecialchars($officerDetails['email']); ?></td></tr>
+        <tr><th>Phone:</th><td><?= htmlspecialchars($officerDetails['phone_no']); ?></td></tr>
+        <tr><th>Age:</th><td><?= htmlspecialchars($officerDetails['age']); ?></td></tr>
+        <tr><th>Sex:</th><td><?= htmlspecialchars($officerDetails['sex']); ?></td></tr>
+    </table>
 
-        <!-- Profile Section -->
-        <section class="card section" id="profileSection">
-            <h2>Profile</h2>
-            <div class="profile-container">
-                <img src="profile.jpg" alt="Senior Officer" class="profile-image">
-                <div class="profile-details">
-                    <p><strong>Name:</strong> Jane Doe</p>
-                    <p><strong>Role:</strong> Senior Officer</p>
-                    <p><strong>Email:</strong> janedoe@example.com</p>
-                    <p><strong>Phone:</strong> +1234567890</p>
-                </div>
-            </div>
-        </section>
+    <hr>
 
-        <!-- Stock Overview Section -->
-        <section class="card section" id="stockSection">
-            <h2>Stock Overview</h2>
-            <canvas id="stockChart"></canvas>
-            <p>Total Stock Available: <span id="totalStock">1000</span> units</p>
-        </section>
+    <h2>STOCK OVERVIEW</h2>
+    <h3>Junior Officers and their Stock</h3>
+    <table border="1">
+        <tr>
+            <th>#</th>
+            <th>Junior Officer</th>
+            <th>Region ID</th>
+            <th>Total Stock</th>
+        </tr>
+        <?php
+        $index = 1;
+        foreach ($juniorOfficers as $officer): ?>
+            <tr>
+                <td><?= $index++ ?></td>
+                <td><?= $officer['offID'] ?></td> 
+                <td><?= $officer['regionID'] ?: 'N/A' ?></td>
+                <td><?= $officer['total_stock'] ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
 
-        <!-- District Management Section -->
-        <section class="card section" id="districtSection">
-            <h2>District Management</h2>
-            <div class="district-table">
-                <table>
-                    <tr>
-                        <th>District</th>
-                        <th>Stock Available</th>
-                        <th>Allocate Stock</th>
-                    </tr>
-                    <tr>
-                        <td>District A</td>
-                        <td id="districtAStock">200</td>
-                        <td><button onclick="allocateStock('districtAStock')">Allocate 50</button></td>
-                    </tr>
-                    <tr>
-                        <td>District B</td>
-                        <td id="districtBStock">300</td>
-                        <td><button onclick="allocateStock('districtBStock')">Allocate 50</button></td>
-                    </tr>
-                </table>
-            </div>
-        </section>
+    <hr>
 
-        <!-- Requests Section -->
-        <section class="card section" id="requestSection">
-            <h2>Request Approvals</h2>
-            <button onclick="approveRequest()">Approve Request</button>
-            <button onclick="rejectRequest()">Reject Request</button>
-        </section>
+    <h2>STOCK ALLOCATION</h2>
+    <p>Total Stock: <?= $totalstock ?></p>
 
-        <!-- Officer Management Section -->
-        <section class="card section" id="officerSection">
-            <h2>Officer Management</h2>
-            <p>Assign Junior Officer to District:</p>
-            <select id="districtSelect">
-                <option value="District A">District A</option>
-                <option value="District B">District B</option>
-            </select>
-            <input type="text" id="officerName" placeholder="Officer Name">
-            <button onclick="assignOfficer()">Assign</button>
-            <div id="assignmentResult"></div>
-        </section>
-    </div>
+    <form method="post">
+        <table border="1">
+            <tr>
+                <th>#</th>
+                <th>Junior Officer</th>
+                <th>Stock Allocated</th>
+            </tr>
+            <?php
+            $index = 1;
+            foreach ($juniorOfficers as $officer): ?>
+                <tr>
+                    <td><?= $index++ ?></td>
+                    <td><?= $officer['offID'] ?></td> 
+                    <td>
+                        <input type="number" name="allocations[<?= $officer['offID'] ?>]" min="0" required>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>            
+        <button type="submit" name="stockbtn">Allocate Stock</button>
+    </form>
 
-    <script src="off3.js"></script>
 </body>
 </html>
