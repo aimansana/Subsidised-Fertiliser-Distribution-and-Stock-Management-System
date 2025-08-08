@@ -83,7 +83,7 @@ if (isset($_POST['submitrequest'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farmer Dashboard</title>
-    <link rel="stylesheet" href="FarmerDashboard.css">
+    <link rel="stylesheet" href="css/FarmerDashboard.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
 </head>
 <body>
@@ -213,3 +213,4 @@ if (isset($_POST['submitrequest'])) {
                
 </body>
 </html>
+
