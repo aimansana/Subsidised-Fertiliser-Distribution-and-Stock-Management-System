@@ -132,7 +132,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Junior Officer Dashboard</title>
-    <link rel="stylesheet" href="off2.css">
+    <link rel="stylesheet" href="css/off2.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- FontAwesome -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -474,4 +474,5 @@ $conn->close();
     <script src="off2.js"></script>
 </body>
 </html>
+
 
