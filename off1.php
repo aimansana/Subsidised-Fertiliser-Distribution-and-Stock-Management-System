@@ -115,7 +115,7 @@ if (isset($_POST['btn_add_request'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Custom CSS (Your stylesheet) -->
-    <link rel="stylesheet" href="off1.css"></head>
+    <link rel="stylesheet" href="css/off1.css"></head>
 <body>
 
 <div class="sidebar">
@@ -440,3 +440,4 @@ if (isset($_POST['btn_add_request'])) {
 
 </body>
 </html>
+
