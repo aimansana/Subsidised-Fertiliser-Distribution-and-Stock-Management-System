@@ -23,7 +23,7 @@ $officerDetails = fetchSingleRow($conn, "SELECT * FROM officers WHERE offID = ?"
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subsidy Payment Officer Dashboard</title>
-    <link rel="stylesheet" href="off4.css">
+    <link rel="stylesheet" href="css/off4.css">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -134,3 +134,4 @@ $officerDetails = fetchSingleRow($conn, "SELECT * FROM officers WHERE offID = ?"
     <script src="off4.js"></script>
 </body>
 </html>
+
