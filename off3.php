@@ -71,7 +71,7 @@ if (isset($_POST['stockbtn'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Senior Officer Dashboard</title>
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="css/off3.css">
     
 </head>
 <body>
@@ -144,3 +144,4 @@ if (isset($_POST['stockbtn'])) {
 
 </body>
 </html>
+
